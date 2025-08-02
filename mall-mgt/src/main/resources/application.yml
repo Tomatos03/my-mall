@@ -1,0 +1,31 @@
+server:
+  port: 8011
+
+spring:
+  application:
+    name: mall-api
+  datasource:
+    username: Tomatos
+    password: 20030503
+    # serverTimezone=Asia/Shanghai 设置时区
+    # characterEncoding=utf8 设置字符编码
+    # useSSL=false 关闭SSL
+    # zeroDateTimeBehavior=convertToNull 遇到零日期时转换为null
+    # allowMultiQueries=true 允许多条SQL同时执行
+    # autoReconnect=true 断线自动重连
+    url: >
+      jdbc:mariadb://localhost:3306/my_mall?
+      serverTimezone=Asia/Shanghai
+      &characterEncoding=utf8
+      &useSSL=false&zeroDateTimeBehavior=convertToNull
+      &allowMultiQueries=true&autoReconnect=true
+#  jackson:
+#    property-naming-strategy: SNAKE_CASE
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
