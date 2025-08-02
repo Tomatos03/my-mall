@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
      * @return API请求响应实体
      */
     @ExceptionHandler(Throwable.class)
-    public Result handleException(Throwable e) {
+    public Result handleException(Throwable e) throws Throwable {
         if (e instanceof BusinessException) {
             BusinessException businessException = (BusinessException) e;
             log.info("请求出现业务异常：", e);

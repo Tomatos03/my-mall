@@ -39,6 +39,6 @@ public class ResultUtil {
      * @return 接口相应实体
      */
     public static <T> Result<T> error(int code, String message) {
-        return new Result<>(code, message, null);
+        return new Result(code, message, null);
     }
 }

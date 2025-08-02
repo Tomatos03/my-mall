@@ -1,7 +1,10 @@
 package com.mall.service;
 
 import com.mall.entity.UserEntity;
+import com.mall.entity.auth.AuthUserEntity;
+import com.mall.entity.auth.TokenEntity;
 import com.mall.mapper.UserMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,5 +71,13 @@ public class UserService {
      */
     public int deleteById(Long id) {
         return userMapper.deleteById(id);
+    }
+
+    public TokenEntity login(AuthUserEntity authUserEntity) {
+        return new TokenEntity();
+    }
+
+
+    public void logout(HttpServletRequest request) {
     }
 }
