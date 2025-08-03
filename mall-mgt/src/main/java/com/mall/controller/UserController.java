@@ -5,7 +5,6 @@ import com.mall.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -25,7 +24,8 @@ public class UserController {
      * @param id 系统ID
      * @return 用户信息
      */
-    @PreAuthorize("hasRole('USER')")
+//    @NoLogin
+//    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "通过id查询用户信息", description = "通过id查询用户信息")
     @GetMapping("/findById")
     public UserEntity findById(Long id) {

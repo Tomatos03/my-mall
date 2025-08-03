@@ -1,6 +1,8 @@
 package com.mall.config;
 
+import com.mall.annotation.NoLogin;
 import com.mall.filter.JWTFilter;
+import com.mall.util.SpringContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,6 +20,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.util.pattern.PathPattern;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author : Tomatos
@@ -27,10 +37,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
     @Bean
-    public UserDetailsService defineUser() {
+    public UserDetailsService defineUser(PasswordEncoder passwordEncoder) {
         UserDetails user = User.builder()
                                 .username("root")
-                                .password("{noop}zjlljz")
+                                .password(passwordEncoder.encode("zjlljz"))
                                 .roles("USER")
                                 .build();
         return new InMemoryUserDetailsManager(user);
@@ -72,7 +82,8 @@ public class SecurityConfig {
                                              "/knife4j/**"
                                      ).permitAll()
                                      .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                     .anyRequest().permitAll();
+                                     .requestMatchers(getWhiteList()).permitAll()
+                                     .anyRequest().authenticated();
                              })
                              .formLogin(Customizer.withDefaults())
                              .sessionManagement(sessionConfig ->
@@ -84,5 +95,25 @@ public class SecurityConfig {
 //                                 exceptionHandler.accessDeniedHandler();
                              })
                              .build();
+    }
+
+    private String[] getWhiteList() {
+        Map<RequestMappingInfo, HandlerMethod> handlerMethods = SpringContext.getBean(RequestMappingHandlerMapping.class)
+                                                                             .getHandlerMethods();
+        List<String> whiteList = new ArrayList<>();
+        for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
+            HandlerMethod handlerMethod = entry.getValue();
+            NoLogin methodAnnotation = handlerMethod.getMethodAnnotation(NoLogin.class);
+            if (methodAnnotation == null)
+                continue;
+            List<String> patterns = entry.getKey()
+                                     .getPathPatternsCondition()
+                                     .getPatterns()
+                                     .stream()
+                                     .map(PathPattern::toString)
+                                     .toList();
+            whiteList.addAll(patterns);
+        }
+        return whiteList.toArray(new String[0]);
     }
 }

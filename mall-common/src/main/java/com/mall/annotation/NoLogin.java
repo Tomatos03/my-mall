@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
  * @date : 2025/8/2
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.MODULE)
+@Target(ElementType.METHOD)
 public @interface NoLogin {
 }
