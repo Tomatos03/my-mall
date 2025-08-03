@@ -2,7 +2,7 @@ package com.mall.filter;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
-import com.mall.constant.UserConst;
+import com.mall.constant.RedisKeyConst;
 import com.mall.entity.auth.AuthUserEntity;
 import com.mall.util.JwtUtil;
 import com.mall.util.RedisUtil;
@@ -74,7 +74,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private String getUserJsonByUsername(String username) {
-        return redisUtil.get(UserConst.PREFIX + username);
+        return redisUtil.get(RedisKeyConst.USER + username);
     }
 
     private static final String AUTHORIZATION_PREFIX = "Basic";
