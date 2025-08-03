@@ -1,11 +1,16 @@
 package com.mall.config;
 
 import com.mall.annotation.NoLogin;
-import com.mall.filter.JWTFilter;
+import com.mall.filter.JwtFilter;
 import com.mall.util.SpringContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,6 +41,9 @@ import java.util.Map;
 @EnableMethodSecurity
 @Configuration
 public class SecurityConfig {
+    @Autowired
+    private JwtFilter jwtFilter;
+
     @Bean
     public UserDetailsService defineUser(PasswordEncoder passwordEncoder) {
         UserDetails user = User.builder()
@@ -50,6 +58,15 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    // 当实现UserDetailsService接口时, 不会在自动注入AuthenticationManager实例对象, 需要手动注册
+    @Bean
+    public AuthenticationManager authenticationManager(@Qualifier("myUserDetailsService") UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder);
+        return new ProviderManager(provider);
     }
 
     // https://docs.spring.io/spring-security/reference/reactive/authorization/method.html#_customizing_authorization
@@ -89,7 +106,7 @@ public class SecurityConfig {
                              .sessionManagement(sessionConfig ->
                                      sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                              )
-                             .addFilterBefore(new JWTFilter(), UsernamePasswordAuthenticationFilter.class)
+                             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                              .exceptionHandling(exceptionHandler -> {
 //                                 exceptionHandler.authenticationEntryPoint();
 //                                 exceptionHandler.accessDeniedHandler();

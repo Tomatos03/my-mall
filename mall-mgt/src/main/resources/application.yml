@@ -19,6 +19,11 @@ spring:
       &characterEncoding=utf8
       &useSSL=false&zeroDateTimeBehavior=convertToNull
       &allowMultiQueries=true&autoReconnect=true
+  data:
+    redis:
+      port: 6379
+      password: zjlljz
+      database: 0
 #  jackson:
 #    property-naming-strategy: SNAKE_CASE
 mybatis:
@@ -29,3 +34,8 @@ knife4j:
   enable: true
   setting:
     language: zh_cn
+
+my_mall:
+  jwt:
+    secret: "your-very-secure-jwt-secret-key-2024!@#ABCdef1234567890"
+    expiration: 86400 # 1天(秒为单位)

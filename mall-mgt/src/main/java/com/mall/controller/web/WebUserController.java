@@ -1,5 +1,6 @@
 package com.mall.controller.web;
 
+import com.mall.annotation.NoLogin;
 import com.mall.entity.auth.AuthUserEntity;
 import com.mall.entity.auth.TokenEntity;
 import com.mall.service.UserService;
@@ -33,7 +34,7 @@ public class WebUserController {
      * @param authUserEntity 用户实体
      * @return 影响行数
      */
-//    @NoLogin
+    @NoLogin
     @Operation(summary = "用户登录", description = "用户登录")
     @PostMapping("/login")
     public TokenEntity login(@Valid @RequestBody AuthUserEntity authUserEntity) {
@@ -46,7 +47,7 @@ public class WebUserController {
      * @param request 请求
      * @return 影响行数
      */
-//    @NoLogin
+    @NoLogin
     @Operation(summary = "用户退出登录", description = "用户退出登录")
     @PostMapping("/logout")
     public void logout(HttpServletRequest request) {

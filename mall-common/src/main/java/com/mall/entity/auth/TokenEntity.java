@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+
 /**
  * @author : Tomatos
  * @date : 2025/8/2
@@ -14,6 +15,10 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class TokenEntity {
+    public TokenEntity(String username, String token) {
+        this.username = username;
+        this.token = token;
+    }
 
     /**
      * 用户名称
