@@ -1,14 +1,18 @@
 package com.mall.service;
 
+import cn.hutool.captcha.CaptchaUtil;
+import cn.hutool.captcha.CircleCaptcha;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONUtil;
-import com.mall.constant.TokenConst;
-import com.mall.constant.UserConst;
+import com.mall.constant.RedisKeyConst;
+import com.mall.entity.CaptchaEntity;
 import com.mall.entity.UserEntity;
 import com.mall.entity.auth.AuthUserEntity;
 import com.mall.entity.auth.TokenEntity;
 import com.mall.mapper.UserMapper;
 import com.mall.properties.JwtProperties;
 import com.mall.util.JwtUtil;
+import com.mall.util.PasswordUtil;
 import com.mall.util.RedisUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +41,8 @@ public class UserService {
     private RedisUtil redisUtil;
     @Autowired
     private JwtProperties jwtProperties;
+    @Autowired
+    private PasswordUtil passwordUtil;
 //    @Autowired
 //    private AuthenticationManagerBuilder authenticationManagerBuilder;
     @Autowired
@@ -101,9 +107,13 @@ public class UserService {
     public TokenEntity login(AuthUserEntity authUser) {
         String username = authUser.getUsername();
         log.info("尝试认证:{}", authUser);
+        // 由于前端传入秘钥使用了公钥加密, 这里使用私钥解密
+        String password = passwordUtil.decodeRsaPassword(authUser.getPassword());
+        authUser.setPassword(password);
+
         // 尝试进行认证
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(username, authUser.getPassword());
+                new UsernamePasswordAuthenticationToken(username, password);
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
 
         // 存储已经认证的用户的信息
@@ -116,7 +126,7 @@ public class UserService {
 
         // 缓存用户token
         redisUtil.set(
-                TokenConst.PREFIX + username,
+                RedisKeyConst.TOKEN + username,
                 token,
                 jwtProperties.getExpiration(),
                 TimeUnit.SECONDS
@@ -126,7 +136,7 @@ public class UserService {
         authUser.setPassword("");
         String userJson = JSONUtil.toJsonStr(authUser);
         redisUtil.set(
-                UserConst.PREFIX + username,
+                RedisKeyConst.USER + username,
                 userJson,
                 jwtProperties.getExpiration(),
                 TimeUnit.SECONDS
@@ -136,5 +146,14 @@ public class UserService {
 
 
     public void logout(HttpServletRequest request) {
+    }
+
+    public CaptchaEntity getCode() {
+        CircleCaptcha circleCaptcha = CaptchaUtil.createCircleCaptcha(111, 36);
+        String imageBase64 = circleCaptcha.getImageBase64Data();
+        String uuid = IdUtil.fastSimpleUUID();
+
+        redisUtil.set(RedisKeyConst.CAPTCHA + uuid, imageBase64, 60);
+        return new CaptchaEntity(uuid, imageBase64);
     }
 }

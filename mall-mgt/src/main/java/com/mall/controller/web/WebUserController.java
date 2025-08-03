@@ -1,6 +1,7 @@
 package com.mall.controller.web;
 
 import com.mall.annotation.NoLogin;
+import com.mall.entity.CaptchaEntity;
 import com.mall.entity.auth.AuthUserEntity;
 import com.mall.entity.auth.TokenEntity;
 import com.mall.service.UserService;
@@ -10,10 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author : Tomatos
@@ -52,5 +50,12 @@ public class WebUserController {
     @PostMapping("/logout")
     public void logout(HttpServletRequest request) {
         userService.logout(request);
+    }
+
+    @NoLogin
+    @Operation(summary = "获取验证码", description = "获取验证码")
+    @GetMapping(value = "/code")
+    public CaptchaEntity getCode() {
+        return userService.getCode();
     }
 }
