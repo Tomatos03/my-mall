@@ -1,27 +1,30 @@
 package com.mall.mapper;
 
-import com.mall.entity.UserEntity;
+import com.mall.entity.UserDO;
+import com.mall.entity.condition.UserConditionDTO;
+
+import java.util.List;
 
 /**
  * @author : Tomatos
  * @date : 2025/8/2
  */
-public interface UserMapper {
+public interface UserMapper extends BaseMapper<UserDO, UserConditionDTO> {
     /**
      * 通过id查询用户信息
      *
      * @param id 系统ID
      * @return 用户信息
      */
-    UserEntity findById(Long id);
+    UserDO findById(Long id);
 
     /**
      * 根据条件查询用户列表
      *
-     * @param userConditionEntity 条件
+     * @param userConditionDTO 条件
      * @return 用户列表
      */
-//    List<UserEntity> searchByCondition(UserConditionEntity userConditionEntity);
+    List<UserDO> searchByCondition(UserConditionDTO userConditionDTO);
 
     /**
      * 根据条件查询用户数量
@@ -34,18 +37,18 @@ public interface UserMapper {
     /**
      * 添加用户
      *
-     * @param userEntity 用户实体
+     * @param userDO 用户实体
      * @return 影响行数
      */
-    int insert(UserEntity userEntity);
+    int insert(UserDO userDO);
 
     /**
      * 修改用户
      *
-     * @param userEntity 用户实体
+     * @param userDO 用户实体
      * @return 影响行数
      */
-    int update(UserEntity userEntity);
+    int update(UserDO userDO);
 
     /**
      * 删除用户

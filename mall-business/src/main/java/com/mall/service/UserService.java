@@ -2,29 +2,30 @@ package com.mall.service;
 
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.CircleCaptcha;
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.json.JSONUtil;
-import com.mall.constant.RedisKeyConst;
-import com.mall.entity.CaptchaEntity;
-import com.mall.entity.UserEntity;
-import com.mall.entity.auth.AuthUserEntity;
-import com.mall.entity.auth.TokenEntity;
+import com.mall.domain.CaptchaHelper;
+import com.mall.domain.JwtHelper;
+import com.mall.domain.PasswordHelper;
+import com.mall.domain.cache.CaptchaCacher;
+import com.mall.domain.cache.TokenCacher;
+import com.mall.domain.cache.UserCacher;
+import com.mall.domain.security.Authenticator;
+import com.mall.dto.AuthenticatedUserDTO;
+import com.mall.dto.CaptchaDTO;
+import com.mall.dto.UserDTO;
+import com.mall.entity.UserDO;
+import com.mall.entity.auth.AuthenticationUserDTO;
 import com.mall.mapper.UserMapper;
-import com.mall.properties.JwtProperties;
-import com.mall.util.JwtUtil;
-import com.mall.util.PasswordUtil;
-import com.mall.util.RedisUtil;
+import com.mall.util.RequestUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 /**
  * @author : Tomatos
@@ -36,17 +37,19 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
     @Autowired
-    private JwtUtil jwtUtil;
+    private PasswordHelper passwordHelper;
     @Autowired
-    private RedisUtil redisUtil;
+    private Authenticator authenticator;
     @Autowired
-    private JwtProperties jwtProperties;
+    private CaptchaHelper captchaHelper;
     @Autowired
-    private PasswordUtil passwordUtil;
-//    @Autowired
-//    private AuthenticationManagerBuilder authenticationManagerBuilder;
+    private JwtHelper jwtHelper;
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private UserCacher userCacher;
+    @Autowired
+    private TokenCacher tokenCacher;
+    @Autowired
+    private CaptchaCacher captchaCacher;
 
     /**
      * 通过id查询用户信息
@@ -54,8 +57,9 @@ public class UserService {
      * @param id 系统ID
      * @return 用户信息
      */
-    public UserEntity findById(Long id) {
-        return userMapper.findById(id);
+    public UserDTO findById(Long id) {
+        UserDO userDO = userMapper.findById(id);
+        return BeanUtil.copyProperties(userDO, UserDTO.class);
     }
 
 //    /**
@@ -77,21 +81,23 @@ public class UserService {
     /**
      * 添加用户
      *
-     * @param userEntity 用户实体
+     * @param userDTO 用户实体
      * @return 影响行数
      */
-    public int insert(UserEntity userEntity) {
-        return userMapper.insert(userEntity);
+    public void insert(UserDTO userDTO) {
+        UserDO userDO = BeanUtil.copyProperties(userDTO, UserDO.class);
+        userMapper.insert(userDO);
     }
 
     /**
      * 修改用户
      *
-     * @param userEntity 用户实体
+     * @param userDTO 用户实体
      * @return 影响行数
      */
-    public int update(UserEntity userEntity) {
-        return userMapper.update(userEntity);
+    public int update(UserDTO userDTO) {
+        UserDO userDO = BeanUtil.copyProperties(userDTO, UserDO.class);
+        return userMapper.update(userDO);
     }
 
     /**
@@ -104,56 +110,57 @@ public class UserService {
         return userMapper.deleteById(id);
     }
 
-    public TokenEntity login(AuthUserEntity authUser) {
-        String username = authUser.getUsername();
-        log.info("尝试认证:{}", authUser);
-        // 由于前端传入秘钥使用了公钥加密, 这里使用私钥解密
-        String password = passwordUtil.decodeRsaPassword(authUser.getPassword());
-        authUser.setPassword(password);
+    public AuthenticatedUserDTO login(AuthenticationUserDTO authenticationUserDTO) {
+        log.info("尝试登录:{}", authenticationUserDTO);
 
-        // 尝试进行认证
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(username, password);
-        Authentication authenticate = authenticationManager.authenticate(authenticationToken);
+        captchaHelper.validate(captchaCacher.get(authenticationUserDTO.getUuid()),
+                               authenticationUserDTO.getCode());
 
-        // 存储已经认证的用户的信息
-        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        String username = authenticationUserDTO.getUsername();
+        String decodePassword = passwordHelper.decodeRsaPassword(authenticationUserDTO.getPassword());
+        Authentication authenticated = authenticator.authenticate(username, decodePassword);
+        AuthenticatedUserDTO authenticatedUserDTO = convertFrom(authenticated);
 
-        // 创建Jwt
-        HashMap<String, Object> payload = new HashMap<>();
-        payload.put("username", username);
-        String token = jwtUtil.createJwt(payload);
+        String token = jwtHelper.createUserToken(username);
+        authenticatedUserDTO.setToken(token);
 
-        // 缓存用户token
-        redisUtil.set(
-                RedisKeyConst.TOKEN + username,
-                token,
-                jwtProperties.getExpiration(),
-                TimeUnit.SECONDS
-        );
-
-        // 缓存用户Json
-        authUser.setPassword("");
-        String userJson = JSONUtil.toJsonStr(authUser);
-        redisUtil.set(
-                RedisKeyConst.USER + username,
-                userJson,
-                jwtProperties.getExpiration(),
-                TimeUnit.SECONDS
-        );
-        return new TokenEntity(username,  token);
+        userCacher.save(authenticatedUserDTO);
+        tokenCacher.save(username, token);
+        return authenticatedUserDTO;
     }
-
 
     public void logout(HttpServletRequest request) {
+        String token = RequestUtil.getToken(request);
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        userCacher.del(username);
+        tokenCacher.del(username);
     }
 
-    public CaptchaEntity getCode() {
-        CircleCaptcha circleCaptcha = CaptchaUtil.createCircleCaptcha(111, 36);
-        String imageBase64 = circleCaptcha.getImageBase64Data();
-        String uuid = IdUtil.fastSimpleUUID();
+    private AuthenticatedUserDTO convertFrom(Authentication authentication) {
+        // 如果 principal 是 UserDetails，可以直接拿信息
+        String username = authentication.getName();
+        List<String> roles = authentication.getAuthorities()
+                                           .stream()
+                                           .map(GrantedAuthority::getAuthority)
+                                           .toList();
 
-        redisUtil.set(RedisKeyConst.CAPTCHA + uuid, imageBase64, 60);
-        return new CaptchaEntity(uuid, imageBase64);
+        return AuthenticatedUserDTO.builder()
+                                   .username(username)
+                                   .authorities(roles)
+                                   .build();
+    }
+
+    public String getUserInfo() {
+        return authenticator.getUsername();
+    }
+
+    public CaptchaDTO getCode() {
+        CircleCaptcha circleCaptcha = CaptchaUtil.createCircleCaptcha(111, 36);
+        String uuid = IdUtil.fastSimpleUUID();
+        String imageBase64 = circleCaptcha.getImageBase64Data();
+
+        captchaCacher.save(uuid, circleCaptcha.getCode());
+        return new CaptchaDTO(uuid, imageBase64);
     }
 }

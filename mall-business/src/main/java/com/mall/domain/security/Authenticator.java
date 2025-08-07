@@ -1,4 +1,4 @@
-package com.mall.domain;
+package com.mall.domain.security;
 
 import com.mall.dto.AuthenticatedUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
-package com.mall.entity;
+package com.mall.entity.condition;
 
-import com.mall.entity.condition.PageConditionEntity;
+import com.mall.domain.page.PageCondition;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -11,8 +11,7 @@ import java.util.List;
  * @date : 2025/8/4
  */
 @Data
-public class RequestConditionEntity extends PageConditionEntity {
-
+public class RequestCondition extends PageCondition {
     /**
      * 创建日期范围
      */

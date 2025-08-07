@@ -14,7 +14,7 @@
 <!--        <result property="isDel" column="is_del"/>-->
 <!--    </resultMap>-->
 
-    <insert id="insert" parameterType="com.mall.entity.UserEntity">
+    <insert id="insert" parameterType="com.mall.entity.UserDO">
         INSERT INTO user (
             id,
             user_name,
@@ -44,7 +44,7 @@
         WHERE id = #{id}
     </delete>
 
-    <update id="update" parameterType="com.mall.entity.UserEntity">
+    <update id="update" parameterType="com.mall.entity.UserDO">
         UPDATE user
         <set>
             <if test="userName != null and userName != ''">
@@ -82,7 +82,7 @@
         is_del
     </sql>
 
-    <select id="findById" resultType="com.mall.entity.UserEntity" parameterType="Long">
+    <select id="findById" resultType="com.mall.entity.UserDO" parameterType="Long">
         SELECT
             <include refid="selectUserColumn"/>
         FROM user

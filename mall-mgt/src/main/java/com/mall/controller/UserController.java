@@ -1,6 +1,6 @@
 package com.mall.controller;
 
-import com.mall.entity.UserEntity;
+import com.mall.dto.UserDTO;
 import com.mall.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.constraints.NotNull;
@@ -29,7 +29,7 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "通过id查询用户信息", description = "通过id查询用户信息")
     @GetMapping("/findById")
-    public UserEntity findById(Long id) {
+    public UserDTO findById(Long id) {
         return userService.findById(id);
     }
 
@@ -48,25 +48,25 @@ public class UserController {
     /**
      * 添加用户
      *
-     * @param userEntity 用户实体
+     * @param userDTO 用户实体
      * @return 影响行数
      */
     @PostMapping("/insert")
     @Operation(summary = "添加用户", description = "添加一个用户")
-    public int insert(@RequestBody UserEntity userEntity) {
-        return userService.insert(userEntity);
+    public void insert(@RequestBody UserDTO userDTO) {
+        userService.insert(userDTO);
     }
 
     /**
      * 修改用户
      *
-     * @param userEntity 用户实体
+     * @param userDTO 用户实体
      * @return 影响行数
      */
     @Operation(summary = "更新用户信息", description = "根据传入UserEntity更新原来的用户信息")
     @PostMapping("/update")
-    public int update(@RequestBody UserEntity userEntity) {
-        return userService.update(userEntity);
+    public int update(@RequestBody UserDTO userDTO) {
+        return userService.update(userDTO);
     }
 
     /**

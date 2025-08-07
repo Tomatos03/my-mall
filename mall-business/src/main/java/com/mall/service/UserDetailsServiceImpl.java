@@ -1,6 +1,6 @@
 package com.mall.service;
 
-import com.mall.model.AuthenticationUser;
+import com.mall.domain.security.AuthenticationUser;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

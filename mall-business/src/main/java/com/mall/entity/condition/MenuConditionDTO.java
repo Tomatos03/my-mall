@@ -1,25 +1,22 @@
-package com.mall.dto;
+package com.mall.entity.condition;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author : Tomatos
  * @date : 2025/8/4
  */
+@Schema(description = "菜单查询条件实体")
 @Data
-public class MenuTreeDTO implements Serializable {
-
+public class MenuConditionDTO extends RequestCondition {
     /**
-     * 菜单系统ID
+     * ID
      */
-    @Schema(description = "菜单系统ID")
+    @Schema(description = "ID")
     private Long id;
 
     /**
@@ -33,6 +30,12 @@ public class MenuTreeDTO implements Serializable {
      */
     @Schema(description = "上级菜单ID")
     private Long pid;
+
+    /**
+     * 上级菜单ID集合
+     */
+    @Schema(description = "上级菜单ID集合")
+    private List<Long> pidList;
 
     /**
      * 排序
@@ -56,7 +59,7 @@ public class MenuTreeDTO implements Serializable {
      * 是否隐藏
      */
     @Schema(description = "是否隐藏")
-    private Boolean hidden;
+    private Integer hidden;
 
     /**
      * 是否外链 1：是 0：否
@@ -83,42 +86,44 @@ public class MenuTreeDTO implements Serializable {
     private String url;
 
     /**
-     * 组件
+     * 创建人ID
      */
-    @Schema(description = "组件")
-    private String component;
+    @Schema(description = "创建人ID")
+    private Long createUserId;
 
     /**
-     * 创建时间
+     * 创建人名称
      */
-    @Schema(description = "创建时间")
+    @Schema(description = "创建人名称")
+    private String createUserName;
+
+    /**
+     * 创建日期
+     */
+    @Schema(description = "创建日期")
     private Date createTime;
 
     /**
-     * 跳转
+     * 修改人ID
      */
-    private String redirect;
-
-    private Boolean alwaysShow;
-
-
-    private MetaDTO meta;
+    @Schema(description = "修改人ID")
+    private Long updateUserId;
 
     /**
-     * 下一级菜单集合
+     * 修改人名称
      */
-    private List<MenuTreeDTO> children;
-
+    @Schema(description = "修改人名称")
+    private String updateUserName;
 
     /**
-     * 增加添加子菜单的方法
-     *
-     * @param menuTreeDTO 子菜单
+     * 修改时间
      */
-    public void addChildren(MenuTreeDTO menuTreeDTO) {
-        if (Objects.isNull(children)) {
-            children = new ArrayList<>();
-        }
-        children.add(menuTreeDTO);
-    }
+    @Schema(description = "修改时间")
+    private Date updateTime;
+
+    /**
+     * 是否删除 1：已删除 0：未删除
+     */
+    @Schema(description = "是否删除 1：已删除 0：未删除")
+    private Integer isDel;
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.mall.mapper.MenuMapper">
-    <resultMap type="com.mall.entity.MenuEntity" id="MenuResult">
+    <resultMap type="com.mall.entity.MenuDO" id="MenuResult">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="pid" column="pid"/>
@@ -138,7 +138,7 @@
     </sql>
 
     <select id="searchByCondition"
-            parameterType="com.mall.entity.condition.MenuConditionEntity">
+            parameterType="com.mall.entity.condition.MenuConditionDTO">
         SELECT
             <include refid="selectMenuColumn"/>
         FROM sys_menu

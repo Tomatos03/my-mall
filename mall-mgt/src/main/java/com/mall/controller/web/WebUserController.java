@@ -1,9 +1,9 @@
 package com.mall.controller.web;
 
 import com.mall.annotation.NoLogin;
-import com.mall.entity.CaptchaEntity;
-import com.mall.entity.auth.AuthUserEntity;
-import com.mall.entity.auth.TokenEntity;
+import com.mall.dto.AuthenticatedUserDTO;
+import com.mall.dto.CaptchaDTO;
+import com.mall.entity.auth.AuthenticationUserDTO;
 import com.mall.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,14 +29,14 @@ public class WebUserController {
     /**
      * 用户登录
      *
-     * @param authUserEntity 用户实体
+     * @param authenticationUserDTO 认证用户
      * @return 影响行数
      */
     @NoLogin
     @Operation(summary = "用户登录", description = "用户登录")
     @PostMapping("/login")
-    public TokenEntity login(@Valid @RequestBody AuthUserEntity authUserEntity) {
-        return userService.login(authUserEntity);
+    public AuthenticatedUserDTO login(@Valid @RequestBody AuthenticationUserDTO authenticationUserDTO) {
+        return userService.login(authenticationUserDTO);
     }
 
     /**
@@ -55,7 +55,18 @@ public class WebUserController {
     @NoLogin
     @Operation(summary = "获取验证码", description = "获取验证码")
     @GetMapping(value = "/code")
-    public CaptchaEntity getCode() {
+    public CaptchaDTO getCode() {
         return userService.getCode();
+    }
+
+    @NoLogin
+    @Operation(summary = "获取用户信息", description = "获取用户信息")
+    @GetMapping(value = "/info")
+    public AuthenticatedUserDTO getUserInfo() {
+        // TODO 这里暂时简单处理
+        String username = userService.getUserInfo();
+        return AuthenticatedUserDTO.builder()
+                                   .username(username)
+                                   .build();
     }
 }

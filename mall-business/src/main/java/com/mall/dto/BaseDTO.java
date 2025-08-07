@@ -1,21 +1,21 @@
-package com.mall.entity;
+package com.mall.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
+ *
+ *
  * @author : Tomatos
- * @date : 2025/8/2
+ * @date : 2025/8/8
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class BaseEntity implements Serializable {
-
+public class BaseDTO {
     /**
      * 系统ID
      */
@@ -34,7 +34,7 @@ public class BaseEntity implements Serializable {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /**
      * 修改人ID
@@ -49,7 +49,7 @@ public class BaseEntity implements Serializable {
     /**
      * 修改时间
      */
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     /**
      * 是否删除

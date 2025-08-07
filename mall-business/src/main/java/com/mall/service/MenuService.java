@@ -1,13 +1,14 @@
 package com.mall.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import com.google.common.collect.Lists;
-import com.mall.dto.MenuTreeDTO;
+import com.mall.vo.MenuTreeVO;
 import com.mall.dto.MetaDTO;
-import com.mall.entity.MenuEntity;
-import com.mall.entity.ResponsePageEntity;
-import com.mall.entity.condition.MenuConditionEntity;
-import com.mall.entity.condition.PageConditionEntity;
+import com.mall.entity.MenuDO;
+import com.mall.entity.condition.ResponsePage;
+import com.mall.entity.condition.MenuConditionDTO;
+import com.mall.domain.page.PageCondition;
 import com.mall.mapper.MenuMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,49 +24,50 @@ public class MenuService {
     @Autowired
     MenuMapper menuMapper;
 
-    public List<MenuTreeDTO> getMenuTree() {
-        MenuTreeDTO menuTreeDTO = new MenuTreeDTO();
-        menuTreeDTO.setAlwaysShow(true);
-        menuTreeDTO.setId(0L);
+    public List<MenuTreeVO> getMenuTree() {
+        MenuTreeVO menuTreeVO = new MenuTreeVO();
+        menuTreeVO.setAlwaysShow(true);
+        menuTreeVO.setId(0L);
 
-        return getMenuTree0(menuTreeDTO, true);
+        return getMenuTree0(menuTreeVO, true);
     }
 
-    private List<MenuTreeDTO> getMenuTree0(MenuTreeDTO menuTreeDTO, boolean isAlwaysShow) {
-        MenuConditionEntity menuConditionEntity = new MenuConditionEntity();
-        menuConditionEntity.setPageSize(PageConditionEntity.NO_PAGINATION);
-        menuConditionEntity.setPid(menuTreeDTO.getId());
+    private List<MenuTreeVO> getMenuTree0(MenuTreeVO menuTreeVO, boolean isAlwaysShow) {
+        MenuConditionDTO menuConditionDTO = new MenuConditionDTO();
+        menuConditionDTO.setPageSize(PageCondition.NO_PAGINATION);
+        menuConditionDTO.setPid(menuTreeVO.getId());
 
-        List<MenuEntity> menuEntities = menuMapper.searchByCondition(menuConditionEntity);
-        if (menuEntities == null || menuEntities.isEmpty())
+        List<MenuDO> menuEntities = menuMapper.searchByCondition(menuConditionDTO);
+        if (CollectionUtil.isEmpty(menuEntities))
             return null;
 
-        List<MenuTreeDTO> menuTreeDTOS = Lists.newArrayList();
-        for (MenuEntity menuEntity : menuEntities) {
-            MenuTreeDTO newMenuTreeDTO = buildMenuTreeDTO(menuEntity, isAlwaysShow);
-            menuTreeDTOS.add(newMenuTreeDTO);
+        List<MenuTreeVO> menuTreeVOS = Lists.newArrayList();
+        for (MenuDO menuDO : menuEntities) {
+            MenuTreeVO newMenuTreeVO = buildMenuTreeDTO(menuDO, isAlwaysShow);
+            menuTreeVOS.add(newMenuTreeVO);
 
-            newMenuTreeDTO.setChildren(getMenuTree0(newMenuTreeDTO, false));
+            newMenuTreeVO.setChildren(getMenuTree0(newMenuTreeVO, false));
         }
-        return menuTreeDTOS;
+        return menuTreeVOS;
     }
 
 
-    private MenuTreeDTO buildMenuTreeDTO(MenuEntity menuEntity, boolean isAlwaysShow) {
-        MenuTreeDTO menuTreeDTO = BeanUtil.copyProperties(menuEntity, MenuTreeDTO.class);
-        menuTreeDTO.setAlwaysShow(isAlwaysShow);
+    private MenuTreeVO buildMenuTreeDTO(MenuDO menuDO, boolean isAlwaysShow) {
+        MenuTreeVO menuTreeVO = BeanUtil.copyProperties(menuDO, MenuTreeVO.class);
+        menuTreeVO.setAlwaysShow(isAlwaysShow);
 
-        MetaDTO metaDTO = new MetaDTO();
-        metaDTO.setIcon(menuTreeDTO.getIcon());
-        metaDTO.setTitle(menuTreeDTO.getName());
-        metaDTO.setNoCache(true);
+        MetaDTO metaDTO = MetaDTO.builder()
+                                 .icon(menuTreeVO.getIcon())
+                                 .title(menuTreeVO.getName())
+                                 .noCache(true)
+                                 .build();
 
-        menuTreeDTO.setMeta(metaDTO);
-        return menuTreeDTO;
+        menuTreeVO.setMeta(metaDTO);
+        return menuTreeVO;
     }
 
-    public ResponsePageEntity<MenuEntity> searchByPage(MenuConditionEntity menuConditionEntity) {
-        List<MenuEntity> menuEntities = menuMapper.searchByCondition(menuConditionEntity);
-        return ResponsePageEntity.build(menuConditionEntity, menuEntities.size(), menuEntities);
+    public ResponsePage<MenuDO> searchByPage(MenuConditionDTO menuConditionDTO) {
+        List<MenuDO> menuEntities = menuMapper.searchByCondition(menuConditionDTO);
+        return ResponsePage.build(menuConditionDTO, menuEntities.size(), menuEntities);
     }
 }

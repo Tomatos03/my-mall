@@ -1,11 +1,13 @@
 package com.mall.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
  * @author : Tomatos
  * @date : 2025/8/4
  */
+@Builder
 @Data
 public class MetaDTO {
 

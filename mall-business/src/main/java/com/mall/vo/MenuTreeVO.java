@@ -1,23 +1,24 @@
-package com.mall.entity.condition;
+package com.mall.vo;
 
-import com.mall.entity.RequestConditionEntity;
+import com.mall.dto.MetaDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.sql.Date;
+import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
  * @author : Tomatos
  * @date : 2025/8/4
  */
-@Schema(description = "菜单查询条件实体")
 @Data
-public class MenuConditionEntity extends RequestConditionEntity {
+public class MenuTreeVO implements Serializable {
+
     /**
-     * ID
+     * 菜单系统ID
      */
-    @Schema(description = "ID")
+    @Schema(description = "菜单系统ID")
     private Long id;
 
     /**
@@ -31,12 +32,6 @@ public class MenuConditionEntity extends RequestConditionEntity {
      */
     @Schema(description = "上级菜单ID")
     private Long pid;
-
-    /**
-     * 上级菜单ID集合
-     */
-    @Schema(description = "上级菜单ID集合")
-    private List<Long> pidList;
 
     /**
      * 排序
@@ -60,7 +55,7 @@ public class MenuConditionEntity extends RequestConditionEntity {
      * 是否隐藏
      */
     @Schema(description = "是否隐藏")
-    private Integer hidden;
+    private Boolean hidden;
 
     /**
      * 是否外链 1：是 0：否
@@ -87,44 +82,29 @@ public class MenuConditionEntity extends RequestConditionEntity {
     private String url;
 
     /**
-     * 创建人ID
+     * 组件
      */
-    @Schema(description = "创建人ID")
-    private Long createUserId;
+    @Schema(description = "组件")
+    private String component;
 
     /**
-     * 创建人名称
+     * 创建时间
      */
-    @Schema(description = "创建人名称")
-    private String createUserName;
-
-    /**
-     * 创建日期
-     */
-    @Schema(description = "创建日期")
+    @Schema(description = "创建时间")
     private Date createTime;
 
     /**
-     * 修改人ID
+     * 跳转
      */
-    @Schema(description = "修改人ID")
-    private Long updateUserId;
+    private String redirect;
+
+    private Boolean alwaysShow;
+
+
+    private MetaDTO meta;
 
     /**
-     * 修改人名称
+     * 下一级菜单集合
      */
-    @Schema(description = "修改人名称")
-    private String updateUserName;
-
-    /**
-     * 修改时间
-     */
-    @Schema(description = "修改时间")
-    private Date updateTime;
-
-    /**
-     * 是否删除 1：已删除 0：未删除
-     */
-    @Schema(description = "是否删除 1：已删除 0：未删除")
-    private Integer isDel;
+    private List<MenuTreeVO> children;
 }

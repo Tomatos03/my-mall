@@ -1,6 +1,6 @@
-package com.mall.entity;
+package com.mall.entity.condition;
 
-import com.mall.entity.condition.PageConditionEntity;
+import com.mall.domain.page.PageCondition;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -15,7 +15,7 @@ import java.util.Objects;
  */
 @AllArgsConstructor
 @Data
-public class ResponsePageEntity<T> implements Serializable {
+public class ResponsePage<T> implements Serializable {
 
     private static final Integer ZERO = 0;
 
@@ -53,7 +53,7 @@ public class ResponsePageEntity<T> implements Serializable {
      * @param <T>               数据类型
      * @return ResponsePageEntity实体
      */
-    public static <T> ResponsePageEntity<T> buildEmpty(PageConditionEntity pageCondition) {
+    public static <T> ResponsePage<T> buildEmpty(PageCondition pageCondition) {
         return build(pageCondition, 0, new ArrayList<>(0));
     }
 
@@ -67,10 +67,10 @@ public class ResponsePageEntity<T> implements Serializable {
      * @param <T>               数据类型
      * @return ResponsePageEntity实体
      */
-    public static <T> ResponsePageEntity<T> build(PageConditionEntity pageCondition, Integer totalCount,
-                                                  List<T> data) {
+    public static <T> ResponsePage<T> build(PageCondition pageCondition, Integer totalCount,
+                                            List<T> data) {
         Integer totalPage = getTotalPage(pageCondition.getPageSize(), totalCount);
-        return new ResponsePageEntity(pageCondition.getPageNo(), pageCondition.getPageSize(), totalPage, totalCount, data);
+        return new ResponsePage(pageCondition.getPageNo(), pageCondition.getPageSize(), totalPage, totalCount, data);
     }
 
 

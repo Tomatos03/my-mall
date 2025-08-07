@@ -1,5 +1,6 @@
-package com.mall.model;
+package com.mall.domain.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,12 +12,14 @@ import java.util.List;
 
 /**
  * @author : Tomatos
- * @date : 2025/8/5
+ * @date : 2025/8/3
  */
 @Data
-@Schema(description = "认证的用户")
-public class AuthenticationUser implements UserDetails {
+@Schema(description = "Web用户")
+public class WebUser implements UserDetails {
+    private Long id;
     private String username;
+    @JsonIgnore
     private String password;
     private List<SimpleGrantedAuthority> authorities;
 
@@ -25,10 +28,11 @@ public class AuthenticationUser implements UserDetails {
      */
     private List<String> roles;
 
-    public AuthenticationUser(String username, String password, List<SimpleGrantedAuthority> authorities) {
+    public WebUser(Long id, String username, String password, List<SimpleGrantedAuthority> authorities) {
         this.authorities = authorities;
         this.password = password;
         this.username = username;
+        this.id = id;
     }
 
     @Override

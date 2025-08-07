@@ -1,7 +1,7 @@
 package com.mall.filter;
 
 import cn.hutool.json.JSONUtil;
-import com.mall.domain.Authenticator;
+import com.mall.domain.security.Authenticator;
 import com.mall.domain.JwtHelper;
 import com.mall.domain.cache.TokenCacher;
 import com.mall.domain.cache.UserCacher;

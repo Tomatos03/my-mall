@@ -1,4 +1,4 @@
-package com.mall.entity.condition;
+package com.mall.domain.page;
 
 import cn.hutool.core.collection.CollectionUtil;
 import lombok.Data;
@@ -11,7 +11,7 @@ import java.util.Objects;
  * @date : 2025/8/4
  */
 @Data
-public class PageConditionEntity {
+public class PageCondition {
     // Xml条件查询中当PageSize小于等于0的时候不进行分页
     public static final int NO_PAGINATION = 0;
     private static final int DEFAULT_PAGE_SIZE = 10;
