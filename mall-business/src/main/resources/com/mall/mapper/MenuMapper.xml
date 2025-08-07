@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mall.mapper.MenuMapper">
+    <resultMap type="com.mall.entity.MenuEntity" id="MenuResult">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="pid" column="pid"/>
+        <result property="sort" column="sort"/>
+        <result property="icon" column="icon"/>
+        <result property="path" column="path"/>
+        <result property="hidden" column="hidden"/>
+        <result property="isLink" column="is_link"/>
+        <result property="type" column="type"/>
+        <result property="permission" column="permission"/>
+        <result property="url" column="url"/>
+        <result property="createUserId" column="create_user_id"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUserId" column="update_user_id"/>
+        <result property="updateUserName" column="update_user_name"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDel" column="is_del"/>
+        <result property="component" column="component"/>
+    </resultMap>
+
+    <sql id="selectMenuColumn">
+         id,
+         name,
+         pid,
+         sort,
+         icon,
+         path,
+         hidden,
+         is_link,
+         type,
+         permission,
+         url,
+         create_user_id,
+         create_user_name,
+         create_time,
+         update_user_id,
+         update_user_name,
+         update_time,
+         component,
+         is_del
+    </sql>
+
+    <sql id="queryWhere">
+        <where>
+            <if test="id != null ">
+                AND id = #{id}
+            </if>
+
+            <if test="name != null  and name != ''">
+                AND name LIKE CONCAT ('%',  #{name},'%')
+            </if>
+
+            <if test="pid != null ">
+                AND pid = #{pid}
+            </if>
+
+            <if test="pidList != null and pidList.size()>0">
+                AND pid IN
+                <foreach collection="pidList" item="pid" open="(" close=")" separator=",">
+                    #{pid}
+                </foreach>
+            </if>
+
+            <if test="sort != null ">
+                AND sort = #{sort}
+            </if>
+
+            <if test="icon != null  and icon != ''">
+                AND icon = #{icon}
+            </if>
+
+            <if test="path != null  and path != ''">
+                AND path = #{path}
+            </if>
+
+            <if test="hidden != null ">
+                AND hidden = #{hidden}
+            </if>
+
+            <if test="isLink != null ">
+                AND is_link = #{isLink}
+            </if>
+
+            <if test="type != null ">
+                AND type = #{type}
+            </if>
+
+            <if test="permission != null  and permission != ''">
+                AND permission = #{permission}
+            </if>
+
+            <if test="url != null  and url != ''">
+                AND url = #{url}
+            </if>
+
+            <if test="createUserId != null ">
+                AND create_user_id = #{createUserId}
+            </if>
+
+            <if test="createUserName != null  and createUserName != ''">
+                AND create_user_name = #{createUserName}
+            </if>
+
+            <if test="createTime != null ">
+                AND create_time = #{createTime}
+            </if>
+
+            <if test="updateUserId != null ">
+                AND update_user_id = #{updateUserId}
+            </if>
+
+            <if test="updateUserName != null  and updateUserName != ''">
+                AND update_user_name = #{updateUserName}
+            </if>
+
+            <if test="updateTime != null ">
+                AND update_time = #{updateTime}
+            </if>
+
+            <if test="isDel != null ">
+                AND is_del = #{isDel}
+            </if>
+
+            <if test="createBeginTime != null and createBeginTime !=''">
+                AND create_time >= #{createBeginTime}
+            </if>
+
+            <if test="createEndTime != null and createEndTime !=''">
+                AND create_time <![CDATA[<]]> #{createEndTime}
+            </if>
+            AND is_del = 0
+        </where>
+    </sql>
+
+    <select id="searchByCondition"
+            parameterType="com.mall.entity.condition.MenuConditionEntity">
+        SELECT
+            <include refid="selectMenuColumn"/>
+        FROM sys_menu
+            <include refid="queryWhere"/>
+            <include refid="com.mall.mapper.BaseMapper.paginationSql"/>
+    </select>
+</mapper>
