@@ -2,6 +2,7 @@ package com.mall.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import java.util.List;
  * @author : Tomatos
  * @date : 2025/8/3
  */
+@Data
 @Schema(description = "Web用户")
 public class WebUserEntity implements UserDetails {
     private Long id;
@@ -35,7 +37,7 @@ public class WebUserEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return this.authorities;
     }
 
     @Override
