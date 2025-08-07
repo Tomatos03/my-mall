@@ -1,9 +1,8 @@
 package com.mall.config;
 
 import com.mall.annotation.NoLogin;
+import com.mall.context.SpringContextHolder;
 import com.mall.filter.JwtFilter;
-import com.mall.util.SpringContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +10,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -41,8 +39,6 @@ import java.util.Map;
 @EnableMethodSecurity
 @Configuration
 public class SecurityConfig {
-    @Autowired
-    private JwtFilter jwtFilter;
 
     @Bean
     public UserDetailsService defineUser(PasswordEncoder passwordEncoder) {
@@ -76,7 +72,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChainConfig(HttpSecurity securityConfig) throws Exception {
+    public SecurityFilterChain filterChainConfig(HttpSecurity securityConfig, JwtFilter jwtFilter) throws Exception {
         return securityConfig.csrf(AbstractHttpConfigurer::disable)
                              // 禁用 X-Frame-Options 允许页面被嵌入到 <iframe> 等标签中
                              .headers(headers -> headers.frameOptions(frame -> frame.disable()))
@@ -102,7 +98,7 @@ public class SecurityConfig {
                                      .requestMatchers(getWhiteList()).permitAll()
                                      .anyRequest().authenticated();
                              })
-                             .formLogin(Customizer.withDefaults())
+                             .formLogin(AbstractHttpConfigurer::disable)
                              .sessionManagement(sessionConfig ->
                                      sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                              )
@@ -115,8 +111,8 @@ public class SecurityConfig {
     }
 
     private String[] getWhiteList() {
-        Map<RequestMappingInfo, HandlerMethod> handlerMethods = SpringContext.getBean(RequestMappingHandlerMapping.class)
-                                                                             .getHandlerMethods();
+        Map<RequestMappingInfo, HandlerMethod> handlerMethods = SpringContextHolder.getBean(RequestMappingHandlerMapping.class)
+                                                                                   .getHandlerMethods();
         List<String> whiteList = new ArrayList<>();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
             HandlerMethod handlerMethod = entry.getValue();

@@ -39,3 +39,5 @@ my_mall:
   jwt:
     secret: "your-very-secure-jwt-secret-key-2024!@#ABCdef1234567890"
     expiration: 86400 # 1天(秒为单位)
+  captcha:
+    expiration: 60

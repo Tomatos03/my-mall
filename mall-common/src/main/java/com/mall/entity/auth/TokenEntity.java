@@ -15,11 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class TokenEntity {
-    public TokenEntity(String username, String token) {
-        this.username = username;
-        this.token = token;
-    }
-
     /**
      * 用户名称
      */
@@ -39,4 +34,10 @@ public class TokenEntity {
      * 过期时间
      */
     private int expiresIn;
+
+    public TokenEntity(String username, String token, List<String> roles) {
+        this.roles = roles;
+        this.token = token;
+        this.username = username;
+    }
 }

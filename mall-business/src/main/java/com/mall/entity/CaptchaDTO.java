@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CaptchaEntity {
+public class CaptchaDTO {
     /**
      * 唯一标识
      */

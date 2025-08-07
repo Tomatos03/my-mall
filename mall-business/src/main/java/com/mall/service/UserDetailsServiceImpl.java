@@ -1,8 +1,7 @@
 package com.mall.service;
 
-import com.mall.entity.WebUserEntity;
+import com.mall.model.AuthenticationUser;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,9 +19,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public static final String ENCODED_PASSWORD = new BCryptPasswordEncoder().encode("123456");
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public AuthenticationUser loadUserByUsername(String username) throws UsernameNotFoundException {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("USER"));
-        return new WebUserEntity(123L, username, ENCODED_PASSWORD, authorities);
+        return new AuthenticationUser(username, ENCODED_PASSWORD, authorities);
     }
 }

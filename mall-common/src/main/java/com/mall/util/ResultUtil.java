@@ -17,7 +17,7 @@ public class ResultUtil {
      * @return 接口相应实体
      */
     public static <T> Result<T> success(T data) {
-        return new Result(Result.OK, null, data);
+        return new Result<>(Result.OK, null, data);
     }
 
     /**

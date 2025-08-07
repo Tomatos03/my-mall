@@ -9,9 +9,9 @@ import lombok.Data;
  * @author : Tomatos
  * @date : 2025/8/2
  */
-@Schema(description = "用户权限实体类")
+@Schema(description = "认证用户传输传输对象")
 @Data
-public class AuthUserEntity {
+public class AuthenticationUserDTO {
     /**
      * 唯一标识
      */

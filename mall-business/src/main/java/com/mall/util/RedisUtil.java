@@ -1,5 +1,6 @@
 package com.mall.util;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -15,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedisUtil {
     @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+    StringRedisTemplate stringRedisTemplate;
 
     /**
      * 保存缓存
@@ -25,13 +26,8 @@ public class RedisUtil {
      * @return true成功 false失败
      */
     public boolean set(String key, String value) {
-        try {
-            stringRedisTemplate.opsForValue().set(key, value);
-            return true;
-        } catch (Exception e) {
-            log.error("Redis保存数据失败：", e);
-            return false;
-        }
+        stringRedisTemplate.opsForValue().set(key, value);
+        return true;
     }
 
     /**
@@ -76,5 +72,25 @@ public class RedisUtil {
      */
     public String get(String key) {
         return key == null ? null : stringRedisTemplate.opsForValue().get(key);
+    }
+
+
+    /**
+     * 删除缓存
+     *
+     * @param key 存储缓存时的key
+     * @return void
+     * @since : 1.0
+     * @author : Tomatos
+     * @date : 2025/8/5 15:57
+     */
+    public void del(String key) {
+        try {
+            if (!StrUtil.isEmpty(key)) {
+                stringRedisTemplate.delete(key);
+            }
+        } catch (Exception e) {
+            log.error("Redis删除数据失败：", e);
+        }
     }
 }

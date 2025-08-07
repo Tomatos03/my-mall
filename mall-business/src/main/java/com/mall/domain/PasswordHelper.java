@@ -1,4 +1,4 @@
-package com.mall.util;
+package com.mall.domain;
 
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
@@ -12,16 +12,12 @@ import org.springframework.stereotype.Component;
  * @date : 2025/8/3
  */
 @Component
-public class PasswordUtil {
-
+public class PasswordHelper {
     @Value("${mall.mgt.password.privateKey:MIIBVgIBADANBgkqhkiG9w0BAQEFAASCAUAwggE8AgEAAkEAv5YziQe5zP5OAyVYfIh2fJDiJuEeD4ZGNpVQjiPvsNGhvwjF/SCDECMwZl1lYAL6wNDNNXhr/ILV5xF0ZHg0+wIDAQABAkBDQRjqO5oPyh3coNmFLepaJAofl9sTnBE9zACxRRA5Q2ErwtUVi+A4qLX+HPDbPFWCbvEPKsGods4BiAL+rxWxAiEA+W9p3bfu+JA2XTxEboH9Cd5/g92PZGALne+cVKAKfFcCIQDEoQebpFK/hw8AWvWRZ4vXZLoocv8qEhnPEySCqTtl/QIhAK0vdSLTdaGxh31+vci4ijcS/BhTeh7oLMiwuCttnzorAiEAouivvvokPN8PRMIX10KtD+Y6fizYz+hzTaeUhlTkC5kCIQCPDDmumEPGzUDmFe1hlL3AqUeCNNnVhxYQrI4bNHFZvQ==}")
     private String privateKey;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    private PasswordUtil() {}
-
+    PasswordEncoder passwordEncoder;
 
     public String encode(String password) {
         return passwordEncoder.encode(password);
