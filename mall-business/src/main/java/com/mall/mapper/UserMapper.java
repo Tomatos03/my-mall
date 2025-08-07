@@ -1,6 +1,6 @@
 package com.mall.mapper;
 
-import com.mall.entity.UserEntity;
+import com.mall.entity.UserDTO;
 
 /**
  * @author : Tomatos
@@ -13,7 +13,7 @@ public interface UserMapper {
      * @param id 系统ID
      * @return 用户信息
      */
-    UserEntity findById(Long id);
+    UserDTO findById(Long id);
 
     /**
      * 根据条件查询用户列表
@@ -34,18 +34,18 @@ public interface UserMapper {
     /**
      * 添加用户
      *
-     * @param userEntity 用户实体
+     * @param userDTO 用户实体
      * @return 影响行数
      */
-    int insert(UserEntity userEntity);
+    int insert(UserDTO userDTO);
 
     /**
      * 修改用户
      *
-     * @param userEntity 用户实体
+     * @param userDTO 用户实体
      * @return 影响行数
      */
-    int update(UserEntity userEntity);
+    int update(UserDTO userDTO);
 
     /**
      * 删除用户

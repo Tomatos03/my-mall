@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Schema(description = "菜单查询条件实体")
 @Data
-public class MenuConditionEntity extends RequestConditionEntity {
+public class MenuConditionDTO extends RequestConditionEntity {
     /**
      * ID
      */

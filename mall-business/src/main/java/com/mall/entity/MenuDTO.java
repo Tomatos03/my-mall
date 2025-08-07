@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
  @AllArgsConstructor
  @NoArgsConstructor
  @Data
- public class MenuEntity extends BaseEntity {
+ public class MenuDTO extends BaseDTO {
      /**
       * 菜单名称
       */

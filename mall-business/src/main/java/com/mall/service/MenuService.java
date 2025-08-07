@@ -4,9 +4,9 @@ import cn.hutool.core.bean.BeanUtil;
 import com.google.common.collect.Lists;
 import com.mall.dto.MenuTreeDTO;
 import com.mall.dto.MetaDTO;
-import com.mall.entity.MenuEntity;
+import com.mall.entity.MenuDTO;
 import com.mall.entity.ResponsePageEntity;
-import com.mall.entity.condition.MenuConditionEntity;
+import com.mall.entity.condition.MenuConditionDTO;
 import com.mall.entity.condition.PageConditionEntity;
 import com.mall.mapper.MenuMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,17 +32,17 @@ public class MenuService {
     }
 
     private List<MenuTreeDTO> getMenuTree0(MenuTreeDTO menuTreeDTO, boolean isAlwaysShow) {
-        MenuConditionEntity menuConditionEntity = new MenuConditionEntity();
-        menuConditionEntity.setPageSize(PageConditionEntity.NO_PAGINATION);
-        menuConditionEntity.setPid(menuTreeDTO.getId());
+        MenuConditionDTO menuConditionDTO = new MenuConditionDTO();
+        menuConditionDTO.setPageSize(PageConditionEntity.NO_PAGINATION);
+        menuConditionDTO.setPid(menuTreeDTO.getId());
 
-        List<MenuEntity> menuEntities = menuMapper.searchByCondition(menuConditionEntity);
+        List<MenuDTO> menuEntities = menuMapper.searchByCondition(menuConditionDTO);
         if (menuEntities == null || menuEntities.isEmpty())
             return null;
 
         List<MenuTreeDTO> menuTreeDTOS = Lists.newArrayList();
-        for (MenuEntity menuEntity : menuEntities) {
-            MenuTreeDTO newMenuTreeDTO = buildMenuTreeDTO(menuEntity, isAlwaysShow);
+        for (MenuDTO menuDTO : menuEntities) {
+            MenuTreeDTO newMenuTreeDTO = buildMenuTreeDTO(menuDTO, isAlwaysShow);
             menuTreeDTOS.add(newMenuTreeDTO);
 
             newMenuTreeDTO.setChildren(getMenuTree0(newMenuTreeDTO, false));
@@ -51,8 +51,8 @@ public class MenuService {
     }
 
 
-    private MenuTreeDTO buildMenuTreeDTO(MenuEntity menuEntity, boolean isAlwaysShow) {
-        MenuTreeDTO menuTreeDTO = BeanUtil.copyProperties(menuEntity, MenuTreeDTO.class);
+    private MenuTreeDTO buildMenuTreeDTO(MenuDTO menuDTO, boolean isAlwaysShow) {
+        MenuTreeDTO menuTreeDTO = BeanUtil.copyProperties(menuDTO, MenuTreeDTO.class);
         menuTreeDTO.setAlwaysShow(isAlwaysShow);
 
         MetaDTO metaDTO = new MetaDTO();
@@ -64,8 +64,8 @@ public class MenuService {
         return menuTreeDTO;
     }
 
-    public ResponsePageEntity<MenuEntity> searchByPage(MenuConditionEntity menuConditionEntity) {
-        List<MenuEntity> menuEntities = menuMapper.searchByCondition(menuConditionEntity);
-        return ResponsePageEntity.build(menuConditionEntity, menuEntities.size(), menuEntities);
+    public ResponsePageEntity<MenuDTO> searchByPage(MenuConditionDTO menuConditionDTO) {
+        List<MenuDTO> menuEntities = menuMapper.searchByCondition(menuConditionDTO);
+        return ResponsePageEntity.build(menuConditionDTO, menuEntities.size(), menuEntities);
     }
 }

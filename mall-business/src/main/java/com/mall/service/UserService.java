@@ -12,7 +12,7 @@ import com.mall.domain.cache.TokenCacher;
 import com.mall.domain.cache.UserCacher;
 import com.mall.dto.AuthenticatedUserDTO;
 import com.mall.entity.CaptchaDTO;
-import com.mall.entity.UserEntity;
+import com.mall.entity.UserDTO;
 import com.mall.entity.auth.AuthenticationUserDTO;
 import com.mall.mapper.UserMapper;
 import com.mall.util.RequestUtil;
@@ -55,7 +55,7 @@ public class UserService {
      * @param id 系统ID
      * @return 用户信息
      */
-    public UserEntity findById(Long id) {
+    public UserDTO findById(Long id) {
         return userMapper.findById(id);
     }
 
@@ -78,21 +78,21 @@ public class UserService {
     /**
      * 添加用户
      *
-     * @param userEntity 用户实体
+     * @param userDTO 用户实体
      * @return 影响行数
      */
-    public int insert(UserEntity userEntity) {
-        return userMapper.insert(userEntity);
+    public int insert(UserDTO userDTO) {
+        return userMapper.insert(userDTO);
     }
 
     /**
      * 修改用户
      *
-     * @param userEntity 用户实体
+     * @param userDTO 用户实体
      * @return 影响行数
      */
-    public int update(UserEntity userEntity) {
-        return userMapper.update(userEntity);
+    public int update(UserDTO userDTO) {
+        return userMapper.update(userDTO);
     }
 
     /**
