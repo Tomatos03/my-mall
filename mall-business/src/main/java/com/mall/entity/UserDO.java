@@ -15,7 +15,10 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDO extends com.mall.entity.BaseDO {
+public class UserDO extends BaseDO {
+    @Schema(description = "头像ID")
+    private Long avatarId;
+
     @Schema(description = "用户名称")
     private String userName;
 
@@ -50,5 +53,5 @@ public class UserDO extends com.mall.entity.BaseDO {
     private Integer validStatus;
 
     @Schema(description = "角色ID列表")
-    private List<String> roleList;
+    private List<RoleDO> roleList;
 }

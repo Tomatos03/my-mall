@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
+
 /**
  * @author : Tomatos
  * @date : 2025/8/2
@@ -16,7 +17,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 public class BaseDO implements Serializable {
-
     /**
      * 系统ID
      */

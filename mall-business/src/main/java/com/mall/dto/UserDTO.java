@@ -1,5 +1,6 @@
 package com.mall.dto;
 
+import com.mall.entity.RoleDO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -52,5 +53,5 @@ public class UserDTO extends BaseDTO {
     private Integer validStatus;
 
     @Schema(description = "角色ID列表")
-    private List<String> roleList;
+    private List<RoleDO> roleList;
 }

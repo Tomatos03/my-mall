@@ -1,5 +1,6 @@
 package com.mall.controller;
 
+import com.mall.annotation.NoLogin;
 import com.mall.dto.UserDTO;
 import com.mall.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,6 +52,7 @@ public class UserController {
      * @param userDTO 用户实体
      * @return 影响行数
      */
+    @NoLogin
     @PostMapping("/insert")
     @Operation(summary = "添加用户", description = "添加一个用户")
     public void insert(@RequestBody UserDTO userDTO) {

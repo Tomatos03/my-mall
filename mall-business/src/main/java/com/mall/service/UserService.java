@@ -3,6 +3,7 @@ package com.mall.service;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.CircleCaptcha;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.IdUtil;
 import com.mall.domain.CaptchaHelper;
 import com.mall.domain.JwtHelper;
@@ -15,8 +16,12 @@ import com.mall.dto.AuthenticatedUserDTO;
 import com.mall.dto.CaptchaDTO;
 import com.mall.dto.UserDTO;
 import com.mall.entity.UserDO;
+import com.mall.entity.UserRoleDO;
 import com.mall.entity.auth.AuthenticationUserDTO;
+import com.mall.entity.condition.UserConditionDTO;
+import com.mall.exception.BusinessException;
 import com.mall.mapper.UserMapper;
+import com.mall.mapper.UserRoleMapper;
 import com.mall.util.RequestUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -50,6 +56,8 @@ public class UserService {
     private TokenCacher tokenCacher;
     @Autowired
     private CaptchaCacher captchaCacher;
+    @Autowired
+    private UserRoleMapper userRoleMapper;
 
     /**
      * 通过id查询用户信息
@@ -84,9 +92,33 @@ public class UserService {
      * @param userDTO 用户实体
      * @return 影响行数
      */
+    @Transactional(rollbackFor = Throwable.class)
     public void insert(UserDTO userDTO) {
         UserDO userDO = BeanUtil.copyProperties(userDTO, UserDO.class);
+
+        hasDuplicateUserName(userDO.getUserName());
+        hasDuplicateEmail(userDO.getEmail());
+
         userMapper.insert(userDO);
+        userRoleMapper.batchInsert(UserRoleDO.buildUserRoleDO(userDO));
+    }
+
+    private void hasDuplicateEmail(String email) {
+        UserConditionDTO userConditionDTO = new UserConditionDTO();
+        userConditionDTO.setEmail(email);
+
+        List<UserDO> userDOS = userMapper.searchByCondition(userConditionDTO);
+        if (!CollectionUtil.isEmpty(userDOS))
+            throw new BusinessException("重复的邮箱");
+    }
+
+    private void hasDuplicateUserName(String username) {
+        UserConditionDTO userConditionDTO = new UserConditionDTO();
+        userConditionDTO.setUserName(username);
+
+        List<UserDO> userDOS = userMapper.searchByCondition(userConditionDTO);
+        if (!CollectionUtil.isEmpty(userDOS))
+            throw new BusinessException("重复的用户名");
     }
 
     /**
