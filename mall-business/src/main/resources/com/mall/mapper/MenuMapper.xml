@@ -136,6 +136,71 @@
             AND is_del = 0
         </where>
     </sql>
+
+    <insert id="insert" parameterType="com.mall.entity.MenuDO">
+        INSERT INTO sys_menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            pid,
+            sort,
+            <if test="icon != null">icon,</if>
+            <if test="path != null">path,</if>
+            <if test="hidden != null">hidden,</if>
+            <if test="isLink != null">is_link,</if>
+            <if test="permission != null">permission,</if>
+            <if test="type != null">type,</if>
+            <if test="component != null">component,</if>
+            <if test="url != null">url,</if>
+            create_user_id,
+            create_user_name,
+            <if test="createTime != null">create_time,</if>
+            <if test="updateUserId != null">update_user_id,</if>
+            <if test="updateUserName != null">update_user_name,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            #{pid},
+            #{sort},
+            <if test="icon != null">#{icon},</if>
+            <if test="path != null">#{path},</if>
+            <if test="hidden != null">#{hidden},</if>
+            <if test="isLink != null">#{isLink},</if>
+            <if test="permission != null">#{permission},</if>
+            <if test="type != null">#{type},</if>
+            <if test="component != null">#{component},</if>
+            <if test="url != null">#{url},</if>
+            #{createUserId},
+            #{createUserName},
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUserId != null">#{updateUserId},</if>
+            <if test="updateUserName != null">#{updateUserName},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.mall.entity.MenuDO">
+        UPDATE sys_menu
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="pid != null">pid = #{pid},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="icon != null">icon = #{icon},</if>
+            <if test="path != null">path = #{path},</if>
+            <if test="hidden != null">hidden = #{hidden},</if>
+            <if test="isLink != null">is_link = #{isLink},</if>
+            <if test="permission != null">permission = #{permission},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="component != null">component = #{component},</if>
+            <if test="url != null">url = #{url},</if>
+            <if test="updateUserId != null">update_user_id = #{updateUserId},</if>
+            <if test="updateUserName != null">update_user_name = #{updateUserName},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
     <delete id="batchDelete">
         UPDATE sys_menu
         SET is_del = 1
@@ -144,15 +209,6 @@
             #{id}
         </foreach>
     </delete>
-
-    <select id="searchByCondition"
-            parameterType="com.mall.entity.condition.MenuConditionDTO">
-        SELECT
-            <include refid="selectMenuColumn"/>
-        FROM sys_menu
-            <include refid="queryWhere"/>
-            <include refid="com.mall.mapper.BaseMapper.paginationSql"/>
-    </select>
 
     <select id="findMenuByRoleIdList"
             parameterType="Long"
@@ -179,5 +235,15 @@
             </foreach>
             AND sm.is_del = 0
         </where>
+    </select>
+
+    <select id="searchByCondition"
+            parameterType="com.mall.entity.condition.MenuConditionDTO"
+            resultMap="MenuResult">
+        SELECT
+        <include refid="selectMenuColumn"/>
+        FROM sys_menu
+        <include refid="queryWhere"/>
+        <include refid="com.mall.mapper.BaseMapper.paginationSql"/>
     </select>
 </mapper>

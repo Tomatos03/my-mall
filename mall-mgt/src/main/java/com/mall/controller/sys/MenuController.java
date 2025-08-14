@@ -1,6 +1,7 @@
 package com.mall.controller.sys;
 
 import com.mall.annotation.NoLogin;
+import com.mall.dto.MenuDTO;
 import com.mall.entity.MenuDO;
 import com.mall.entity.condition.MenuConditionDTO;
 import com.mall.entity.condition.ResponsePage;
@@ -58,5 +59,17 @@ public class MenuController {
     @PostMapping("/export")
     public void export(HttpServletResponse response, MenuConditionDTO menuConditionDTO) throws IOException {
         menuService.export(response, menuConditionDTO);
+    }
+
+    @Operation(summary = "插入菜单", description = "插入菜单")
+    @PostMapping("/insert")
+    public int insert(@RequestBody MenuDTO menuDTO) {
+        return menuService.insert(menuDTO);
+    }
+
+    @Operation(summary = "更新菜单", description = "更新菜单")
+    @PostMapping("/update")
+    public int update(@RequestBody MenuDTO menuDTO) {
+        return menuService.update(menuDTO);
     }
 }

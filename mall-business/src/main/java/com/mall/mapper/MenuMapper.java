@@ -2,6 +2,7 @@ package com.mall.mapper;
 
 import com.mall.entity.MenuDO;
 import com.mall.entity.condition.MenuConditionDTO;
+import org.springframework.dao.DataAccessException;
 
 import java.util.Collection;
 import java.util.List;
@@ -12,5 +13,13 @@ import java.util.List;
  */
 public interface MenuMapper extends BaseMapper<MenuDO, MenuConditionDTO> {
     List<MenuDO> findMenuByRoleIdList(Collection<Long> roleIdList);
+
     int batchDelete(List<Long> ids);
+
+    int insert(MenuDO menuDO);
+
+    int update(MenuDO menuDO);
+
+    @Override
+    List<MenuDO> searchByCondition(MenuConditionDTO menuConditionDTO) throws DataAccessException;
 }

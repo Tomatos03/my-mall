@@ -3,13 +3,15 @@ package com.mall.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.google.common.collect.Lists;
-import com.mall.domain.ExcelHelper;
+import com.mall.util.ExcelUtil;
 import com.mall.domain.page.PageCondition;
+import com.mall.dto.MenuDTO;
 import com.mall.dto.MetaDTO;
 import com.mall.entity.MenuDO;
 import com.mall.entity.condition.MenuConditionDTO;
 import com.mall.entity.condition.ResponsePage;
 import com.mall.mapper.MenuMapper;
+import com.mall.util.TimeUtil;
 import com.mall.vo.MenuTreeVO;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,8 +72,10 @@ public class MenuService {
     }
 
     public ResponsePage<MenuDO> searchByPage(MenuConditionDTO menuConditionDTO) {
-        List<MenuDO> menuEntities = menuMapper.searchByCondition(menuConditionDTO);
-        return ResponsePage.build(menuConditionDTO, menuEntities.size(), menuEntities);
+        TimeUtil.fillTimeInterval(menuConditionDTO);
+        List<MenuDO> menuDOS = menuMapper.searchByCondition(menuConditionDTO);
+
+        return ResponsePage.build(menuConditionDTO, menuDOS.size(), menuDOS);
     }
 
     public int deleteByIds(List<Long> ids) {
@@ -81,6 +85,20 @@ public class MenuService {
     public void export(HttpServletResponse response, MenuConditionDTO menuConditionDTO) throws IOException {
         menuConditionDTO.setPageSize(PageCondition.ALL_PAGE);
         List<MenuDO> menuDOS = menuMapper.searchByCondition(menuConditionDTO);
-        ExcelHelper.export("菜单数据", MenuDO.class, menuDOS, response);
+        ExcelUtil.export("菜单数据", MenuDO.class, menuDOS, response);
+    }
+
+    public int insert(MenuDTO menuDTO) {
+        MenuDO menuDO = BeanUtil.copyProperties(menuDTO, MenuDO.class);
+        // TODO 暂时写死
+        menuDO.setCreateUserId(1L);
+        menuDO.setCreateUserName("admin");
+
+        return menuMapper.insert(menuDO);
+    }
+
+    public int update(MenuDTO menuDTO) {
+        MenuDO menuDO = BeanUtil.copyProperties(menuDTO, MenuDO.class);
+        return menuMapper.update(menuDO);
     }
 }
