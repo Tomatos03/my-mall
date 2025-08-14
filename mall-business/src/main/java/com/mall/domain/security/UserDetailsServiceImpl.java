@@ -1,6 +1,5 @@
-package com.mall.service;
+package com.mall.domain.security;
 
-import com.mall.domain.security.AuthenticationUser;
 import com.mall.entity.UserDO;
 import com.mall.mapper.RoleMapper;
 import com.mall.mapper.UserMapper;
