@@ -12,6 +12,7 @@ import java.util.Objects;
  */
 @Data
 public class PageCondition {
+    public static final int ALL_PAGE = 0;
     // Xml条件查询中当PageSize小于等于0的时候不进行分页
     public static final int NO_PAGINATION = 0;
     private static final int DEFAULT_PAGE_SIZE = 10;

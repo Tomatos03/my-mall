@@ -7,10 +7,12 @@ import com.mall.entity.condition.ResponsePage;
 import com.mall.service.MenuService;
 import com.mall.vo.MenuTreeVO;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -49,5 +51,12 @@ public class MenuController {
     @PostMapping("/deleteByIds")
     public int deleteByIds(@RequestBody @NotNull List<Long> ids) {
         return menuService.deleteByIds(ids);
+    }
+
+    @NoLogin
+    @Operation(summary = "导出菜单数据", description = "导出菜单数据")
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, MenuConditionDTO menuConditionDTO) throws IOException {
+        menuService.export(response, menuConditionDTO);
     }
 }

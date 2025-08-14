@@ -1,5 +1,6 @@
 package com.mall.entity;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,43 +18,27 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 public class BaseDO implements Serializable {
-    /**
-     * 系统ID
-     */
+    @ExcelProperty("系统ID")
     private Long id;
 
-    /**
-     * 创建人ID
-     */
+    @ExcelProperty("创建人ID")
     private Long createUserId;
 
-    /**
-     * 创建人名称
-     */
+    @ExcelProperty("创建人名称")
     private String createUserName;
 
-    /**
-     * 创建时间
-     */
+    @ExcelProperty("创建时间")
     private LocalDateTime createTime;
 
-    /**
-     * 修改人ID
-     */
+    @ExcelProperty("修改人ID")
     private Long updateUserId;
 
-    /**
-     * 修改人名称
-     */
+    @ExcelProperty("修改人名称")
     private String updateUserName;
 
-    /**
-     * 修改时间
-     */
+    @ExcelProperty("修改时间")
     private LocalDateTime updateTime;
 
-    /**
-     * 是否删除
-     */
+    @ExcelProperty("是否删除")
     private Integer isDel;
 }

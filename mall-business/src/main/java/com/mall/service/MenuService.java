@@ -3,6 +3,7 @@ package com.mall.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.google.common.collect.Lists;
+import com.mall.domain.ExcelHelper;
 import com.mall.domain.page.PageCondition;
 import com.mall.dto.MetaDTO;
 import com.mall.entity.MenuDO;
@@ -10,9 +11,11 @@ import com.mall.entity.condition.MenuConditionDTO;
 import com.mall.entity.condition.ResponsePage;
 import com.mall.mapper.MenuMapper;
 import com.mall.vo.MenuTreeVO;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -73,5 +76,11 @@ public class MenuService {
 
     public int deleteByIds(List<Long> ids) {
         return menuMapper.batchDelete(ids);
+    }
+
+    public void export(HttpServletResponse response, MenuConditionDTO menuConditionDTO) throws IOException {
+        menuConditionDTO.setPageSize(PageCondition.ALL_PAGE);
+        List<MenuDO> menuDOS = menuMapper.searchByCondition(menuConditionDTO);
+        ExcelHelper.export("菜单数据", MenuDO.class, menuDOS, response);
     }
 }
