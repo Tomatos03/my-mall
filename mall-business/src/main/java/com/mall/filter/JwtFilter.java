@@ -38,10 +38,11 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("请求地址: {}", request.getRequestURI());
 
-        String token, username;
+        String token, username, cacheToken;
         if ((token = RequestUtil.getToken(request)) != null
         && (username = jwtHelper.getUsernameFromToken(token)) != null
-        && (token.equals(tokenCacher.getTokenFromCache(username)))
+        && (cacheToken = tokenCacher.getTokenFromCache(username)) != null
+        && (token.equals(cacheToken))
         ) {
             String userJson = userCacher.getUserJson(username);
             AuthenticatedUserDTO authenticatedUserDTO = JSONUtil.toBean(userJson, AuthenticatedUserDTO.class);
