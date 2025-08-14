@@ -193,6 +193,13 @@
         WHERE id = #{id}
     </select>
 
+    <select id="findByUserName" resultType="com.mall.entity.UserDO">
+        SELECT
+        <include refid="selectUserColumn"/>
+        FROM sys_user u
+        WHERE u.user_name = #{username}
+    </select>
+
     <insert id="insert" parameterType="com.mall.entity.UserDO" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO sys_user
         <trim prefix="(" suffix=")" suffixOverrides=",">

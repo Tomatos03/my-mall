@@ -57,4 +57,6 @@ public interface UserMapper extends BaseMapper<UserDO, UserConditionDTO> {
      * @return 影响行数
      */
     int deleteById(Long id);
+
+    UserDO findByUserName(String username);
 }
