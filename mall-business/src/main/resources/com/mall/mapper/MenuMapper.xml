@@ -136,6 +136,14 @@
             AND is_del = 0
         </where>
     </sql>
+    <delete id="batchDelete">
+        UPDATE sys_menu
+        SET is_del = 1
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
 
     <select id="searchByCondition"
             parameterType="com.mall.entity.condition.MenuConditionDTO">
@@ -144,5 +152,32 @@
         FROM sys_menu
             <include refid="queryWhere"/>
             <include refid="com.mall.mapper.BaseMapper.paginationSql"/>
+    </select>
+
+    <select id="findMenuByRoleIdList"
+            parameterType="Long"
+            resultMap="MenuResult">
+        SELECT
+        sm.id,
+        sm.name,
+        sm.pid,
+        sm.sort,
+        sm.icon,
+        sm.path,
+        sm.hidden,
+        sm.is_link,
+        sm.type,
+        sm.permission,
+        sm.url,
+        srm.role_id
+        FROM sys_menu sm
+        INNER JOIN sys_role_menu srm ON sm.id=srm.role_id
+        <where>
+            srm.role_id IN
+            <foreach collection="roleIdList" item="roleId" open="(" close=")" separator=",">
+                #{roleId}
+            </foreach>
+            AND sm.is_del = 0
+        </where>
     </select>
 </mapper>

@@ -1,12 +1,13 @@
 package com.mall.controller.sys;
 
 import com.mall.annotation.NoLogin;
-import com.mall.vo.MenuTreeVO;
 import com.mall.entity.MenuDO;
-import com.mall.entity.condition.ResponsePage;
 import com.mall.entity.condition.MenuConditionDTO;
+import com.mall.entity.condition.ResponsePage;
 import com.mall.service.MenuService;
+import com.mall.vo.MenuTreeVO;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,5 +36,18 @@ public class MenuController {
     @PostMapping("/searchByPage")
     public ResponsePage<MenuDO> searchByPage(@RequestBody MenuConditionDTO menuConditionDTO) {
         return menuService.searchByPage(menuConditionDTO);
+    }
+
+    /**
+     * 批量删除菜单
+     *
+     * @param ids 菜单ID
+     * @return 影响行数
+     */
+    @NoLogin
+    @Operation(summary = "删除菜单", description = "删除菜单")
+    @PostMapping("/deleteByIds")
+    public int deleteByIds(@RequestBody @NotNull List<Long> ids) {
+        return menuService.deleteByIds(ids);
     }
 }
