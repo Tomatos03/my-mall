@@ -1,7 +1,9 @@
 package com.mall.domain.security;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,21 +11,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+
 /**
  * @author : Tomatos
  * @date : 2025/8/5
  */
 @Data
 @Schema(description = "认证的用户")
+@Builder
+@NoArgsConstructor
 public class AuthenticationUser implements UserDetails {
     private String username;
     private String password;
     private List<SimpleGrantedAuthority> authorities;
-
-    /**
-     * 角色信息
-     */
-    private List<String> roles;
 
     public AuthenticationUser(String username, String password, List<SimpleGrantedAuthority> authorities) {
         this.authorities = authorities;
