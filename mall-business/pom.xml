@@ -55,6 +55,11 @@
             <version>4.0.3</version>
         </dependency>
 
+        <!-- aop -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
         <!-- 该依赖存在一个问题: 根据class对象获取RequestMappingHandlerMapping的Bean对象不唯一, 暂时先注释这个依赖 -->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.boot</groupId>-->

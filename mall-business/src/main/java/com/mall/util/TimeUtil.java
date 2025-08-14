@@ -13,6 +13,9 @@ import java.util.List;
 public class TimeUtil {
     public static void fillTimeInterval(RequestCondition requestCondition) {
         List<String> betweenTime = requestCondition.getBetweenTime();
+        if (betweenTime ==  null)
+            return;
+
         int size = betweenTime.size();
 
         if (size >= 1)
