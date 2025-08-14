@@ -19,5 +19,5 @@ public class AuthenticatedUserDTO {
     private Long id;
     private String username;
     private String token;
-    private List<String> authorities;
+    private List<String> roles;
 }
