@@ -27,7 +27,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -151,7 +150,7 @@ public class UserService {
         String username = authenticationUserDTO.getUsername();
         String decodePassword = passwordHelper.decodeRsaPassword(authenticationUserDTO.getPassword());
         Authentication authenticated = authenticator.authenticate(username, decodePassword);
-        AuthenticatedUserDTO authenticatedUserDTO = convertFrom(authenticated);
+        AuthenticatedUserDTO authenticatedUserDTO = Authenticator.convertFrom(authenticated);
 
         String token = jwtHelper.createUserToken(username);
         authenticatedUserDTO.setToken(token);
@@ -169,22 +168,8 @@ public class UserService {
         tokenCacher.del(username);
     }
 
-    private AuthenticatedUserDTO convertFrom(Authentication authentication) {
-        // 如果 principal 是 UserDetails，可以直接拿信息
-        String username = authentication.getName();
-        List<String> roles = authentication.getAuthorities()
-                                           .stream()
-                                           .map(GrantedAuthority::getAuthority)
-                                           .toList();
-
-        return AuthenticatedUserDTO.builder()
-                                   .username(username)
-                                   .authorities(roles)
-                                   .build();
-    }
-
-    public String getUserInfo() {
-        return authenticator.getUsername();
+    public AuthenticatedUserDTO getUserInfo() {
+        return authenticator.getAuthenticatedUser();
     }
 
     public CaptchaDTO getCode() {

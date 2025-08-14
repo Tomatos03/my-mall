@@ -63,10 +63,6 @@ public class WebUserController {
     @Operation(summary = "获取用户信息", description = "获取用户信息")
     @GetMapping(value = "/info")
     public AuthenticatedUserDTO getUserInfo() {
-        // TODO 这里暂时简单处理
-        String username = userService.getUserInfo();
-        return AuthenticatedUserDTO.builder()
-                                   .username(username)
-                                   .build();
+        return userService.getUserInfo();
     }
 }
