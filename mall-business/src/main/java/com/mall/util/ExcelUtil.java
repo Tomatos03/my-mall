@@ -1,4 +1,4 @@
-package com.mall.domain;
+package com.mall.util;
 
 import com.alibaba.excel.EasyExcel;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,11 +18,11 @@ import java.util.List;
  * @author : Tomatos
  * @date : 2025/8/14
  */
-public class ExcelHelper {
+public class ExcelUtil {
     public static final String FILE_STORE_PATH = "/tmp/";
     private static final String UTF8 = StandardCharsets.UTF_8.toString();
 
-    private ExcelHelper() {};
+    private ExcelUtil() {};
 
     /**
      * 导出excel
