@@ -19,6 +19,7 @@ spring:
       &characterEncoding=utf8
       &useSSL=false&zeroDateTimeBehavior=convertToNull
       &allowMultiQueries=true&autoReconnect=true
+    driver-class-name: org.mariadb.jdbc.Driver
   data:
     redis:
       port: 6379

@@ -3,6 +3,7 @@ package com.mall.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.google.common.collect.Lists;
+import com.mall.constant.ExcelTitleConst;
 import com.mall.util.ExcelUtil;
 import com.mall.domain.page.PageCondition;
 import com.mall.dto.MenuDTO;
@@ -85,7 +86,7 @@ public class MenuService {
     public void export(HttpServletResponse response, MenuConditionDTO menuConditionDTO) throws IOException {
         menuConditionDTO.setPageSize(PageCondition.ALL_PAGE);
         List<MenuDO> menuDOS = menuMapper.searchByCondition(menuConditionDTO);
-        ExcelUtil.export("菜单数据", MenuDO.class, menuDOS, response);
+        ExcelUtil.export(ExcelTitleConst.MENU_DATE, MenuDO.class, menuDOS, response);
     }
 
     public int insert(MenuDTO menuDTO) {
