@@ -1,5 +1,6 @@
-package com.mall.entity.condition;
+package com.mall.dto.condition;
 
+import com.mall.entity.condition.RequestCondition;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

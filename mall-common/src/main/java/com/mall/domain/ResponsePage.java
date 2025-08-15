@@ -1,6 +1,6 @@
-package com.mall.entity.condition;
+package com.mall.domain;
 
-import com.mall.domain.page.PageCondition;
+import com.mall.entity.condition.PageCondition;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

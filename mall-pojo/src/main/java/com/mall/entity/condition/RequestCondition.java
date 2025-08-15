@@ -1,6 +1,5 @@
 package com.mall.entity.condition;
 
-import com.mall.domain.page.PageCondition;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

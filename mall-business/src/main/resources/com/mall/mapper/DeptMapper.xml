@@ -61,7 +61,7 @@
         SELECT <include refid="selectDeptColumn"/> FROM sys_dept WHERE id = #{id}
     </select>
 
-    <select id="searchByCondition" parameterType="com.mall.entity.condition.DeptConditionDTO" resultMap="DeptResult">
+    <select id="searchByCondition" parameterType="com.mall.dto.condition.DeptConditionDTO" resultMap="DeptResult">
         SELECT
         <include refid="selectDeptColumn"/>
         FROM sys_dept
@@ -82,7 +82,7 @@
         </where>
     </select>
 
-    <select id="searchCount" parameterType="com.mall.entity.condition.DeptConditionDTO" resultType="int">
+    <select id="searchCount" parameterType="com.mall.dto.condition.DeptConditionDTO" resultType="int">
         SELECT COUNT(*)
         FROM sys_dept
         <include refid="queryWhere"/>

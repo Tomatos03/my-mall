@@ -145,7 +145,7 @@
     </sql>
 
     <select id="searchByCondition"
-            parameterType="com.mall.entity.condition.UserConditionDTO"
+            parameterType="com.mall.dto.condition.UserConditionDTO"
             resultMap="UserResult">
         SELECT
         <include refid="selectUserColumn"/>

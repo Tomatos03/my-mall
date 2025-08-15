@@ -1,7 +1,7 @@
 package com.mall.mapper;
 
 import com.mall.entity.UserDO;
-import com.mall.entity.condition.UserConditionDTO;
+import com.mall.dto.condition.UserConditionDTO;
 
 import java.util.List;
 

@@ -1,9 +1,9 @@
 package com.mall.mapper;
 
 import com.mall.annotation.AutoFill;
-import com.mall.constant.FillType;
+import com.mall.enums.FillType;
 import com.mall.entity.MenuDO;
-import com.mall.entity.condition.MenuConditionDTO;
+import com.mall.dto.condition.MenuConditionDTO;
 import org.springframework.dao.DataAccessException;
 
 import java.util.Collection;

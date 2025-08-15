@@ -3,7 +3,7 @@ package com.mall.controller.web;
 import com.mall.annotation.NoLogin;
 import com.mall.dto.AuthenticatedUserDTO;
 import com.mall.dto.CaptchaDTO;
-import com.mall.entity.auth.AuthenticationUserDTO;
+import com.mall.dto.AuthenticationUserDTO;
 import com.mall.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

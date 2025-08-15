@@ -1,7 +1,7 @@
 package com.mall.mapper;
 
 import com.mall.entity.DeptDO;
-import com.mall.entity.condition.DeptConditionDTO;
+import com.mall.dto.condition.DeptConditionDTO;
 
 import java.util.List;
 

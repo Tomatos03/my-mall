@@ -238,7 +238,7 @@
     </select>
 
     <select id="searchByCondition"
-            parameterType="com.mall.entity.condition.MenuConditionDTO"
+            parameterType="com.mall.dto.condition.MenuConditionDTO"
             resultMap="MenuResult">
         SELECT
         <include refid="selectMenuColumn"/>

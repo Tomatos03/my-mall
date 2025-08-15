@@ -1,4 +1,4 @@
-package com.mall.domain.page;
+package com.mall.entity.condition;
 
 import cn.hutool.core.collection.CollectionUtil;
 import lombok.Data;

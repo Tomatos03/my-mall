@@ -2,8 +2,8 @@ package com.mall.controller.sys;
 
 import com.mall.dto.DeptDTO;
 import com.mall.entity.DeptDO;
-import com.mall.entity.condition.DeptConditionDTO;
-import com.mall.entity.condition.ResponsePage;
+import com.mall.dto.condition.DeptConditionDTO;
+import com.mall.domain.ResponsePage;
 import com.mall.service.DeptService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
