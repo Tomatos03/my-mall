@@ -4,15 +4,13 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.google.common.collect.Lists;
 import com.mall.constant.ExcelTitleConst;
-import com.mall.util.ExcelUtil;
-import com.mall.entity.condition.PageCondition;
 import com.mall.dto.MenuDTO;
 import com.mall.dto.MetaDTO;
-import com.mall.entity.MenuDO;
 import com.mall.dto.condition.MenuConditionDTO;
-import com.mall.domain.ResponsePage;
+import com.mall.entity.MenuDO;
+import com.mall.entity.condition.PageCondition;
+import com.mall.mapper.BaseMapper;
 import com.mall.mapper.MenuMapper;
-import com.mall.util.TimeUtil;
 import com.mall.vo.MenuTreeVO;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +24,7 @@ import java.util.List;
  * @date : 2025/8/4
  */
 @Service
-public class MenuService {
+public class MenuService extends CommonService<MenuDO, MenuConditionDTO> {
     @Autowired
     MenuMapper menuMapper;
 
@@ -72,21 +70,12 @@ public class MenuService {
         return menuTreeVO;
     }
 
-    public ResponsePage<MenuDO> searchByPage(MenuConditionDTO menuConditionDTO) {
-        TimeUtil.fillTimeInterval(menuConditionDTO);
-        List<MenuDO> menuDOS = menuMapper.searchByCondition(menuConditionDTO);
-
-        return ResponsePage.build(menuConditionDTO, menuDOS.size(), menuDOS);
-    }
-
     public int deleteByIds(List<Long> ids) {
         return menuMapper.batchDelete(ids);
     }
 
     public void export(HttpServletResponse response, MenuConditionDTO menuConditionDTO) throws IOException {
-        menuConditionDTO.setPageSize(PageCondition.ALL_PAGE);
-        List<MenuDO> menuDOS = menuMapper.searchByCondition(menuConditionDTO);
-        ExcelUtil.export(ExcelTitleConst.MENU_DATE, MenuDO.class, menuDOS, response);
+        super.export(menuConditionDTO, response, MenuDO.class, ExcelTitleConst.MENU_DATE);
     }
 
     public int insert(MenuDTO menuDTO) {
@@ -101,5 +90,10 @@ public class MenuService {
     public int update(MenuDTO menuDTO) {
         MenuDO menuDO = BeanUtil.copyProperties(menuDTO, MenuDO.class);
         return menuMapper.update(menuDO);
+    }
+
+    @Override
+    protected BaseMapper<MenuDO, MenuConditionDTO> getMapper() {
+        return menuMapper;
     }
 }

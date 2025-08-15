@@ -3,14 +3,12 @@ package com.mall.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.mall.constant.ExcelTitleConst;
-import com.mall.entity.condition.PageCondition;
 import com.mall.dto.DeptDTO;
-import com.mall.entity.DeptDO;
 import com.mall.dto.condition.DeptConditionDTO;
-import com.mall.domain.ResponsePage;
+import com.mall.entity.DeptDO;
+import com.mall.entity.condition.PageCondition;
+import com.mall.mapper.BaseMapper;
 import com.mall.mapper.DeptMapper;
-import com.mall.util.ExcelUtil;
-import com.mall.util.TimeUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,26 +26,16 @@ import java.util.List;
  * @date : 2025/8/14
  */
 @Service
-public class DeptService {
+public class DeptService extends CommonService<DeptDO, DeptConditionDTO> {
     @Autowired
     private DeptMapper deptMapper;
-
-    public ResponsePage<DeptDO> searchByPage(DeptConditionDTO deptConditionDTO) {
-        TimeUtil.fillTimeInterval(deptConditionDTO);
-        List<DeptDO> deptDOS = deptMapper.searchByCondition(deptConditionDTO);
-
-        return ResponsePage.build(deptConditionDTO, deptDOS.size(), deptDOS);
-    }
 
     public int deleteByIds(@NotNull List<Long> ids) {
         return deptMapper.deleteByIds(ids);
     }
 
-    public void export(HttpServletResponse response, DeptConditionDTO deptConditionDTO) throws IOException, IOException {
-        deptConditionDTO.setPageSize(PageCondition.ALL_PAGE);
-
-        List<DeptDO> deptDOS = deptMapper.searchByCondition(deptConditionDTO);
-        ExcelUtil.export(ExcelTitleConst.DEPT_DATE, DeptDO.class, deptDOS, response);
+    public void export(HttpServletResponse response, DeptConditionDTO deptConditionDTO) throws IOException {
+        super.export(deptConditionDTO, response, DeptDO.class, ExcelTitleConst.DEPT_DATE);
     }
 
     public int update(DeptDTO deptDTO) {
@@ -94,5 +82,10 @@ public class DeptService {
             newDeptDTO.setChildren(getDeptSubTree(newDeptDTO));
         }
         return deptDTOS;
+    }
+
+    @Override
+    protected BaseMapper<DeptDO, DeptConditionDTO> getMapper() {
+        return deptMapper;
     }
 }

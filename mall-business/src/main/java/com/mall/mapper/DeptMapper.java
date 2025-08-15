@@ -11,7 +11,7 @@ import java.util.List;
  * @author : Tomatos
  * @date : 2025/8/14
  */
-public interface DeptMapper {
+public interface DeptMapper extends BaseMapper<DeptDO, DeptConditionDTO> {
     List<DeptDO> searchByCondition(DeptConditionDTO deptConditionDTO);
 
     DeptDO searchById(Long id);
