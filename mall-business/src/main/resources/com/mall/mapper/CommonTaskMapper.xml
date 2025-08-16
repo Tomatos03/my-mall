@@ -63,6 +63,19 @@
             AND is_del = 0
         </where>
     </sql>
+    <update id="update" parameterType="com.mall.entity.CommonTaskDO">
+        UPDATE common_task
+        SET
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="fileUrl != null and fileUrl != ''">file_url = #{fileUrl},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="failureCount != null">failure_count = #{failureCount},</if>
+            <if test="bizType != null">biz_type = #{bizType},</if>
+            <if test="requestParam != null">request_param = #{requestParam},</if>
+            update_time = now()
+        WHERE id = #{id}
+    </update>
 
     <select id="searchByCondition"
             parameterType="com.mall.entity.condition.CommonTaskCondition"

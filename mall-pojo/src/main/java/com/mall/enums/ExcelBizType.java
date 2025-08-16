@@ -12,11 +12,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ExcelBizType {
-    MENU(1, "com.mall.entity.MenuConditionDTO", "菜单"),
-    ROLE(2, "com.mall.entity.RoleConditionDTO", "角色"),
-    DEPT(3, "com.mall.entity.DeptConditionDTO", "部门"),
-    USER(4, "com.mall.entity.UserConditionDTO", "用户"),
-    JOB(5, "com.mall.entity.JobConditionDTO", "岗位");
+    MENU(1, "菜单", "com.mall.dto.condition.MenuConditionDTO", "com.mall.service.MenuService", "com.mall.entity.MenuDO"),
+    ROLE(2, "角色", "com.mall.dto.condition.RoleConditionDTO", "com.mall.service.RoleService", "com.mall.entity.RoleDO"),
+    DEPT(3, "部门", "com.mall.dto.condition.DeptConditionDTO", "com.mall.service.DeptService", "com.mall.entity.DeptDO"),
+    USER(4, "用户", "com.mall.dto.condition.UserConditionDTO", "com.mall.service.UserService", "com.mall.entity.UserDO"),
+    JOB(5, "岗位", "com.mall.dto.condition.JobConditionDTO", "com.mall.service.JobService", "com.mall.entity.JobDO");
 
     /**
      * 枚举值
@@ -24,13 +24,23 @@ public enum ExcelBizType {
     private Integer value;
 
     /**
-     * 请求参数实体
-     */
-    private String requestDO;
-
-    /**
      * 枚举描述
      */
     private String desc;
+
+    /**
+     * 请求参数实体
+     */
+    private String dtoName;
+
+    /**
+     * Service类名称
+     */
+    private String serviceName;
+
+    /**
+     * DO类名称
+     */
+    private String doName;
 }
 

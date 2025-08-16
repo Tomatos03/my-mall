@@ -17,6 +17,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @NoArgsConstructor
 @Builder
 public class CommonTaskDO extends BaseDO{
+    public static final int MAX_FAILURE_COUNT = 3;
+
     /**
      * 任务名称
      */

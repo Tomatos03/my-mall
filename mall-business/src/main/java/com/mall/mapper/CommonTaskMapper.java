@@ -17,4 +17,6 @@ public interface CommonTaskMapper extends BaseMapper<CommonTaskDO, CommonTaskCon
     List<CommonTaskDO> searchByCondition(CommonTaskCondition commonTaskCondition);
 
     void insert(CommonTaskDO excelExportTask);
+
+    void update(CommonTaskDO commonTaskDO);
 }

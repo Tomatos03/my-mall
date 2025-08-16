@@ -34,22 +34,22 @@ public abstract class CommonService<K, V> {
     /**
      * 导出数据到Excel
      *
-     * @param v        数据对象
-     * @param response 响应对象
-     * @param clazz    数据类型
-     * @param fileName 文件名称
+     * @param condition 条件实体
+     * @param response  响应对象
+     * @param kClazz    待添加对象Class对象
+     * @param fileName  文件名称
      * @return void
      * @since : 1.0
      * @author : Tomatos
      * @date : 2025/8/15 22:28
      */
-    public void export(V v, HttpServletResponse response, Class<K> clazz, String fileName) throws IOException {
-        RequestCondition requestCondition = (RequestCondition) v;
+    public void export(V condition, HttpServletResponse response, Class<K> kClazz, String fileName) throws IOException {
+        RequestCondition requestCondition = (RequestCondition) condition;
         requestCondition.setPageSize(PageCondition.ALL_PAGE);
         TimeUtil.fillTimeInterval(requestCondition);
 
-        List<K> dataList = getMapper().searchByCondition(v);
-        ExcelUtil.export(fileName, clazz, dataList, response);
+        List<K> dataList = getMapper().searchByCondition(condition);
+        ExcelUtil.export(fileName, kClazz, dataList, response);
     }
 
     /**
@@ -67,5 +67,25 @@ public abstract class CommonService<K, V> {
 
         List<K> dataList = getMapper().searchByCondition(v);
         return ResponsePage.build(requestCondition, dataList.size(), dataList);
+    }
+
+    /**
+     * 导出数据到Excel
+     *
+     * @param condition 条件实体
+     * @param kClass    待添加对象实体
+     * @param fileName  文件名称
+     * @return void
+     * @since : 1.0
+     * @author : Tomatos
+     * @date : 2025/8/15 22:28
+     */
+    public void export(V condition, Class<K> kClass, String fileName) throws IOException {
+        RequestCondition requestCondition = (RequestCondition) condition;
+        requestCondition.setPageSize(PageCondition.ALL_PAGE);
+        TimeUtil.fillTimeInterval(requestCondition);
+
+        List<K> dataList = getMapper().searchByCondition(condition);
+        ExcelUtil.export(fileName, kClass, dataList);
     }
 }

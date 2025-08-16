@@ -4,8 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -19,7 +18,7 @@ import java.util.List;
  * @date : 2025/8/14
  */
 public class ExcelUtil {
-    public static final String FILE_STORE_PATH = "/tmp/";
+    public static final String FILE_STORE_PATH = "/tmp";
     private static final String UTF8 = StandardCharsets.UTF_8.toString();
 
     private ExcelUtil() {};
@@ -42,6 +41,30 @@ public class ExcelUtil {
         response.setHeader("Content-disposition", "attachment;filename=" + downloadName + ".xlsx");
 
         EasyExcel.write(response.getOutputStream(), clazz)
+                 .sheet(fileName)
+                 .doWrite(data);
+    }
+
+    /**
+     * 导出excel到指定存储位置
+     *
+     * @param fileName  文件名称
+     * @param data      数据
+     * @param clazz     数据类型
+     * @return void
+     * @since : 1.0
+     * @author : Tomatos
+     * @date : 2025/8/16 16:54
+     */
+    public static <T> void export(String fileName,  Class<T> clazz, List<T> data) throws FileNotFoundException, UnsupportedEncodingException {
+        fileName = String.format("%s数据_%s.xlsx",
+                                 fileName,
+                                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+
+        FileOutputStream fileOutputStream = new FileOutputStream(String.format("%s/%s",
+                                                                               FILE_STORE_PATH,
+                                                                               fileName));
+        EasyExcel.write(fileOutputStream, clazz)
                  .sheet(fileName)
                  .doWrite(data);
     }
