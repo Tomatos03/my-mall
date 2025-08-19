@@ -1,10 +1,11 @@
 package com.mall.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.experimental.SuperBuilder;
+
 /**
  *
  *
@@ -15,7 +16,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 public class CommonTaskDO extends BaseDO{
     public static final int MAX_FAILURE_COUNT = 3;
 

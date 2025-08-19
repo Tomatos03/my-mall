@@ -2,9 +2,9 @@ package com.mall.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
 @Schema(description = "用户角色关联实体")
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 @Data
 public class UserRoleDO extends BaseDO {
     /**
@@ -35,10 +35,10 @@ public class UserRoleDO extends BaseDO {
     public static List<UserRoleDO> buildUserRoleDO(UserDO userDO) {
         return userDO.getRoleList()
                      .stream()
-                     .map(role -> UserRoleDO.builder()
-                                            .userId(userDO.getId())
-                                            .roleId(role.getId())
-                                            .build()
+                     .map(role -> (UserRoleDO) UserRoleDO.builder()
+                                                         .userId(userDO.getId())
+                                                         .roleId(role.getId())
+                                                         .build()
                      )
                      .toList();
     }

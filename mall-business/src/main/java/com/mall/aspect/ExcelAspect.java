@@ -54,7 +54,7 @@ public class ExcelAspect {
         CommonTaskDO task = new CommonTaskDO();
         task.setName(excelBizType.getDesc());
         task.setStatus(TaskStatus.WAITING.getValue());
-//        task.setFailureCount(0);
+        task.setFailureCount(0);
         task.setType(TaskType.MENU.getValue());
         task.setBizType(excelBizType.getValue());
         task.setCreateUserId(0L);
