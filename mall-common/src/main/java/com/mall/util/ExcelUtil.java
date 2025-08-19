@@ -1,10 +1,15 @@
 package com.mall.util;
 
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -18,7 +23,8 @@ import java.util.List;
  * @date : 2025/8/14
  */
 public class ExcelUtil {
-    public static final String FILE_STORE_PATH = "/tmp";
+    private static final int SHEET_SIZE = 3;
+    private static final String FILE_STORE_PATH = "/tmp";
     private static final String UTF8 = StandardCharsets.UTF_8.toString();
 
     private ExcelUtil() {};
@@ -80,8 +86,33 @@ public class ExcelUtil {
      */
     private static String getDownLoadFileName(String fileName) throws UnsupportedEncodingException {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String nowTime = LocalDateTime.now().format(fmt);
+        String nowTime = LocalDateTime.now()
+                                      .format(fmt);
         // 将中文字符进行重新编码防止下载时名称发生乱码
         return URLEncoder.encode(String.format("%s_%s", fileName, nowTime), UTF8);
+    }
+
+    public static <K> void phasedExport(String fileName, Class<K> kClass, List<K> dataList) throws IOException {
+        fileName = String.format("%s数据_%s.xlsx",
+                                 fileName,
+                                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+
+        try (FileOutputStream fileOutputStream = new FileOutputStream(String.format("%s/%s", FILE_STORE_PATH, fileName))) {
+            ExcelWriter excelWriter = EasyExcel.write(fileOutputStream, kClass)
+                                               .build();
+
+            int dataSize = dataList.size();
+            int sheetCount = (dataSize + SHEET_SIZE - 1) / SHEET_SIZE;
+            for (int i = 0; i < sheetCount; ++i) {
+                int l = i * SHEET_SIZE;
+                int r = Math.min((i + 1) * SHEET_SIZE, dataSize);
+                List<K> subList = dataList.subList(l, r);
+
+                WriteSheet writeSheet = EasyExcel.writerSheet(i, "Sheet" + (i + 1))
+                                                 .build();
+                excelWriter.write(subList, writeSheet);
+            }
+            excelWriter.finish();
+        }
     }
 }

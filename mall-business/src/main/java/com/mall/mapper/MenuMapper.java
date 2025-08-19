@@ -26,4 +26,7 @@ public interface MenuMapper extends BaseMapper<MenuDO, MenuConditionDTO> {
 
     @Override
     List<MenuDO> searchByCondition(MenuConditionDTO menuConditionDTO) throws DataAccessException;
+
+    @Override
+    int searchCount(MenuConditionDTO menuConditionDTO);
 }

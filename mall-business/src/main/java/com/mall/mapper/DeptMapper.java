@@ -39,4 +39,7 @@ public interface DeptMapper extends BaseMapper<DeptDO, DeptConditionDTO> {
      * @return 结果
      */
     int deleteByIds(List<Long> ids);
+
+    @Override
+    int searchCount(DeptConditionDTO deptConditionDTO);
 }

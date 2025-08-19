@@ -15,8 +15,7 @@ public interface BaseMapper<K, V> {
      * @param v 实体类
      * @return 数量
      */
-//    int searchCount(V v);
-
+    int searchCount(V v);
 
     /**
      * 根据条件查询数据

@@ -86,6 +86,6 @@ public abstract class CommonService<K, V> {
         TimeUtil.fillTimeInterval(requestCondition);
 
         List<K> dataList = getMapper().searchByCondition(condition);
-        ExcelUtil.export(fileName, kClass, dataList);
+        ExcelUtil.phasedExport(fileName, kClass, dataList);
     }
 }

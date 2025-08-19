@@ -246,4 +246,10 @@
         <include refid="queryWhere"/>
         <include refid="com.mall.mapper.BaseMapper.paginationSql"/>
     </select>
+
+    <select id="searchCount" parameterType="com.mall.dto.condition.MenuConditionDTO" resultType="int">
+        SELECT COUNT(*)
+        FROM sys_menu
+        <include refid="queryWhere"/>
+    </select>
 </mapper>
