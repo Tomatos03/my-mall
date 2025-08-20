@@ -10,7 +10,7 @@ import java.util.List;
  * @author : Tomatos
  * @date : 2025/8/14
  */
-public class TimeUtil {
+public abstract class TimeUtil {
     public static void fillTimeInterval(RequestCondition requestCondition) {
         List<String> betweenTime = requestCondition.getBetweenTime();
         if (betweenTime ==  null)

@@ -22,7 +22,7 @@ import java.util.List;
  * @author : Tomatos
  * @date : 2025/8/14
  */
-public class ExcelUtil {
+public abstract class ExcelUtil {
     private static final int SHEET_SIZE = 3;
     private static final String FILE_STORE_PATH = "/tmp";
     private static final String UTF8 = StandardCharsets.UTF_8.toString();

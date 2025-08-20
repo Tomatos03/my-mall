@@ -6,7 +6,7 @@ import com.mall.entity.Result;
  * @author : Tomatos
  * @date : 2025/8/2
  */
-public class ResultUtil {
+public abstract class ResultUtil {
     private ResultUtil() {};
 
     /**

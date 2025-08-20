@@ -13,7 +13,7 @@ import java.util.Map;
  * @author : Tomatos
  * @date : 2025/8/3
  */
-public class JwtUtil {
+public abstract class JwtUtil {
     public static String createJwt(Map<String, Object> payload, JwtProperties jwtProperties) {
         // expiration以秒为单位, 这里需要转毫秒
         return Jwts.builder()

@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
  * @author : Tomatos
  * @date : 2025/8/5
  */
-public class RequestUtil {
+public abstract class RequestUtil {
     private static final String AUTHORIZATION_PREFIX = "Basic";
     private static final String AUTHORIZATION_SEPARATE = "@";
 
