@@ -93,4 +93,43 @@ public class RedisUtil {
             log.error("Redis删除数据失败：", e);
         }
     }
+
+    /**
+     * 保存缓存（仅当键不存在时设置）
+     *
+     * @param key   键
+     * @param value 值
+     * @return true成功 false失败
+     */
+    public boolean setNX(String key, String value) {
+        Boolean result = stringRedisTemplate.opsForValue().setIfAbsent(key, value);
+        return Boolean.TRUE.equals(result);
+    }
+
+    /**
+     * 保存缓存（仅当键不存在时设置），并设置过期时间（单位秒）
+     *
+     * @param key        键
+     * @param value      值
+     * @param expireTime 过期时间（秒）
+     * @return true成功 false失败
+     */
+    public boolean setNX(String key, String value, long expireTime) {
+        Boolean result = stringRedisTemplate.opsForValue().setIfAbsent(key, value, expireTime, TimeUnit.SECONDS);
+        return Boolean.TRUE.equals(result);
+    }
+
+    /**
+     * 保存缓存（仅当键不存在时设置），并设置指定单位的过期时间
+     *
+     * @param key        键
+     * @param value      值
+     * @param expireTime 过期时间
+     * @param unit       时间单位
+     * @return true成功 false失败
+     */
+    public boolean setNX(String key, String value, long expireTime, TimeUnit unit) {
+        Boolean result = stringRedisTemplate.opsForValue().setIfAbsent(key, value, expireTime, unit);
+        return Boolean.TRUE.equals(result);
+    }
 }

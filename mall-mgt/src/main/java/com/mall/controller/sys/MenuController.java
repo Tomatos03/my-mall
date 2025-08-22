@@ -2,10 +2,11 @@ package com.mall.controller.sys;
 
 import com.mall.annotation.ExcelExport;
 import com.mall.annotation.NoLogin;
-import com.mall.dto.MenuDTO;
-import com.mall.entity.MenuDO;
-import com.mall.dto.condition.MenuConditionDTO;
+import com.mall.annotation.NoRepeatSubmit;
 import com.mall.domain.ResponsePage;
+import com.mall.dto.MenuDTO;
+import com.mall.dto.condition.MenuConditionDTO;
+import com.mall.entity.MenuDO;
 import com.mall.enums.ExcelBizType;
 import com.mall.service.MenuService;
 import com.mall.vo.MenuTreeVO;
@@ -57,11 +58,12 @@ public class MenuController {
     }
 
     @NoLogin
+    @NoRepeatSubmit
     @Operation(summary = "导出菜单数据", description = "导出菜单数据")
     @PostMapping("/export")
     @ExcelExport(ExcelBizType.MENU)
     public void export(HttpServletResponse response, MenuConditionDTO menuConditionDTO) throws IOException {
-//        menuService.export(response, menuConditionDTO);
+        menuService.export(response, menuConditionDTO);
     }
 
     @Operation(summary = "插入菜单", description = "插入菜单")
