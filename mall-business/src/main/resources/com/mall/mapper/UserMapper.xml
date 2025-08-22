@@ -155,13 +155,13 @@
     </select>
 
     <delete id="deleteById">
-        UPDATE user
+        UPDATE sys_user
         SET is_del = 1,update_time=now(3)
         WHERE id = #{id}
     </delete>
 
     <update id="update" parameterType="com.mall.entity.UserDO">
-        UPDATE user
+        UPDATE sys_user
         <set>
             <if test="userName != null and userName != ''">
                 user_name = #{userName,jdbcType=VARCHAR},
@@ -189,7 +189,7 @@
     <select id="findById" resultType="com.mall.entity.UserDO" parameterType="Long">
         SELECT
             <include refid="selectUserColumn"/>
-        FROM user
+        FROM sys_user
         WHERE id = #{id}
     </select>
 
