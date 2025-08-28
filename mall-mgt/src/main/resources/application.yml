@@ -2,6 +2,8 @@ server:
   port: 8011
 
 spring:
+  profiles:
+    active: dev
   application:
     name: mall-api
   datasource:
@@ -25,6 +27,17 @@ spring:
       port: 6379
       password: zjlljz
       database: 0
+  mail:
+    # QQ邮箱配置参考:
+    # https://wx.mail.qq.com/list/readtemplate?name=app_intro.html#/agreement/authorizationCode
+    # properties可配置属性参考:
+    # https://javaee.github.io/javamail/docs/api/com/sun/mail/smtp/package-summary.html
+    protocol: ${spring.mail.protocol}
+    host: ${spring.mail.host}
+    port: ${spring.mail.port}
+    default-encoding: ${spring.mail.default-encoding}
+    username: ${spring.mail.username}
+    password: ${spring.mail.password}
 #  jackson:
 #    property-naming-strategy: SNAKE_CASE
 mybatis:

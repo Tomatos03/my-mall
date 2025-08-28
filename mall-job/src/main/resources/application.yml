@@ -2,6 +2,8 @@ server:
   port: 8012
 
 spring:
+  profiles:
+    active: dev
   application:
     name: mall-job
   datasource:
@@ -25,6 +27,15 @@ spring:
       port: 6379
       password: zjlljz
       database: 0
+  mail:
+    # 配置信息查看:
+    # https://wx.mail.qq.com/list/readtemplate?name=app_intro.html#/agreement/authorizationCode
+    protocol: ${spring.mail.protocol}
+    host: ${spring.mail.host}
+    port: ${spring.mail.port}
+    default-encoding: ${spring.mail.default-encoding}
+    username: ${spring.mail.username}
+    password: ${spring.mail.password}
 
 mybatis:
   configuration:
