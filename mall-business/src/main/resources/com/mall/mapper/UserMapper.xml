@@ -20,6 +20,8 @@
         <result property="updateUserName" column="update_user_name"/>
         <result property="updateTime" column="update_time"/>
         <result property="isDel" column="is_del"/>
+        <result property="lastLoginCity" column="last_login_city"/>
+        <result property="lastLoginTime" column="last_login_time"/>
     </resultMap>
 
     <sql id="selectUserColumn">
@@ -41,7 +43,9 @@
          update_user_id,
          update_user_name,
          update_time,
-         is_del
+         is_del,
+         last_login_city,
+         last_login_time
     </sql>
 
     <sql id="queryWhere">
@@ -181,6 +185,8 @@
             <if test="isDel != null">
                 is_del = #{isDel,jdbcType=INTEGER},
             </if>
+            <if test="lastLoginCity != null and lastLoginCity!=''"> last_login_city = #{lastLoginCity}, </if>
+            <if test="lastLoginTime != null"> last_login_time = #{lastLoginTime}, </if>
             update_time=now(3)
         </set>
         WHERE id = #{id}

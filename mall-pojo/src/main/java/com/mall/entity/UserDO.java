@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -54,4 +55,10 @@ public class UserDO extends BaseDO {
 
     @Schema(description = "角色ID列表")
     private List<RoleDO> roleList;
+
+    @Schema(description = "上次登录城市")
+    private String lastLoginCity;
+
+    @Schema(description = "上次登录时间")
+    private LocalDateTime lastLoginTime;
 }

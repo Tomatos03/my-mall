@@ -54,4 +54,7 @@ public class UserDTO extends BaseDTO {
 
     @Schema(description = "角色ID列表")
     private List<RoleDO> roleList;
+
+    @Schema(description = "最后登录城市")
+    private String lastLoginCity;
 }

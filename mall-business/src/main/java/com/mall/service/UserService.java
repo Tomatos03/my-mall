@@ -5,7 +5,9 @@ import cn.hutool.captcha.CircleCaptcha;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.mall.domain.CaptchaHelper;
+import com.mall.domain.Ip2regionSearcher;
 import com.mall.domain.JwtHelper;
 import com.mall.domain.PasswordHelper;
 import com.mall.domain.cache.CaptchaCacher;
@@ -13,12 +15,12 @@ import com.mall.domain.cache.TokenCacher;
 import com.mall.domain.cache.UserCacher;
 import com.mall.domain.security.Authenticator;
 import com.mall.dto.AuthenticatedUserDTO;
+import com.mall.dto.AuthenticationUserDTO;
 import com.mall.dto.CaptchaDTO;
 import com.mall.dto.UserDTO;
+import com.mall.dto.condition.UserConditionDTO;
 import com.mall.entity.UserDO;
 import com.mall.entity.UserRoleDO;
-import com.mall.dto.AuthenticationUserDTO;
-import com.mall.dto.condition.UserConditionDTO;
 import com.mall.exception.BusinessException;
 import com.mall.mapper.UserMapper;
 import com.mall.mapper.UserRoleMapper;
@@ -29,8 +31,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author : Tomatos
@@ -57,6 +63,9 @@ public class UserService {
     private CaptchaCacher captchaCacher;
     @Autowired
     private UserRoleMapper userRoleMapper;
+    @Autowired
+    private Ip2regionSearcher ip2regionSearcher;
+
 
     /**
      * 通过id查询用户信息
@@ -150,6 +159,17 @@ public class UserService {
         String username = authenticationUserDTO.getUsername();
         String decodePassword = passwordHelper.decodeRsaPassword(authenticationUserDTO.getPassword());
         Authentication authenticated = authenticator.authenticate(username, decodePassword);
+
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
+                .getRequest();
+        // TODO: 本地测试127.0.0.1 无法查询到信息
+//        String ipStr = IpUtil.getIpAddr(request);
+        String ipStr = "123.58.180.7";
+        String[] ipInfo = ip2regionSearcher.queryIpInfo(ipStr);
+        String city = ip2regionSearcher.getCity(ipInfo);
+
+        validRemoteLogin(9L, city);
+
         AuthenticatedUserDTO authenticatedUserDTO = Authenticator.convertFrom(authenticated);
 
         String token = jwtHelper.createUserToken(username);
@@ -157,7 +177,28 @@ public class UserService {
 
         userCacher.save(authenticatedUserDTO);
         tokenCacher.save(username, token);
+
+        updateLastLoginCity(city);
         return authenticatedUserDTO;
+    }
+
+    private void validRemoteLogin(Long userId, String nowLoginCity) {
+        UserDO userDO = userMapper.findById(userId);
+        String lastLoginCity = userDO.getLastLoginCity();
+
+        if (StrUtil.isEmpty(lastLoginCity) || nowLoginCity.equals(lastLoginCity))
+            return;
+
+        throw new BusinessException("您的账号处于异地登录，为了安全考虑，请修改密码之后重新登录");
+    }
+
+    private void updateLastLoginCity(String city) {
+        UserDO userDO = new UserDO();
+        userDO.setId(9L);
+        userDO.setLastLoginTime(LocalDateTime.now());
+        userDO.setLastLoginCity(city);
+
+        userMapper.update(userDO);
     }
 
     public void logout(HttpServletRequest request) {
