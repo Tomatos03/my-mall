@@ -1,9 +1,8 @@
-package com.mall.job;
+package com.mall.strategy;
 
 import com.mall.context.SpringContextHolder;
 import com.mall.entity.CommonTaskDO;
 import com.mall.entity.NotifyDO;
-import com.mall.entity.condition.CommonTaskCondition;
 import com.mall.entity.condition.RequestCondition;
 import com.mall.enums.ExcelBizType;
 import com.mall.enums.TaskStatus;
@@ -12,47 +11,24 @@ import com.mall.mapper.CommonTaskMapper;
 import com.mall.service.CommonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
-
-import java.util.List;
 
 /**
  *
  *
  * @author : Tomatos
- * @date : 2025/8/15
+ * @date : 2025/8/28
  */
 @Slf4j
 @Component
-public class ExcelExportJob {
+public class ExcelExportStrategy extends ScheduledTaskStrategy {
     @Autowired
     CommonTaskMapper commonTaskMapper;
     @Autowired
     CommonNotifyMapper commonNotifyMapper;
 
-    @Scheduled(fixedRate = 60000)
-    public void handle() {
-        List<CommonTaskDO> waitHandleTask = getNeedHandleTask();
-
-        if (isNotTask(waitHandleTask))
-            return;
-
-        for (CommonTaskDO task : waitHandleTask) {
-            doExport(task);
-        }
-    }
-
-    private boolean isNotTask(List<CommonTaskDO> waitHandleTask) {
-        if (CollectionUtils.isEmpty(waitHandleTask)) {
-            log.info("没有任务需要执行");
-            return true;
-        }
-        return false;
-    }
-
-    private void doExport(CommonTaskDO commonTaskDO) {
+    @Override
+    public void execute(CommonTaskDO commonTaskDO) {
         Integer excelBizType = commonTaskDO.getBizType();
 
         for (ExcelBizType currentExcelBizType : ExcelBizType.values()) {
@@ -65,14 +41,25 @@ public class ExcelExportJob {
                 String fileName = currentExcelBizType.getDesc();
                 RequestCondition condition =
                         (RequestCondition) Class.forName(currentExcelBizType.getDtoName())
-                                                                     .getDeclaredConstructor()
-                                                                     .newInstance();
+                                                .getDeclaredConstructor()
+                                                .newInstance();
                 Class clazz = Class.forName(currentExcelBizType.getDoName());
 
                 CommonService commonService = (CommonService) SpringContextHolder.getBean(Class.forName(currentExcelBizType.getServiceName()));
                 commonService.export(condition, clazz,fileName);
 
-                NotifyDO notifyDO = createNotify();
+                NotifyDO notifyDO = NotifyDO.builder()
+                                            .isPush(0)
+                                            .type(1)
+                                            .readStatus(0)
+                                            .title("导出成功")
+                                            .content("Excel导出成功")
+                                            .isDel(0)
+                                            .createUserId(0L)
+                                            .createUserName("admin")
+                                            .toUserId(9L)
+                                            .build();
+
                 commonNotifyMapper.insert(notifyDO);
                 updateTaskStatus(TaskStatus.SUCCESS, commonTaskDO);
             } catch (Exception e) {
@@ -85,32 +72,6 @@ public class ExcelExportJob {
             }
             return;
         }
-    }
-
-    private NotifyDO createNotify() {
-        return NotifyDO.builder()
-                       .isPush(0)
-                       .type(1)
-                       .readStatus(0)
-                       .title("导出成功")
-                       .content("Excel导出成功")
-                       .isDel(0)
-                       .createUserId(0L)
-                       .createUserName("admin")
-                       .toUserId(9L)
-                       .build();
-    }
-
-    private List<CommonTaskDO> getNeedHandleTask() {
-        CommonTaskCondition commonTaskCondition = new CommonTaskCondition();
-
-        List<Integer> statusQueue = List.of(
-                TaskStatus.WAITING.getValue(),
-                TaskStatus.RUNNING.getValue()
-        );
-        commonTaskCondition.setStatusList(statusQueue);
-
-        return commonTaskMapper.searchByCondition(commonTaskCondition);
     }
 
     private void updateTaskStatus(TaskStatus taskStatus, CommonTaskDO commonTaskDO) {

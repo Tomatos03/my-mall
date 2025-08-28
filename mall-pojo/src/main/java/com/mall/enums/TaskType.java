@@ -25,4 +25,15 @@ public enum TaskType {
      * 枚举描述
      */
     private String desc;
+
+    /**
+     * 根据 value 获取对应的枚举类型
+     */
+    public static TaskType fromValue(Integer value) {
+        for (TaskType type : TaskType.values()) {
+            if (type.getValue().equals(value))
+                return type;
+        }
+        throw new IllegalArgumentException("Unknown TaskType value: " + value);
+    }
 }
