@@ -42,3 +42,14 @@ my_mall:
     expiration: 86400 # 1天(秒为单位)
   captcha:
     expiration: 60
+
+ip2region:
+  db-path: "classpath:ip2region/ip2region.xdb"
+
+ip-geolocation:
+  api: "http://ip-api.com/json/"
+  city-field-name: "city"
+  country-field-name: "country"
+  province-field-name: "province"
+  params:
+    lang: zh-CN
