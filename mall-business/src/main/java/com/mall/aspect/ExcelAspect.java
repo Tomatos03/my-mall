@@ -55,7 +55,7 @@ public class ExcelAspect {
         task.setName(excelBizType.getDesc());
         task.setStatus(TaskStatus.WAITING.getValue());
         task.setFailureCount(0);
-        task.setType(TaskType.MENU.getValue());
+        task.setType(TaskType.EXCEL_EXPORT.getValue());
         task.setBizType(excelBizType.getValue());
         task.setCreateUserId(0L);
         task.setCreateUserName("admin");
