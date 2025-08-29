@@ -175,8 +175,8 @@ public class UserService {
                 .getRequest();
         // TODO: 本地测试127.0.0.1 无法查询到信息
 //        String ipStr = IpUtil.getIpAddr(request);
-//        String ipStr = "123.58.180.7";
-        String ipStr = "8.8.8.8";
+        String ipStr = "123.58.180.7";
+//        String ipStr = "8.8.8.8";
         String[] ipInfo = ip2regionSearcher.queryIpInfo(ipStr);
         String city = ip2regionSearcher.getCity(ipInfo);
 

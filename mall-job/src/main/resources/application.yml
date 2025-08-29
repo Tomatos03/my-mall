@@ -51,6 +51,7 @@ my_mall:
 logging:
   level:
     com.mall.mapper: debug
+    org.springframework.amqp.support.converter: DEBUG
 
 ip2region:
   db-path: "classpath:ip2region/ip2region.xdb"

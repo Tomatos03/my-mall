@@ -6,6 +6,11 @@ spring:
     active: dev
   application:
     name: mall-api
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: Tomatos03
+    password: 20030503
   datasource:
     username: Tomatos
     password: 20030503
