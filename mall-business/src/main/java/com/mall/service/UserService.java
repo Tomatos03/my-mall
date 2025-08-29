@@ -6,6 +6,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.mall.domain.CaptchaHelper;
 import com.mall.domain.Ip2regionSearcher;
 import com.mall.domain.JwtHelper;
@@ -19,12 +20,20 @@ import com.mall.dto.AuthenticationUserDTO;
 import com.mall.dto.CaptchaDTO;
 import com.mall.dto.UserDTO;
 import com.mall.dto.condition.UserConditionDTO;
+import com.mall.entity.CommonTaskDO;
+import com.mall.enums.EmailBizType;
+import com.mall.enums.TaskStatus;
+import com.mall.enums.TaskType;
+import com.mall.pojo.RemoteUserPOJO;
 import com.mall.entity.UserDO;
 import com.mall.entity.UserRoleDO;
 import com.mall.exception.BusinessException;
+import com.mall.mapper.CommonTaskMapper;
 import com.mall.mapper.UserMapper;
 import com.mall.mapper.UserRoleMapper;
+import com.mall.util.IpUtil;
 import com.mall.util.RequestUtil;
+import com.mall.util.TimeUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +74,8 @@ public class UserService {
     private UserRoleMapper userRoleMapper;
     @Autowired
     private Ip2regionSearcher ip2regionSearcher;
+    @Autowired
+    private CommonTaskMapper commonTaskMapper;
 
 
     /**
@@ -164,7 +175,8 @@ public class UserService {
                 .getRequest();
         // TODO: 本地测试127.0.0.1 无法查询到信息
 //        String ipStr = IpUtil.getIpAddr(request);
-        String ipStr = "123.58.180.7";
+//        String ipStr = "123.58.180.7";
+        String ipStr = "8.8.8.8";
         String[] ipInfo = ip2regionSearcher.queryIpInfo(ipStr);
         String city = ip2regionSearcher.getCity(ipInfo);
 
@@ -189,7 +201,47 @@ public class UserService {
         if (StrUtil.isEmpty(lastLoginCity) || nowLoginCity.equals(lastLoginCity))
             return;
 
+        addRemoteLoginEmailTask(userDO, nowLoginCity);
+
         throw new BusinessException("您的账号处于异地登录，为了安全考虑，请修改密码之后重新登录");
+    }
+
+    private void addRemoteLoginEmailTask(UserDO userDO, String nowLoginCity) {
+        RemoteUserPOJO remoteUserDO = getRemoteUserPOJO(userDO, nowLoginCity);
+
+        String remoteUserJsonStr = JSONUtil.toJsonStr(remoteUserDO);
+
+        CommonTaskDO commonTaskDO = CommonTaskDO.builder()
+                                                .name("异地登录邮箱提醒")
+                                                .type(TaskType.SEND_EMAIL.getValue())
+                                                .bizType(EmailBizType.REMOTE_LOGIN.getValue())
+                                                .status(TaskStatus.WAITING.getValue())
+                                                .failureCount(0)
+                                                .requestParam(remoteUserJsonStr)
+                                                .createUserId(9L)
+                                                .createUserName("admin")
+                                                .build();
+
+        commonTaskMapper.insert(commonTaskDO);
+    }
+
+    private RemoteUserPOJO getRemoteUserPOJO(UserDO userDO, String nowCity) {
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
+                .getRequest();
+
+        String ipStr = IpUtil.getIpAddr(request);
+        String device = request.getHeader("user-agent");
+        String nowTimeStr = TimeUtil.nowFormatted();
+
+        return RemoteUserPOJO.builder()
+                             .ip(ipStr)
+                             .nickName(userDO.getNickName())
+                             .email(userDO.getEmail())
+                             .device(device)
+                             .cityName(nowCity)
+                             .loginTime(nowTimeStr)
+                             .username(userDO.getUserName())
+                             .build();
     }
 
     private void updateLastLoginCity(String city) {

@@ -13,7 +13,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum TaskType {
 
-    EXCEL_EXPORT(1, "通用excel数据导出");
+    EXCEL_EXPORT(1, "通用excel数据导出"),
+    SEND_EMAIL(2, "发送邮件");
 
     /**
      * 枚举值
