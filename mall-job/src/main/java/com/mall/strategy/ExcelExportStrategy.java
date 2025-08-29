@@ -36,7 +36,8 @@ public class ExcelExportStrategy extends ScheduledTaskStrategy {
                 continue;
 
             try {
-                updateTaskStatus(TaskStatus.RUNNING, commonTaskDO);
+                if (commonTaskDO.getStatus().equals(TaskStatus.WAITING.getValue()))
+                    updateTaskStatus(TaskStatus.RUNNING, commonTaskDO);
 
                 String fileName = currentExcelBizType.getDesc();
                 RequestCondition condition =
