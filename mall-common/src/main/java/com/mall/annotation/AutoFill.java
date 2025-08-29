@@ -1,6 +1,6 @@
 package com.mall.annotation;
 
-import com.mall.enums.FillType;
+import com.mall.annotation.enums.FillType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

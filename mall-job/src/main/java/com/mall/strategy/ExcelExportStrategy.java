@@ -14,6 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
 /**
  *
  *
@@ -45,37 +48,41 @@ public class ExcelExportStrategy extends ScheduledTaskStrategy {
             if (isWaitingStatus(commonTaskDO))
                 updateStatus(TaskStatus.RUNNING, commonTaskDO, commonTaskMapper);
 
-            String fileName = excelBizType.getDesc();
-            RequestCondition condition =
-                    (RequestCondition) Class.forName(excelBizType.getDtoName())
-                                            .getDeclaredConstructor()
-                                            .newInstance();
-            Class clazz = Class.forName(excelBizType.getDoName());
-
-            CommonService commonService = (CommonService) SpringContextHolder.getBean(Class.forName(excelBizType.getServiceName()));
-            commonService.export(condition, clazz,fileName);
-
-            NotifyDO notifyDO = NotifyDO.builder()
-                                        .isPush(0)
-                                        .type(1)
-                                        .readStatus(0)
-                                        .title("导出成功")
-                                        .content("Excel导出成功")
-                                        .isDel(0)
-                                        .createUserId(0L)
-                                        .createUserName("admin")
-                                        .toUserId(9L)
-                                        .build();
-
-            commonNotifyMapper.insert(notifyDO);
+            exportExcel(excelBizType);
+            pushSuccessNotice();
             updateStatus(TaskStatus.SUCCESS, commonTaskDO, commonTaskMapper);
         } catch (Exception e) {
-            log.info("Excel导出失败:{}", e.getMessage());
+            log.error("Excel导出失败:{}", e.getMessage());
             if (isExceedMaxFailureCount(commonTaskDO)) {
                 updateStatus(TaskStatus.FAIL, commonTaskDO, commonTaskMapper);
                 return;
             }
             increaseFailCount(commonTaskDO, commonTaskMapper);
         }
+    }
+
+    private void exportExcel(ExcelBizType excelBizType) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, IOException {
+        RequestCondition condition = (RequestCondition) excelBizType.getConditionClass()
+                                                                    .getDeclaredConstructor()
+                                                                    .newInstance();
+        String excelFileName = excelBizType.getDesc();
+        CommonService commonService = (CommonService) SpringContextHolder.getBean(excelBizType.getServiceClass());
+        commonService.export(condition, excelBizType.getDoClass(), excelFileName);
+    }
+
+    private void pushSuccessNotice() {
+        NotifyDO notifyDO = NotifyDO.builder()
+                                    .isPush(0)
+                                    .type(1)
+                                    .readStatus(0)
+                                    .title("导出成功")
+                                    .content("Excel导出成功")
+                                    .isDel(0)
+                                    .createUserId(0L)
+                                    .createUserName("admin")
+                                    .toUserId(9L)
+                                    .build();
+
+        commonNotifyMapper.insert(notifyDO);
     }
 }

@@ -2,7 +2,7 @@ package com.mall.aspect;
 
 import com.mall.annotation.AutoFill;
 import com.mall.constant.AutoFillConst;
-import com.mall.enums.FillType;
+import com.mall.annotation.enums.FillType;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
