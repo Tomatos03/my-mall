@@ -6,6 +6,7 @@ import com.mall.entity.NotifyDO;
 import com.mall.entity.condition.RequestCondition;
 import com.mall.enums.ExcelBizType;
 import com.mall.enums.TaskStatus;
+import com.mall.enums.TaskType;
 import com.mall.mapper.CommonNotifyMapper;
 import com.mall.mapper.CommonTaskMapper;
 import com.mall.service.CommonService;
@@ -22,61 +23,59 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class ExcelExportStrategy extends ScheduledTaskStrategy {
+    private final CommonTaskMapper commonTaskMapper;
+    private final CommonNotifyMapper commonNotifyMapper;
+
     @Autowired
-    CommonTaskMapper commonTaskMapper;
-    @Autowired
-    CommonNotifyMapper commonNotifyMapper;
+    public ExcelExportStrategy(CommonNotifyMapper commonNotifyMapper, CommonTaskMapper commonTaskMapper) {
+        this.commonNotifyMapper = commonNotifyMapper;
+        this.commonTaskMapper = commonTaskMapper;
+    }
+
+    @Override
+    public TaskType getTaskType() {
+        return TaskType.EXCEL_EXPORT;
+    }
 
     @Override
     public void execute(CommonTaskDO commonTaskDO) {
-        Integer excelBizType = commonTaskDO.getBizType();
+        ExcelBizType excelBizType = ExcelBizType.fromValue(commonTaskDO.getBizType());
 
-        for (ExcelBizType currentExcelBizType : ExcelBizType.values()) {
-            if (!currentExcelBizType.getValue().equals(excelBizType))
-                continue;
+        try {
+            if (isWaitingStatus(commonTaskDO))
+                updateStatus(TaskStatus.RUNNING, commonTaskDO, commonTaskMapper);
 
-            try {
-                if (commonTaskDO.getStatus().equals(TaskStatus.WAITING.getValue()))
-                    updateTaskStatus(TaskStatus.RUNNING, commonTaskDO);
+            String fileName = excelBizType.getDesc();
+            RequestCondition condition =
+                    (RequestCondition) Class.forName(excelBizType.getDtoName())
+                                            .getDeclaredConstructor()
+                                            .newInstance();
+            Class clazz = Class.forName(excelBizType.getDoName());
 
-                String fileName = currentExcelBizType.getDesc();
-                RequestCondition condition =
-                        (RequestCondition) Class.forName(currentExcelBizType.getDtoName())
-                                                .getDeclaredConstructor()
-                                                .newInstance();
-                Class clazz = Class.forName(currentExcelBizType.getDoName());
+            CommonService commonService = (CommonService) SpringContextHolder.getBean(Class.forName(excelBizType.getServiceName()));
+            commonService.export(condition, clazz,fileName);
 
-                CommonService commonService = (CommonService) SpringContextHolder.getBean(Class.forName(currentExcelBizType.getServiceName()));
-                commonService.export(condition, clazz,fileName);
+            NotifyDO notifyDO = NotifyDO.builder()
+                                        .isPush(0)
+                                        .type(1)
+                                        .readStatus(0)
+                                        .title("导出成功")
+                                        .content("Excel导出成功")
+                                        .isDel(0)
+                                        .createUserId(0L)
+                                        .createUserName("admin")
+                                        .toUserId(9L)
+                                        .build();
 
-                NotifyDO notifyDO = NotifyDO.builder()
-                                            .isPush(0)
-                                            .type(1)
-                                            .readStatus(0)
-                                            .title("导出成功")
-                                            .content("Excel导出成功")
-                                            .isDel(0)
-                                            .createUserId(0L)
-                                            .createUserName("admin")
-                                            .toUserId(9L)
-                                            .build();
-
-                commonNotifyMapper.insert(notifyDO);
-                updateTaskStatus(TaskStatus.SUCCESS, commonTaskDO);
-            } catch (Exception e) {
-                log.info("Excel导出失败:{}", e.getMessage());
-                commonTaskDO.setFailureCount(commonTaskDO.getFailureCount() + 1);
-                if (commonTaskDO.getFailureCount() >= CommonTaskDO.MAX_FAILURE_COUNT)
-                    commonTaskDO.setStatus(TaskStatus.FAIL.getValue());
-
-                commonTaskMapper.update(commonTaskDO);
+            commonNotifyMapper.insert(notifyDO);
+            updateStatus(TaskStatus.SUCCESS, commonTaskDO, commonTaskMapper);
+        } catch (Exception e) {
+            log.info("Excel导出失败:{}", e.getMessage());
+            if (isExceedMaxFailureCount(commonTaskDO)) {
+                updateStatus(TaskStatus.FAIL, commonTaskDO, commonTaskMapper);
+                return;
             }
-            return;
+            increaseFailCount(commonTaskDO, commonTaskMapper);
         }
-    }
-
-    private void updateTaskStatus(TaskStatus taskStatus, CommonTaskDO commonTaskDO) {
-        commonTaskDO.setStatus(taskStatus.getValue());
-        commonTaskMapper.update(commonTaskDO);
     }
 }

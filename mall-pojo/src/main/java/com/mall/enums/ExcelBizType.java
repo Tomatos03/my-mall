@@ -42,5 +42,16 @@ public enum ExcelBizType {
      * DO类名称
      */
     private String doName;
+
+    /**
+     * 根据 value 获取对应的枚举类型
+     */
+    public static ExcelBizType fromValue(Integer value) {
+        for (ExcelBizType type : ExcelBizType.values()) {
+            if (type.getValue().equals(value))
+                return type;
+        }
+        throw new IllegalArgumentException("Unknown TaskType value: " + value);
+    }
 }
 

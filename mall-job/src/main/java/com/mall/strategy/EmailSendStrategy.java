@@ -3,6 +3,7 @@ package com.mall.strategy;
 import cn.hutool.json.JSONUtil;
 import com.mall.entity.CommonTaskDO;
 import com.mall.enums.TaskStatus;
+import com.mall.enums.TaskType;
 import com.mall.mapper.CommonTaskMapper;
 import com.mall.pojo.RemoteUserPOJO;
 import com.mall.service.EmailService;
@@ -27,35 +28,44 @@ import java.util.Map;
 @Slf4j
 @Component
 public class EmailSendStrategy extends ScheduledTaskStrategy {
-    @Autowired
-    private EmailService emailService;
-    @Autowired
-    private CommonTaskMapper commonTaskMapper;
-    @Autowired
-    private FreeMarkerConfigurer freeMarkerConfigurer;
+    private final EmailService emailService;
+    private final CommonTaskMapper commonTaskMapper;
+    private final FreeMarkerConfigurer freeMarkerConfigurer;
 
+    @Autowired
+    public EmailSendStrategy(EmailService emailService,
+                             CommonTaskMapper commonTaskMapper,
+                             FreeMarkerConfigurer freeMarkerConfigurer) {
+        this.emailService = emailService;
+        this.commonTaskMapper = commonTaskMapper;
+        this.freeMarkerConfigurer = freeMarkerConfigurer;
+    }
+
+    @Override
+    public TaskType getTaskType() {
+        return TaskType.SEND_EMAIL;
+    }
 
     @Override
     public void execute(CommonTaskDO commonTaskDO) {
         try {
-            if (commonTaskDO.getStatus().equals(TaskStatus.WAITING.getValue()))
-                updateStatus(TaskStatus.RUNNING, commonTaskDO);
+            if (isWaitingStatus(commonTaskDO))
+                updateStatus(TaskStatus.RUNNING, commonTaskDO, commonTaskMapper);
 
             RemoteUserPOJO remoteUserPOJO = JSONUtil.toBean(commonTaskDO.getRequestParam(),
                                                                     RemoteUserPOJO.class);
 
             String htmlContent = generateHtmlContentStr(remoteUserPOJO);
-            // TODO: 接收者邮箱暂时写死
             emailService.sendHtmlEmail(remoteUserPOJO.getEmail(), "异地登录提醒", htmlContent);
 
-            updateStatus(TaskStatus.SUCCESS, commonTaskDO);
+            updateStatus(TaskStatus.SUCCESS, commonTaskDO, commonTaskMapper);
         } catch (Exception e) {
             log.error("数据导出异常，原因：", e);
-            //失败次数加1
-            commonTaskDO.setFailureCount(commonTaskDO.getFailureCount() + 1);
-            //如果失败次数超过3次，则将状态改成失败，后面不再执行
-            if (commonTaskDO.getFailureCount() >= CommonTaskDO.MAX_FAILURE_COUNT)
-                updateStatus(TaskStatus.FAIL, commonTaskDO);
+            if (isExceedMaxFailureCount(commonTaskDO)) {
+                updateStatus(TaskStatus.FAIL, commonTaskDO, commonTaskMapper);
+                return;
+            }
+            increaseFailCount(commonTaskDO, commonTaskMapper);
         }
     }
 
@@ -66,10 +76,5 @@ public class EmailSendStrategy extends ScheduledTaskStrategy {
         model.put("remoteUserPOJO", remoteUserPOJO);
 
         return FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
-    }
-
-    private void updateStatus(TaskStatus status, CommonTaskDO commonTaskDO) {
-        commonTaskDO.setStatus(status.getValue());
-        commonTaskMapper.update(commonTaskDO);
     }
 }

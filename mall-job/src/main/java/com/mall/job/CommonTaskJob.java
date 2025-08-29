@@ -3,9 +3,9 @@ package com.mall.job;
 import com.mall.entity.CommonTaskDO;
 import com.mall.entity.condition.CommonTaskCondition;
 import com.mall.enums.TaskStatus;
-import com.mall.enums.TaskType;
 import com.mall.mapper.CommonTaskMapper;
 import com.mall.strategy.ScheduledTaskStrategy;
+import com.mall.strategy.ScheduledTaskStrategyFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -25,6 +25,8 @@ import java.util.List;
 public class CommonTaskJob {
     @Autowired
     CommonTaskMapper commonTaskMapper;
+    @Autowired
+    ScheduledTaskStrategyFactory strategyFactory;
 
     @Scheduled(fixedRate = 10000)
     public void handle() {
@@ -34,8 +36,7 @@ public class CommonTaskJob {
             return;
 
         for (CommonTaskDO task : waitHandleTask) {
-            TaskType taskType = TaskType.fromValue(task.getType());
-            ScheduledTaskStrategy scheduledTask = ScheduledTaskStrategy.createScheduledTask(taskType);
+            ScheduledTaskStrategy scheduledTask = strategyFactory.getStrategy(task.getType());
             scheduledTask.execute(task);
         }
     }
