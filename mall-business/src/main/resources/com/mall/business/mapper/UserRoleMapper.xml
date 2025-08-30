@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mall.business.mapper.UserRoleMapper">
+    <insert id="insert" parameterType="com.mall.entity.UserRoleDO">
+        INSERT INTO sys_user_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            <if test="userId != null ">user_id,</if>
+            <if test="roleId != null ">role_id,</if>
+        </trim>
+
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id},
+            <if test="userId != null ">#{userId},</if>
+            <if test="roleId != null ">#{roleId},</if>
+        </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO sys_user_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            user_id,
+            role_id
+        </trim>
+        VALUES
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item.id},
+            #{item.userId},
+            #{item.roleId}
+        </foreach>
+    </insert>
+</mapper>

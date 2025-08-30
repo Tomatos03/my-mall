@@ -7,6 +7,8 @@ package com.mall.constant;
  * @date : 2025/8/14
  */
 public final class AutoFillConst {
+    private AutoFillConst(){};
+
     public static final String SET_UPDATE_USER = "setUpdateUser";
     public static final String SET_UPDATE_TIME = "setUpdateTime";
     public static final String SET_CREATE_USER = "setCreateUser";

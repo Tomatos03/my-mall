@@ -18,8 +18,10 @@
         <module>mall-common</module>
         <module>mall-business</module>
         <module>mall-job</module>
-        <module>mall-mgt</module>
+        <module>mall-web</module>
         <module>mall-pojo</module>
+        <module>mall-api</module>
+        <module>mall-security</module>
     </modules>
 
     <properties>
@@ -33,40 +35,18 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
+        <!-- SpringBoot测试依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
 
+        <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
-        </dependency>
-
-        <!-- mariadb(jdbc实现) -->
-        <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
-        </dependency>
-
-        <!-- mybatis -->
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>${mybatis.version}</version>
-        </dependency>
-
-        <!-- 集成了 JSR 303/JSR 380 Bean Validation 规范 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
         <!-- openapi3增强工具 -->
@@ -76,10 +56,6 @@
             <version>${knife4j.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
         <!-- hutool工具库  -->
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -87,6 +63,7 @@
             <version>5.8.39</version>
         </dependency>
 
+        <!-- google工具库 -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>

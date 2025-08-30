@@ -20,20 +20,14 @@
     <dependencies>
         <dependency>
             <groupId>org.demo</groupId>
-            <artifactId>mall-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.demo</groupId>
             <artifactId>mall-business</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <!-- web服务器 -->
         <dependency>
-            <groupId>org.demo</groupId>
-            <artifactId>mall-pojo</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
     </dependencies>
 </project>

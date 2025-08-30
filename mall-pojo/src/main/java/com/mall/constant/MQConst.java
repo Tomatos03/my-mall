@@ -7,6 +7,8 @@ package com.mall.constant;
  * @date : 2025/8/30
  */
 public final class MQConst {
+    private MQConst() {};
+
     /**
      * excel导出交换机
      */
