@@ -10,6 +10,7 @@ import cn.hutool.json.JSONUtil;
 import com.mall.api.properties.CaptchaProps;
 import com.mall.api.properties.JwtProps;
 import com.mall.api.service.IUserService;
+import com.mall.business.mapper.DeptMapper;
 import com.mall.common.util.Ip2regionUtil;
 import com.mall.common.domain.JwtHelper;
 import com.mall.common.domain.cache.CaptchaCacher;
@@ -17,15 +18,14 @@ import com.mall.common.domain.cache.TokenCacher;
 import com.mall.common.domain.cache.UserCacher;
 import com.mall.common.util.PasswordHelper;
 import com.mall.common.util.*;
-import com.mall.dto.AuthenticatedUserDTO;
-import com.mall.dto.AuthenticationUserDTO;
-import com.mall.dto.CaptchaDTO;
-import com.mall.dto.UserDTO;
+import com.mall.dto.*;
+import com.mall.dto.condition.DeptConditionDTO;
 import com.mall.dto.condition.UserConditionDTO;
 import com.mall.entity.CommonTaskDO;
 import com.mall.common.enums.EmailBizTypeEnum;
 import com.mall.common.enums.TaskStatusEnum;
 import com.mall.common.enums.TaskTypeEnum;
+import com.mall.entity.DeptDO;
 import com.mall.pojo.RemoteUserPOJO;
 import com.mall.entity.UserDO;
 import com.mall.entity.UserRoleDO;
@@ -44,7 +44,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author : Tomatos
@@ -63,6 +65,8 @@ public class UserService implements IUserService {
     private JwtProps jwtProps;
     @Autowired
     private CaptchaProps captchaProps;
+    @Autowired
+    private DeptMapper deptMapper;
 
     /**
      * 通过id查询用户信息
@@ -234,6 +238,55 @@ public class UserService implements IUserService {
 
         UserCacher.del(username);
         TokenCacher.del(username);
+    }
+
+    @Override
+    public PageDTO<UserDO> searchByPage(UserConditionDTO userConditionDTO) {
+        List<UserDO> userDOS = userMapper.searchByCondition(userConditionDTO);
+        if (CollectionUtil.isEmpty(userDOS))
+            return PageUtil.emptyPage();
+
+        fillDeptName(userDOS);
+        return PageUtil.buildPageDTO(userConditionDTO, userDOS);
+    }
+
+    private void fillDeptName(List<UserDO> users) {
+        if (CollectionUtil.isEmpty(users))
+            return;
+
+        List<Long> deptIds = getUsersDeptId(users);
+
+        if (CollectionUtil.isEmpty(users))
+            return;
+
+        List<DeptDO> deptDOS = getDeptsByIds(deptIds);
+        Map<Long, DeptDO> deptIdMap = buildDeptIdNameMap(deptDOS);
+
+        users.forEach(user -> {
+            DeptDO deptDO = deptIdMap.get(user.getDeptId());
+            user.setDeptName(deptDO.getName());
+            user.setDept(deptDO);
+        });
+    }
+
+    private Map<Long, DeptDO> buildDeptIdNameMap(List<DeptDO> deptDOS) {
+        return deptDOS.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toMap(DeptDO::getId, (deptDO) -> deptDO));
+    }
+
+    private List<DeptDO> getDeptsByIds(List<Long> deptIds) {
+        DeptConditionDTO condition = new DeptConditionDTO();
+        condition.setIdList(deptIds);
+
+        return deptMapper.searchByCondition(condition);
+    }
+
+    private List<Long> getUsersDeptId(List<UserDO> users) {
+        return users.stream()
+                    .filter(Objects::nonNull)
+                    .map(UserDO::getDeptId)
+                    .toList();
     }
 
     public AuthenticatedUserDTO getUserInfo() {

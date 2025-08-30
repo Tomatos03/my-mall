@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -50,8 +51,12 @@ public class DeptService extends CommonService<DeptDO, DeptConditionDTO> impleme
     }
 
     public List<DeptDTO> searchByTree(DeptConditionDTO deptConditionDTO) {
+        Long pid = deptConditionDTO.getPid();
+        if (pid == null)
+            pid = 0L;
+
         DeptDTO deptDTO = new DeptDTO();
-        deptDTO.setId(deptConditionDTO.getId());
+        deptDTO.setId(pid);
 
         return getDeptSubTree(deptDTO);
     }
@@ -70,6 +75,7 @@ public class DeptService extends CommonService<DeptDO, DeptConditionDTO> impleme
         }
 
         deptDTO.setHasChildren(true);
+        deptDTO.setLeaf(false);
         deptDTO.setSubCount(deptDOS.size());
 
         // 处理子节点

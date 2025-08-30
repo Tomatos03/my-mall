@@ -1,6 +1,7 @@
 package com.mall.business.service;
 
 import com.mall.api.service.ICommonService;
+import com.mall.common.util.PageUtil;
 import com.mall.dto.PageDTO;
 import com.mall.entity.condition.PageCondition;
 import com.mall.entity.condition.RequestCondition;
@@ -67,23 +68,7 @@ public abstract class CommonService<K, V> implements ICommonService<K, V> {
 
         List<K> dataList = getMapper().searchByCondition(v);
 
-        PageDTO<K> pageDTO = new PageDTO<>();
-
-        return buildPageDTO(condition, dataList, pageDTO);
-    }
-
-    private PageDTO<K> buildPageDTO(RequestCondition condition, List<K> dataList,
-                                    PageDTO<K> pageDTO) {
-        int pageSize = condition.getPageSize();
-        int total = dataList.size();
-
-        pageDTO.setTotalPage((total + pageSize - 1) / pageSize); // total / pageSize 向上取整数
-        pageDTO.setPageNo(condition.getPageNo());
-        pageDTO.setData(dataList);
-        pageDTO.setPageSize(pageSize);
-        pageDTO.setTotalCount(total);
-
-        return pageDTO;
+        return PageUtil.buildPageDTO(condition, dataList);
     }
 
     /**

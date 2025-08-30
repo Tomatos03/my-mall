@@ -24,7 +24,13 @@ public class UserDO extends BaseDO {
     private String userName;
 
     @Schema(description = "部门ID")
-    private Integer deptId;
+    private Long deptId;
+
+    @Schema(description = "部门名称")
+    private String deptName;
+
+    @Schema(description = "部门实体")
+    private DeptDO dept;
 
     @Schema(description = "邮箱")
     private String email;
