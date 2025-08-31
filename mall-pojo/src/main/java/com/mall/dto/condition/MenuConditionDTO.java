@@ -1,6 +1,5 @@
 package com.mall.dto.condition;
 
-import com.mall.entity.condition.RequestCondition;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -14,7 +13,7 @@ import java.util.List;
  */
 @Schema(description = "菜单查询条件实体")
 @Data
-public class MenuConditionDTO extends RequestCondition {
+public class MenuConditionDTO extends CommonConditionDTO {
     /**
      * ID
      */

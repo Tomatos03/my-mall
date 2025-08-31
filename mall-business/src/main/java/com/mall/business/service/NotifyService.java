@@ -3,7 +3,7 @@ package com.mall.business.service;
 import com.mall.api.service.INotifyService;
 import com.mall.business.mapper.CommonNotifyMapper;
 import com.mall.entity.NotifyDO;
-import com.mall.entity.condition.NotifyCondition;
+import com.mall.dto.condition.NotifyConditionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +26,7 @@ public class NotifyService implements INotifyService {
     }
 
     @Override
-    public List<NotifyDO> searchByCondition(NotifyCondition notifyCondition) {
+    public List<NotifyDO> searchByCondition(NotifyConditionDTO notifyCondition) {
         return commonNotifyMapper.searchByCondition(notifyCondition);
     }
 

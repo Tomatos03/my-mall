@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MenuDTO extends BaseDTO{
+public class MenuDTO extends CommonDTO{
     /**
      * 菜单名称
      */

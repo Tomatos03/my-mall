@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class DeptDTO extends BaseDTO {
+public class DeptDTO extends CommonDTO {
     /**
      * 系统ID
      */

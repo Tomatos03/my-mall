@@ -78,7 +78,7 @@
     </update>
 
     <select id="searchByCondition"
-            parameterType="com.mall.entity.condition.CommonTaskCondition"
+            parameterType="com.mall.dto.condition.CommonTaskConditionDTO"
             resultMap="CommonTaskResult">
         SELECT
         <include refid="selectCommonTaskColumn"/>
@@ -86,7 +86,7 @@
         <include refid="queryWhere"/>
     </select>
 
-    <insert id="insert" parameterType="com.mall.entity.condition.CommonTaskCondition">
+    <insert id="insert" parameterType="com.mall.dto.condition.CommonTaskConditionDTO">
         INSERT INTO common_task
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name != null and name != ''">name,</if>

@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDO extends BaseDO {
+public class UserDO extends CommonDO {
     @Schema(description = "头像ID")
     private Long avatarId;
 

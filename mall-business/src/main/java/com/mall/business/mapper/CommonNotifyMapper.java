@@ -1,7 +1,7 @@
 package com.mall.business.mapper;
 
 import com.mall.entity.NotifyDO;
-import com.mall.entity.condition.NotifyCondition;
+import com.mall.dto.condition.NotifyConditionDTO;
 import org.springframework.dao.DataAccessException;
 
 import java.util.List;
@@ -12,9 +12,9 @@ import java.util.List;
  * @author : Tomatos
  * @date : 2025/8/19
  */
-public interface CommonNotifyMapper extends BaseMapper<NotifyDO, NotifyCondition> {
+public interface CommonNotifyMapper extends CommonMapper<NotifyDO, NotifyConditionDTO> {
     @Override
-    List<NotifyDO> searchByCondition(NotifyCondition notifyCondition) throws DataAccessException;
+    List<NotifyDO> searchByCondition(NotifyConditionDTO notifyCondition) throws DataAccessException;
 
     int update(NotifyDO notifyDO);
 

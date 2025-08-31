@@ -1,4 +1,4 @@
-package com.mall.entity.condition;
+package com.mall.dto.condition;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Schema(description = "任务查询条件实体")
 @Data
-public class CommonTaskCondition extends RequestCondition {
+public class CommonTaskConditionDTO extends CommonConditionDTO {
     /**
      * ID
      */

@@ -9,7 +9,7 @@ import com.mall.common.enums.TaskStatusEnum;
 import com.mall.common.enums.TaskTypeEnum;
 import com.mall.entity.CommonTaskDO;
 import com.mall.entity.NotifyDO;
-import com.mall.entity.condition.RequestCondition;
+import com.mall.dto.condition.CommonConditionDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -69,9 +69,9 @@ public class ExcelExportStrategy extends ScheduledTaskStrategy {
     }
 
     private void exportExcel(ExcelBizTypeEnum excelBizType) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, IOException {
-        RequestCondition condition = (RequestCondition) excelBizType.getConditionClass()
-                                                                    .getDeclaredConstructor()
-                                                                    .newInstance();
+        CommonConditionDTO condition = (CommonConditionDTO) excelBizType.getConditionClass()
+                                                                        .getDeclaredConstructor()
+                                                                        .newInstance();
         String excelFileName = excelBizType.getDesc();
         CommonService commonService = (CommonService) SpringContextHolder.getBean(excelBizType.getServiceClass());
         commonService.export(condition, excelBizType.getDoClass(), excelFileName);

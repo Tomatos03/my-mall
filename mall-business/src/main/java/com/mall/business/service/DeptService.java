@@ -3,23 +3,18 @@ package com.mall.business.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.mall.api.service.IDeptService;
-import com.mall.constant.ExcelTitleConst;
 import com.mall.dto.DeptDTO;
 import com.mall.dto.condition.DeptConditionDTO;
 import com.mall.entity.DeptDO;
-import com.mall.entity.condition.PageCondition;
-import com.mall.business.mapper.BaseMapper;
+import com.mall.dto.condition.PageConditionDTO;
+import com.mall.business.mapper.CommonMapper;
 import com.mall.business.mapper.DeptMapper;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 /**
  *
@@ -28,30 +23,32 @@ import java.util.Objects;
  * @date : 2025/8/14
  */
 @Service
-public class DeptService extends CommonService<DeptDO, DeptConditionDTO> implements IDeptService {
+public class DeptService
+        extends CommonService<DeptDO, DeptDTO, DeptConditionDTO>
+        implements IDeptService {
     @Autowired
     private DeptMapper deptMapper;
 
-    public int deleteByIds(@NotNull List<Long> ids) {
-        return deptMapper.deleteByIds(ids);
+    protected DeptService() {
+        super(DeptDO.class);
     }
 
-    public void export(HttpServletResponse response, DeptConditionDTO deptConditionDTO) throws IOException {
-        super.export(deptConditionDTO, response, DeptDO.class, ExcelTitleConst.DEPT_DATE);
-    }
+//    /**
+//     * 导出Excel到浏览器下载
+//     *
+//     * @param response
+//     * @param deptConditionDTO
+//     * @return void
+//     * @since : 1.0
+//     * @author : Tomatos
+//     * @date : 2025/8/31 11:52
+//     */
+//    public void export(HttpServletResponse response, DeptConditionDTO deptConditionDTO) throws IOException {
+//        super.export(deptConditionDTO, response, DeptDO.class, ExcelTitleConst.DEPT_DATE);
+//    }
 
-    public int update(DeptDTO deptDTO) {
-        DeptDO deptDO = BeanUtil.copyProperties(deptDTO, DeptDO.class);
-        return deptMapper.update(deptDO);
-    }
-
-    public int insert(DeptDTO deptDTO) {
-        DeptDO deptDO = BeanUtil.copyProperties(deptDTO, DeptDO.class);
-        return deptMapper.insert(deptDO);
-    }
-
-    public List<DeptDTO> searchByTree(DeptConditionDTO deptConditionDTO) {
-        Long pid = deptConditionDTO.getPid();
+    public List<DeptDTO> searchByTree(DeptConditionDTO deptCondition) {
+        Long pid = deptCondition.getPid();
         if (pid == null)
             pid = 0L;
 
@@ -62,12 +59,12 @@ public class DeptService extends CommonService<DeptDO, DeptConditionDTO> impleme
     }
 
     private List<DeptDTO> getDeptSubTree(DeptDTO deptDTO) {
-        DeptConditionDTO deptConditionDTO = new DeptConditionDTO();
-        deptConditionDTO.setPageSize(PageCondition.NO_PAGINATION);
-        deptConditionDTO.setPid(deptDTO.getId());
+        DeptConditionDTO deptCondition = new DeptConditionDTO();
+        deptCondition.setPageSize(PageConditionDTO.NO_PAGINATION);
+        deptCondition.setPid(deptDTO.getId());
 
         // 查找是否存在子树, 如果deptDOS为空说明子树不存在
-        List<DeptDO> deptDOS = deptMapper.searchByCondition(deptConditionDTO);
+        List<DeptDO> deptDOS = deptMapper.searchByCondition(deptCondition);
         if (CollectionUtil.isEmpty(deptDOS)) {
             deptDTO.setLeaf(true);
             deptDTO.setHasChildren(false);
@@ -92,7 +89,7 @@ public class DeptService extends CommonService<DeptDO, DeptConditionDTO> impleme
     }
 
     @Override
-    protected BaseMapper<DeptDO, DeptConditionDTO> getMapper() {
+    protected CommonMapper<DeptDO, DeptConditionDTO> getMapper() {
         return deptMapper;
     }
 }

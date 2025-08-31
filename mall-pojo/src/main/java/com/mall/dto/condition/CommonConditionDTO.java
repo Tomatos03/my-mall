@@ -1,4 +1,4 @@
-package com.mall.entity.condition;
+package com.mall.dto.condition;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -10,7 +10,7 @@ import java.util.List;
  * @date : 2025/8/4
  */
 @Data
-public class RequestCondition extends PageCondition {
+public class CommonConditionDTO extends PageConditionDTO {
     /**
      * 创建日期范围
      */

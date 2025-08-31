@@ -1,13 +1,14 @@
 package com.mall.business.service;
 
 import com.mall.api.service.ICommonService;
-import com.mall.common.util.PageUtil;
-import com.mall.dto.PageDTO;
-import com.mall.entity.condition.PageCondition;
-import com.mall.entity.condition.RequestCondition;
-import com.mall.business.mapper.BaseMapper;
+import com.mall.business.mapper.CommonMapper;
+import com.mall.common.domain.convert.Convert;
 import com.mall.common.util.ExcelUtil;
+import com.mall.common.util.PageUtil;
 import com.mall.common.util.TimeUtil;
+import com.mall.dto.PageDTO;
+import com.mall.dto.condition.CommonConditionDTO;
+import com.mall.dto.condition.PageConditionDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +22,14 @@ import java.util.List;
  * @date : 2025/8/15
  */
 @Slf4j
-public abstract class CommonService<K, V> implements ICommonService<K, V> {
+public abstract class CommonService<DO, DTO, ConditionDTO>
+        implements ICommonService<DO, DTO,ConditionDTO> {
+    private final Class<DO> doClass;
+
+    protected CommonService(Class<DO> doClass) {
+        this.doClass = doClass;
+    }
+
     /**
      * 获取定义的Mapper
      *
@@ -30,7 +38,7 @@ public abstract class CommonService<K, V> implements ICommonService<K, V> {
      * @author : Tomatos
      * @date : 2025/8/15 22:05
      */
-    protected abstract BaseMapper<K, V> getMapper();
+    protected abstract CommonMapper<DO, ConditionDTO> getMapper();
 
     /**
      * 导出数据到Excel到浏览器下载
@@ -44,29 +52,30 @@ public abstract class CommonService<K, V> implements ICommonService<K, V> {
      * @author : Tomatos
      * @date : 2025/8/15 22:28
      */
-    public void export(V condition, HttpServletResponse response, Class<K> kClazz, String fileName) throws IOException {
-        RequestCondition requestCondition = (RequestCondition) condition;
-        requestCondition.setPageSize(PageCondition.ALL_PAGE);
-        TimeUtil.fillTimeInterval(requestCondition);
+    public void export(ConditionDTO condition, HttpServletResponse response, Class<DO> kClazz,
+                       String fileName) throws IOException {
+        CommonConditionDTO commonCondition = (CommonConditionDTO) condition;
+        commonCondition.setPageSize(PageConditionDTO.ALL_PAGE);
+        TimeUtil.fillTimeInterval(commonCondition);
 
-        List<K> dataList = getMapper().searchByCondition(condition);
+        List<DO> dataList = getMapper().searchByCondition(condition);
         ExcelUtil.export(fileName, kClazz, dataList, response);
     }
 
     /**
      * 分页查询
      *
-     * @param v 条件实体
+     * @param conditionDTO 条件传输对象
      * @return com.mall.domain.ResponsePage<K> 分页数据
      * @since : 1.0
      * @author : Tomatos
      * @date : 2025/8/15 22:44
      */
-    public PageDTO<K> searchByPage(V v) {
-        RequestCondition condition = (RequestCondition)v;
+    public PageDTO<DO> searchByPage(ConditionDTO conditionDTO) {
+        CommonConditionDTO condition = (CommonConditionDTO) conditionDTO;
         TimeUtil.fillTimeInterval(condition);
 
-        List<K> dataList = getMapper().searchByCondition(v);
+        List<DO> dataList = getMapper().searchByCondition(conditionDTO);
 
         return PageUtil.buildPageDTO(condition, dataList);
     }
@@ -82,12 +91,33 @@ public abstract class CommonService<K, V> implements ICommonService<K, V> {
      * @author : Tomatos
      * @date : 2025/8/15 22:28
      */
-    public void export(V condition, Class<K> kClass, String fileName) throws IOException {
-        RequestCondition requestCondition = (RequestCondition) condition;
-        requestCondition.setPageSize(PageCondition.ALL_PAGE);
-        TimeUtil.fillTimeInterval(requestCondition);
+    public void export(ConditionDTO condition, Class<DO> kClass, String fileName) throws IOException {
+        CommonConditionDTO commonCondition = (CommonConditionDTO) condition;
+        commonCondition.setPageSize(PageConditionDTO.ALL_PAGE);
+        TimeUtil.fillTimeInterval(commonCondition);
 
-        List<K> dataList = getMapper().searchByCondition(condition);
+        List<DO> dataList = getMapper().searchByCondition(condition);
         ExcelUtil.phasedExport(fileName, kClass, dataList);
+    }
+
+
+    @Override
+    public int insert(DTO dto) {
+        return getMapper().insert(Convert.convert(dto, doClass));
+    }
+
+    @Override
+    public int deleteByIds(List<Long> ids) {
+        return getMapper().deleteByIds(ids);
+    }
+
+    @Override
+    public int update(DTO dto) {
+        return getMapper().update(Convert.convert(dto, doClass));
+    }
+
+    @Override
+    public List<DO> searchByCondition(ConditionDTO condition) {
+        return getMapper().searchByCondition(condition);
     }
 }

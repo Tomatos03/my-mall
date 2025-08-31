@@ -1,7 +1,7 @@
 package com.mall.common.util;
 
 import com.mall.dto.PageDTO;
-import com.mall.entity.condition.RequestCondition;
+import com.mall.dto.condition.CommonConditionDTO;
 
 import java.util.List;
 
@@ -14,8 +14,8 @@ import java.util.List;
 public final class PageUtil {
     private PageUtil() {};
 
-    public static <K> PageDTO<K> emptyPage() {
-        PageDTO<K> pageDTO = new PageDTO<>();
+    public static <DO> PageDTO<DO> emptyPage() {
+        PageDTO<DO> pageDTO = new PageDTO<>();
         pageDTO.setTotalCount(0);
         pageDTO.setTotalPage(0);
         pageDTO.setPageSize(0);
@@ -23,11 +23,11 @@ public final class PageUtil {
         return pageDTO;
     }
 
-    public static <K> PageDTO<K> buildPageDTO(RequestCondition condition, List<K> dataList) {
+    public static <DO> PageDTO<DO> buildPageDTO(CommonConditionDTO condition, List<DO> dataList) {
         int pageSize = condition.getPageSize();
         int total = dataList.size();
 
-        PageDTO<K> pageDTO = new PageDTO<>();
+        PageDTO<DO> pageDTO = new PageDTO<>();
         pageDTO.setTotalPage((total + pageSize - 1) / pageSize); // total / pageSize 向上取整数
         pageDTO.setPageNo(condition.getPageNo());
         pageDTO.setData(dataList);

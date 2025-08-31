@@ -26,7 +26,7 @@ import static com.mall.common.enums.FillTypeEnum.*;
 @Component
 public class AutoFillAspect {
     // @annotation(com.takeout.annotation.AutoFill) 限定只拦截有该注解的方法
-    @Before("execution(* com.mall.api.mapper.AutoFillMapper.*(..)) " +
+    @Before("execution(* com.mall.api.mapper.IAutoFill.*(..)) " +
             "&& @annotation(com.mall.common.annotation.AutoFill)")
     public void beforeAdvice(JoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();

@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @SuperBuilder
 @Data
-public class UserRoleDO extends BaseDO {
+public class UserRoleDO extends CommonDO {
     /**
      * 用户ID
      */

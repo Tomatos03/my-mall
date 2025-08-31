@@ -1,7 +1,7 @@
 package com.mall.api.service;
 
 import com.mall.entity.CommonTaskDO;
-import com.mall.entity.condition.CommonTaskCondition;
+import com.mall.dto.condition.CommonTaskConditionDTO;
 
 import java.util.List;
 
@@ -16,5 +16,5 @@ public interface ITaskService {
 
     void update(CommonTaskDO commonTaskDO);
 
-    List<CommonTaskDO> searchByCondition(CommonTaskCondition commonTaskCondition);
+    List<CommonTaskDO> searchByCondition(CommonTaskConditionDTO commonTaskCondition);
 }

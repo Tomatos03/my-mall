@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoleDO extends BaseDO{
+public class RoleDO extends CommonDO {
     /**
      * 名称
      */

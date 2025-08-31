@@ -15,14 +15,8 @@ import java.util.List;
  * @author : Tomatos
  * @date : 2025/8/29
  */
-public interface IMenuService extends ICommonService<MenuDO, MenuConditionDTO>{
+public interface IMenuService extends ICommonService<MenuDO, MenuDTO, MenuConditionDTO>{
     List<MenuTreeVO> getMenuTree();
 
-    int deleteByIds(List<Long> ids);
-
-    void export(HttpServletResponse response, MenuConditionDTO menuConditionDTO) throws IOException;
-
-    int insert(MenuDTO menuDTO);
-
-    int update(MenuDTO menuDTO);
+    void export(HttpServletResponse response, MenuConditionDTO menuCondition) throws IOException;
 }

@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @SuperBuilder
-public class BaseDO implements Serializable {
+public class CommonDO implements Serializable {
     @ExcelProperty("系统ID")
     private Long id;
 

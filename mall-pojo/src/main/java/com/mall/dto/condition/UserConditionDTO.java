@@ -1,6 +1,5 @@
 package com.mall.dto.condition;
 
-import com.mall.entity.condition.RequestCondition;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,7 @@ import java.util.List;
 @Schema(description = "用户条件实体")
 @Data
 @NoArgsConstructor
-public class UserConditionDTO extends RequestCondition {
+public class UserConditionDTO extends CommonConditionDTO {
     /**
      * ID
      */

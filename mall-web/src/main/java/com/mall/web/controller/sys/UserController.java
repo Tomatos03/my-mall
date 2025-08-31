@@ -1,22 +1,18 @@
-package com.mall.web.controller;
+package com.mall.web.controller.sys;
 
 import com.mall.api.service.IUserService;
-import com.mall.common.annotation.NoLogin;
 import com.mall.dto.PageDTO;
-import com.mall.dto.UserDTO;
-import com.mall.business.service.UserService;
 import com.mall.dto.condition.UserConditionDTO;
 import com.mall.entity.UserDO;
-import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.constraints.NotNull;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * @author : Tomatos
  * @date : 2025/8/2
  */
+@Tag(name = "用户管理", description = "用户管理相关操作")
 @RestController
 @RequestMapping("/v1/user")
 public class UserController {

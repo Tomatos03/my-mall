@@ -11,6 +11,7 @@ import com.mall.entity.MenuDO;
 import com.mall.common.enums.ExcelBizTypeEnum;
 import com.mall.vo.MenuTreeVO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ import java.util.List;
  * @date : 2025/8/4
  */
 
+@Tag(name = "菜单管理", description = "菜单管理相关操作")
 @RestController
 @RequestMapping("/v1/menu")
 public class MenuController {
@@ -38,8 +40,8 @@ public class MenuController {
     @NoLogin
     @Operation(summary = "根据条件查询菜单列表", description = "根据条件查询菜单列表")
     @PostMapping("/searchByPage")
-    public PageDTO<MenuDO> searchByPage(@RequestBody MenuConditionDTO menuConditionDTO) {
-        return menuService.searchByPage(menuConditionDTO);
+    public PageDTO<MenuDO> searchByPage(@RequestBody MenuConditionDTO menuCondition) {
+        return menuService.searchByPage(menuCondition);
     }
 
     /**

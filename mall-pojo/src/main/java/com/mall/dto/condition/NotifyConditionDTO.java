@@ -1,4 +1,4 @@
-package com.mall.entity.condition;
+package com.mall.dto.condition;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @Schema(description = "通知查询条件实体")
-public class NotifyCondition extends RequestCondition {
+public class NotifyConditionDTO extends CommonConditionDTO {
     /**
      * ID
      */

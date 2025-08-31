@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class BaseDTO {
+public class CommonDTO {
     /**
      * 系统ID
      */

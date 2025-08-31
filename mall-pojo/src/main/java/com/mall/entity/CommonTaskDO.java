@@ -17,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class CommonTaskDO extends BaseDO{
+public class CommonTaskDO extends CommonDO {
     public static final int MAX_FAILURE_COUNT = 3;
 
     /**

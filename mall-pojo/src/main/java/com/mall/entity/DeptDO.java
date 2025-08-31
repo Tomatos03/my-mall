@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class DeptDO extends BaseDO{
+public class DeptDO extends CommonDO {
     /**
      * 名称
      */

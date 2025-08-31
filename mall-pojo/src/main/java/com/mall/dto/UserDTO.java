@@ -18,7 +18,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO extends BaseDTO {
+public class UserDTO extends CommonDTO {
     @Schema(description = "用户名称")
     private String userName;
 

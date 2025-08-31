@@ -2,7 +2,7 @@ package com.mall.job.task;
 
 import com.mall.api.service.ITaskService;
 import com.mall.entity.CommonTaskDO;
-import com.mall.entity.condition.CommonTaskCondition;
+import com.mall.dto.condition.CommonTaskConditionDTO;
 import com.mall.common.enums.TaskStatusEnum;
 import com.mall.job.strategy.ScheduledTaskStrategy;
 import com.mall.job.strategy.ScheduledTaskStrategyFactory;
@@ -50,7 +50,7 @@ public class CommonTaskJob {
     }
 
     private List<CommonTaskDO> getNeedHandleTask() {
-        CommonTaskCondition commonTaskCondition = new CommonTaskCondition();
+        CommonTaskConditionDTO commonTaskCondition = new CommonTaskConditionDTO();
 
         List<Integer> statusQueue = List.of(
                 TaskStatusEnum.WAITING.getValue(),

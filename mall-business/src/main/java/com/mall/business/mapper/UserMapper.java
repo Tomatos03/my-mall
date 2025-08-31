@@ -9,7 +9,7 @@ import java.util.List;
  * @author : Tomatos
  * @date : 2025/8/2
  */
-public interface UserMapper extends BaseMapper<UserDO, UserConditionDTO> {
+public interface UserMapper extends CommonMapper<UserDO, UserConditionDTO> {
     /**
      * 通过id查询用户信息
      *

@@ -1,11 +1,10 @@
 package com.mall.web.controller.web;
 
-import com.mall.api.service.IUserService;
+import com.mall.api.service.IWebUserService;
 import com.mall.common.annotation.NoLogin;
 import com.mall.dto.AuthenticatedUserDTO;
 import com.mall.dto.CaptchaDTO;
 import com.mall.dto.AuthenticationUserDTO;
-import com.mall.business.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 public class WebUserController {
     @Autowired
-    private IUserService userService;
+    private IWebUserService webUserService;
 
     /**
      * 用户登录
@@ -36,7 +35,7 @@ public class WebUserController {
     @Operation(summary = "用户登录", description = "用户登录")
     @PostMapping("/login")
     public AuthenticatedUserDTO login(@Valid @RequestBody AuthenticationUserDTO authenticationUserDTO) {
-        return userService.login(authenticationUserDTO);
+        return webUserService.login(authenticationUserDTO);
     }
 
     /**
@@ -49,20 +48,20 @@ public class WebUserController {
     @Operation(summary = "用户退出登录", description = "用户退出登录")
     @PostMapping("/logout")
     public void logout(HttpServletRequest request) {
-        userService.logout(request);
+        webUserService.logout(request);
     }
 
     @NoLogin
     @Operation(summary = "获取验证码", description = "获取验证码")
     @GetMapping(value = "/code")
     public CaptchaDTO getCode() {
-        return userService.getCode();
+        return webUserService.getCode();
     }
 
     @NoLogin
     @Operation(summary = "获取用户信息", description = "获取用户信息")
     @GetMapping(value = "/info")
     public AuthenticatedUserDTO getUserInfo() {
-        return userService.getUserInfo();
+        return webUserService.getUserInfo();
     }
 }

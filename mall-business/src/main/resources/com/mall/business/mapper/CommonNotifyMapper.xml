@@ -113,7 +113,7 @@
     </update>
 
     <select id="searchByCondition"
-            parameterType="com.mall.entity.condition.NotifyCondition"
+            parameterType="com.mall.dto.condition.NotifyConditionDTO"
             resultMap="CommonNotifyResult">
         SELECT
         <include refid="selectCommonNotifyColumn"/>

@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LogDO extends BaseDO {
+public class LogDO extends CommonDO {
     @Schema(description = "方法名称")
     private String methodName;
 

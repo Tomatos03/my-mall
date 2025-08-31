@@ -8,6 +8,7 @@ import com.mall.dto.PageDTO;
 import com.mall.entity.DeptDO;
 import com.mall.dto.condition.DeptConditionDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,7 @@ import java.util.List;
  * @author : Tomatos
  * @date : 2025/8/14
  */
+@Tag(name = "部门管理", description = "部门管理相关操作")
 @RestController
 @RequestMapping("/v1/dept")
 public class DeptController {
@@ -31,14 +33,14 @@ public class DeptController {
 
     @Operation(description = "查询部门树", summary = "查询部门树")
     @PostMapping("/searchByTree")
-    public List<DeptDTO> searchByTree(@RequestBody DeptConditionDTO deptConditionDTO) {
-        return deptService.searchByTree(deptConditionDTO);
+    public List<DeptDTO> searchByTree(@RequestBody DeptConditionDTO deptCondition) {
+        return deptService.searchByTree(deptCondition);
     }
 
     @Operation(summary = "根据条件查询部门列表", description = "根据条件查询部门列表")
     @PostMapping("/searchByPage")
-    public PageDTO<DeptDO> searchByPage(@RequestBody DeptConditionDTO deptConditionDTO) {
-        return deptService.searchByPage(deptConditionDTO);
+    public PageDTO<DeptDO> searchByPage(@RequestBody DeptConditionDTO deptCondition) {
+        return deptService.searchByPage(deptCondition);
     }
 
     /**

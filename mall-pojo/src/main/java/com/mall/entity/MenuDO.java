@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
  @AllArgsConstructor
  @NoArgsConstructor
  @Data
- public class MenuDO extends BaseDO {
+ public class MenuDO extends CommonDO {
      /**
       * 菜单名称
       */

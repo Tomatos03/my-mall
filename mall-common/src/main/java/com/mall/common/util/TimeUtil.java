@@ -1,8 +1,7 @@
 package com.mall.common.util;
 
-import com.mall.entity.condition.RequestCondition;
+import com.mall.dto.condition.CommonConditionDTO;
 
-import java.sql.Time;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -18,17 +17,17 @@ public final class TimeUtil {
 
     private TimeUtil(){};
 
-    public static void fillTimeInterval(RequestCondition requestCondition) {
-        List<String> betweenTime = requestCondition.getBetweenTime();
+    public static void fillTimeInterval(CommonConditionDTO commonCondition) {
+        List<String> betweenTime = commonCondition.getBetweenTime();
         if (betweenTime ==  null)
             return;
 
         int size = betweenTime.size();
 
         if (size >= 1)
-            requestCondition.setCreateBeginTime(betweenTime.get(0));
+            commonCondition.setCreateBeginTime(betweenTime.get(0));
         if (size >= 2)
-            requestCondition.setCreateEndTime(betweenTime.get(1));
+            commonCondition.setCreateEndTime(betweenTime.get(1));
     }
 
     public static String nowFormatted() {

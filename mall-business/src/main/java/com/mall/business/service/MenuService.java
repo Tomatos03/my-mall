@@ -4,13 +4,12 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.google.common.collect.Lists;
 import com.mall.api.service.IMenuService;
-import com.mall.constant.ExcelTitleConst;
 import com.mall.dto.MenuDTO;
 import com.mall.dto.MetaDTO;
 import com.mall.dto.condition.MenuConditionDTO;
 import com.mall.entity.MenuDO;
-import com.mall.entity.condition.PageCondition;
-import com.mall.business.mapper.BaseMapper;
+import com.mall.dto.condition.PageConditionDTO;
+import com.mall.business.mapper.CommonMapper;
 import com.mall.business.mapper.MenuMapper;
 import com.mall.vo.MenuTreeVO;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,9 +24,15 @@ import java.util.List;
  * @date : 2025/8/4
  */
 @Service
-public class MenuService extends CommonService<MenuDO, MenuConditionDTO> implements IMenuService {
+public class MenuService
+        extends CommonService<MenuDO, MenuDTO, MenuConditionDTO>
+        implements IMenuService {
     @Autowired
     private MenuMapper menuMapper;
+
+    protected MenuService() {
+        super(MenuDO.class);
+    }
 
     public List<MenuTreeVO> getMenuTree() {
         MenuTreeVO menuTreeVO = new MenuTreeVO();
@@ -38,11 +43,11 @@ public class MenuService extends CommonService<MenuDO, MenuConditionDTO> impleme
     }
 
     private List<MenuTreeVO> getMenuTree0(MenuTreeVO menuTreeVO, boolean isAlwaysShow) {
-        MenuConditionDTO menuConditionDTO = new MenuConditionDTO();
-        menuConditionDTO.setPageSize(PageCondition.NO_PAGINATION);
-        menuConditionDTO.setPid(menuTreeVO.getId());
+        MenuConditionDTO menuCondition = new MenuConditionDTO();
+        menuCondition.setPageSize(PageConditionDTO.NO_PAGINATION);
+        menuCondition.setPid(menuTreeVO.getId());
 
-        List<MenuDO> menuEntities = menuMapper.searchByCondition(menuConditionDTO);
+        List<MenuDO> menuEntities = menuMapper.searchByCondition(menuCondition);
         if (CollectionUtil.isEmpty(menuEntities))
             return null;
 
@@ -55,7 +60,6 @@ public class MenuService extends CommonService<MenuDO, MenuConditionDTO> impleme
         }
         return menuTreeVOS;
     }
-
 
     private MenuTreeVO buildMenuTreeDTO(MenuDO menuDO, boolean isAlwaysShow) {
         MenuTreeVO menuTreeVO = BeanUtil.copyProperties(menuDO, MenuTreeVO.class);
@@ -71,30 +75,29 @@ public class MenuService extends CommonService<MenuDO, MenuConditionDTO> impleme
         return menuTreeVO;
     }
 
-    public int deleteByIds(List<Long> ids) {
-        return menuMapper.batchDelete(ids);
-    }
-
-    public void export(HttpServletResponse response, MenuConditionDTO menuConditionDTO) throws IOException {
-        super.export(menuConditionDTO, response, MenuDO.class, ExcelTitleConst.MENU_DATE);
+    /**
+     * 导出Excel到浏览器下载
+     *
+     * @param response
+     * @param menuCondition
+     * @return void
+     * @since : 1.0
+     * @author : Tomatos
+     * @date : 2025/8/31 11:53
+     */
+    public void export(HttpServletResponse response, MenuConditionDTO menuCondition) throws IOException {
+//        super.export(menuConditionDTO, response, MenuDO.class, ExcelTitleConst.MENU_DATE);
     }
 
     public int insert(MenuDTO menuDTO) {
-        MenuDO menuDO = BeanUtil.copyProperties(menuDTO, MenuDO.class);
-        // TODO 暂时写死
-        menuDO.setCreateUserId(1L);
-        menuDO.setCreateUserName("admin");
+        menuDTO.setCreateUserId(1L);
+        menuDTO.setCreateUserName("admin");
 
-        return menuMapper.insert(menuDO);
-    }
-
-    public int update(MenuDTO menuDTO) {
-        MenuDO menuDO = BeanUtil.copyProperties(menuDTO, MenuDO.class);
-        return menuMapper.update(menuDO);
+        return super.insert(menuDTO);
     }
 
     @Override
-    protected BaseMapper<MenuDO, MenuConditionDTO> getMapper() {
+    protected CommonMapper<MenuDO, MenuConditionDTO> getMapper() {
         return menuMapper;
     }
 }

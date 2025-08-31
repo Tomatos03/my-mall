@@ -1,7 +1,7 @@
 package com.mall.api.service;
 
 import com.mall.entity.NotifyDO;
-import com.mall.entity.condition.NotifyCondition;
+import com.mall.dto.condition.NotifyConditionDTO;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public interface INotifyService {
     void addNotify(NotifyDO notifyDO);
 
-    List<NotifyDO> searchByCondition(NotifyCondition notifyCondition);
+    List<NotifyDO> searchByCondition(NotifyConditionDTO notifyCondition);
 
     void update(NotifyDO notifyDO);
 }

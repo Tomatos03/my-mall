@@ -155,7 +155,7 @@
         <include refid="selectUserColumn"/>
         FROM sys_user
         <include refid="queryWhere"/>
-        <include refid="com.mall.business.mapper.BaseMapper.paginationSql"/>
+        <include refid="com.mall.business.mapper.CommonMapper.paginationSql"/>
     </select>
 
     <delete id="deleteById">

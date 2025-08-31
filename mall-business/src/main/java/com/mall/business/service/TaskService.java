@@ -3,8 +3,7 @@ package com.mall.business.service;
 import com.mall.api.service.ITaskService;
 import com.mall.business.mapper.CommonTaskMapper;
 import com.mall.entity.CommonTaskDO;
-import com.mall.entity.condition.CommonTaskCondition;
-import org.apache.ibatis.annotations.Mapper;
+import com.mall.dto.condition.CommonTaskConditionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +31,7 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public List<CommonTaskDO> searchByCondition(CommonTaskCondition commonTaskCondition) {
+    public List<CommonTaskDO> searchByCondition(CommonTaskConditionDTO commonTaskCondition) {
         return commonTaskMapper.searchByCondition(commonTaskCondition);
     }
 }

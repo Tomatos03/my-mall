@@ -17,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 @Schema(description = "通知实体")
 @AllArgsConstructor
 @NoArgsConstructor
-public class NotifyDO extends BaseDO {
+public class NotifyDO extends CommonDO {
     @Schema(description = "通知类型（1：excel导出）")
     private Integer type;
 

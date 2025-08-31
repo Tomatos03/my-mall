@@ -17,7 +17,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class NotifyDTO extends BaseDTO {
+public class NotifyDTO extends CommonDTO {
     @Schema(description = "通知类型 1：excel导出")
     private Integer type;
 
