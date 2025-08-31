@@ -35,9 +35,6 @@ public class UserDO extends CommonDO {
     @Schema(description = "邮箱")
     private String email;
 
-    @Schema(description = "是否删除，0-未删除，1-已删除")
-    private Integer isDel;
-
     @Schema(description = "职位ID")
     private Integer jobId;
 
