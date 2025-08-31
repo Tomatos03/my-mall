@@ -1,11 +1,17 @@
 package com.mall.common.enums;
 
 import com.mall.api.service.IDeptService;
+import com.mall.api.service.IJobService;
 import com.mall.api.service.IMenuService;
+import com.mall.api.service.IUserService;
 import com.mall.dto.condition.DeptConditionDTO;
+import com.mall.dto.condition.JobConditionDTO;
 import com.mall.dto.condition.MenuConditionDTO;
+import com.mall.dto.condition.UserConditionDTO;
 import com.mall.entity.DeptDO;
+import com.mall.entity.JobDO;
 import com.mall.entity.MenuDO;
+import com.mall.entity.UserDO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -19,7 +25,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ExcelBizTypeEnum {
     MENU(1, "菜单", MenuConditionDTO.class, IMenuService.class, MenuDO.class),
-    DEPT(3, "部门", DeptConditionDTO.class, IDeptService.class, DeptDO.class);
+    ROLE(2, "角色", UserConditionDTO.class, IUserService.class, UserDO.class),
+    DEPT(3, "部门", DeptConditionDTO.class, IDeptService.class, DeptDO.class),
+    JOB(5, "岗位",JobConditionDTO .class, IJobService .class, JobDO .class);
 
     /**
      * 枚举值
