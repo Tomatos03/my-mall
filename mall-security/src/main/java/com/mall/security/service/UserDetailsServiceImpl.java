@@ -31,6 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         List<SimpleGrantedAuthority> userRoles = getUserRoles(userDO.getId());
         return AuthenticationUser.builder()
+                                 .id(userDO.getId())
                                  .username(username)
                                  .password(userDO.getPassword())
                                  .authorities(userRoles)

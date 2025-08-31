@@ -1,6 +1,7 @@
 package com.mall.common.domain.security;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 
+
 /**
  * @author : Tomatos
  * @date : 2025/8/5
@@ -19,17 +21,13 @@ import java.util.List;
 @Data
 @Schema(description = "认证的用户")
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationUser implements UserDetails {
+    private Long id;
     private String username;
     private String password;
     private List<SimpleGrantedAuthority> authorities;
-
-    public AuthenticationUser(String username, String password, List<SimpleGrantedAuthority> authorities) {
-        this.authorities = authorities;
-        this.password = password;
-        this.username = username;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -75,6 +75,7 @@ public final class AuthenticatorUtil {
                                  .toList();
 
         return AuthenticatedUserDTO.builder()
+                                   .id(user.getId())
                                    .username(user.getUsername())
                                    .roles(roles)
                                    .build();
