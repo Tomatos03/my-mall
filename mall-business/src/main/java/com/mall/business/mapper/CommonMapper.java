@@ -1,5 +1,8 @@
 package com.mall.business.mapper;
 
+import com.mall.api.mapper.IAutoFill;
+import com.mall.common.annotation.AutoFill;
+import com.mall.common.enums.FillTypeEnum;
 import org.springframework.dao.DataAccessException;
 
 import java.util.List;
@@ -8,7 +11,7 @@ import java.util.List;
  * @author : Tomatos
  * @date : 2025/8/4
  */
-public interface CommonMapper<DO, ConditionDTO> {
+public interface CommonMapper<DO, ConditionDTO> extends IAutoFill<DO> {
     /**
      * 根据条件查询数据的数量
      *
@@ -35,6 +38,7 @@ public interface CommonMapper<DO, ConditionDTO> {
      * @author : Tomatos
      * @date : 2025/8/31 16:09
      */
+    @AutoFill(FillTypeEnum.INSERT)
     int insert(DO entity);
 
     /**
@@ -57,5 +61,6 @@ public interface CommonMapper<DO, ConditionDTO> {
      * @author : Tomatos
      * @date : 2025/8/31 16:10
      */
+    @AutoFill(FillTypeEnum.UPDATE)
     int update(DO entity);
 }

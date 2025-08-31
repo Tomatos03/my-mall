@@ -1,8 +1,10 @@
 package com.mall.common.aspect;
 
 import com.mall.common.annotation.AutoFill;
+import com.mall.common.util.AuthenticatorUtil;
 import com.mall.constant.AutoFillConst;
 import com.mall.common.enums.FillTypeEnum;
+import com.mall.dto.AuthenticatedUserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,6 +16,7 @@ import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 
 import static com.mall.common.enums.FillTypeEnum.*;
+import static com.mall.constant.AutoFillConst.*;
 
 /**
  *
@@ -40,14 +43,36 @@ public class AutoFillAspect {
         FillTypeEnum type = method.getAnnotation(AutoFill.class).value();
 
         try {
+            AuthenticatedUserDTO authenticatedUser = AuthenticatorUtil.getAuthenticatedUser();
             LocalDateTime now = LocalDateTime.now();
 
-            Method setUpdateTimeMethod = clazz.getMethod(AutoFillConst.SET_UPDATE_TIME, LocalDateTime.class);
+            // 填充创建更新
+            Method setUpdateTimeMethod = clazz.getMethod(SET_UPDATE_TIME, LocalDateTime.class);
             setUpdateTimeMethod.invoke(dto, now);
 
+            Long id = authenticatedUser.getId();
+            String username = authenticatedUser.getUsername();
+
+            // 填充更新者ID
+            Method setUpdateUserIdMethod = clazz.getMethod(SET_UPDATE_USER_ID, Long.class);
+            setUpdateUserIdMethod.invoke(dto, id);
+
+            // 填充更新者名称
+            Method setUpateUserNameMethod = clazz.getMethod(SET_UPDATE_USER_NAME, String.class);
+            setUpateUserNameMethod.invoke(dto, username);
+
             if (type == INSERT) {
-                Method setCreateTimeMethod = clazz.getMethod(AutoFillConst.SET_CREATE_TIME, LocalDateTime.class);
+                // 填充创建时间
+                Method setCreateTimeMethod = clazz.getMethod(SET_CREATE_TIME, LocalDateTime.class);
                 setCreateTimeMethod.invoke(dto, now);
+
+                // 填充创建者ID
+                Method setCreateUserIdMethod = clazz.getMethod(SET_CREATE_USER_ID, Long.class);
+                setCreateUserIdMethod.invoke(dto, id);
+
+                // 填充创建名称
+                Method setCreteUserNameMethod = clazz.getMethod(SET_CREATE_USER_NAME, String.class);
+                setCreteUserNameMethod.invoke(dto, username);
             }
         } catch (Exception e) {
             log.error("自动填充字段失败: {}", e.getMessage());
