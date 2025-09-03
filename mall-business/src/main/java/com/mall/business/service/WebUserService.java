@@ -6,6 +6,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.mall.api.properties.CaptchaProps;
+import com.mall.api.properties.IPassWordProps;
 import com.mall.api.properties.JwtProps;
 import com.mall.api.service.IWebUserService;
 import com.mall.business.mapper.CommonTaskMapper;
@@ -53,6 +54,8 @@ public class WebUserService implements IWebUserService {
     private CaptchaProps captchaProps;
     @Autowired
     private CommonTaskMapper commonTaskMapper;
+    @Autowired
+    private IPassWordProps passWordProps;
 
     @Override
     public AuthenticatedUserDTO login(AuthenticationUserDTO authenticationUserDTO) {
@@ -66,7 +69,7 @@ public class WebUserService implements IWebUserService {
         String username = authenticationUserDTO.getUsername();
         String decodePassword = PasswordHelper.decodeRsaPassword(
                 authenticationUserDTO.getPassword(),
-                jwtProps.secret()
+                passWordProps.privateKey()
         );
 
         Authentication authenticated = AuthenticatorUtil.authenticate(username, decodePassword);
