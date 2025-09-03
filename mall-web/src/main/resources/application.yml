@@ -5,46 +5,42 @@ spring:
   profiles:
     active: dev
   application:
-    name: mall-api
+    name: mall-web-application
+
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: Tomatos03
-    password: 20030503
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+
   datasource:
-    username: Tomatos
-    password: 20030503
-    # serverTimezone=Asia/Shanghai 设置时区
-    # characterEncoding=utf8 设置字符编码
-    # useSSL=false 关闭SSL
-    # zeroDateTimeBehavior=convertToNull 遇到零日期时转换为null
-    # allowMultiQueries=true 允许多条SQL同时执行
-    # autoReconnect=true 断线自动重连
-    url: >
-      jdbc:mariadb://localhost:3306/my_mall?
-      serverTimezone=Asia/Shanghai
-      &characterEncoding=utf8
-      &useSSL=false&zeroDateTimeBehavior=convertToNull
-      &allowMultiQueries=true&autoReconnect=true
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
     driver-class-name: org.mariadb.jdbc.Driver
+    url: "jdbc:mariadb://${DATASOURCE_HOST:localhost}:${DATASOURCE_PORT:3306}/my_mall?&characterEncoding=utf8"
+
   data:
     redis:
-      port: 6379
-      password: zjlljz
-      database: 0
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: ${REDIS_DATABASE:0}
+
   mail:
-    # QQ邮箱配置参考:
-    # https://wx.mail.qq.com/list/readtemplate?name=app_intro.html#/agreement/authorizationCode
+    protocol: ${MAIL_PROTOCOL:smtp}
+    host: ${MAIL_HOST:smtp.qq.com}
+    port: ${MAIL_PORT:465}
+    default-encoding: ${MAIL_DEFAULT_ENCODING:UTF-8}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     # properties可配置属性参考:
     # https://javaee.github.io/javamail/docs/api/com/sun/mail/smtp/package-summary.html
-    protocol: ${spring.mail.protocol}
-    host: ${spring.mail.host}
-    port: ${spring.mail.port}
-    default-encoding: ${spring.mail.default-encoding}
-    username: ${spring.mail.username}
-    password: ${spring.mail.password}
-#  jackson:
-#    property-naming-strategy: SNAKE_CASE
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
@@ -54,20 +50,22 @@ knife4j:
   setting:
     language: zh_cn
 
-my_mall:
+my-mall:
   jwt:
-    secret: "your-very-secure-jwt-secret-key-2024!@#ABCdef1234567890"
-    expiration: 86400 # 1天(秒为单位)
+    secret: ${JWT_SECRET}
+    expiration: ${JWT_EXPIRATION:86400}   # 1 天(秒)
   captcha:
-    expiration: 60
+    expiration: ${CAPTCHA_EXPIRATION:120}
+  password:
+    private-key-path: ./pri.key
 
 ip2region:
-  db-path: "classpath:ip2region/ip2region.xdb"
+  db-path: ${IP2REGION_DB_PATH:classpath:ip2region/ip2region.xdb}
 
 ip-geolocation:
-  api: "http://ip-api.com/json/"
-  city-field-name: "city"
-  country-field-name: "country"
-  province-field-name: "province"
+  api: ${IP_GEO_API:http://ip-api.com/json/}
+  city-field-name: ${IP_GEO_CITY_FIELD:city}
+  country-field-name: ${IP_GEO_COUNTRY_FIELD:country}
+  province-field-name: ${IP_GEO_PROVINCE_FIELD:province}
   params:
-    lang: zh-CN
+    lang: ${IP_GEO_LANG:zh-CN}
