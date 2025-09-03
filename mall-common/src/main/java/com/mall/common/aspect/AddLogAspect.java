@@ -31,7 +31,7 @@ import java.lang.reflect.Method;
 @Slf4j
 @Aspect
 @Component
-public class addLoginAspect {
+public class AddLogAspect {
     private static final int COMPLETED = 1;
     private static final int NO_COMPLETED = 0;
     @Autowired

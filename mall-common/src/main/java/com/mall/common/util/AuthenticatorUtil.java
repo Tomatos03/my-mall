@@ -27,10 +27,10 @@ public final class AuthenticatorUtil {
     }
 
     public static Authentication authenticate(String username, String password) {
-        UsernamePasswordAuthenticationToken token =
+        UsernamePasswordAuthenticationToken loginUser =
                 new UsernamePasswordAuthenticationToken(username, password);
 
-        Authentication auth = authenticationManager().authenticate(token);
+        Authentication auth = authenticationManager().authenticate(loginUser);
 
         SecurityContextHolder.getContext()
                              .setAuthentication(auth);

@@ -103,7 +103,7 @@ public abstract class CommonService<DO, DTO, ConditionDTO>
 
     @Override
     public int insert(DTO dto) {
-        return getMapper().insert(Convert.convert(dto, doClass));
+        return getMapper().insert(Convert.convertDO(dto, doClass));
     }
 
     @Override
@@ -113,7 +113,7 @@ public abstract class CommonService<DO, DTO, ConditionDTO>
 
     @Override
     public int update(DTO dto) {
-        return getMapper().update(Convert.convert(dto, doClass));
+        return getMapper().update(Convert.convertDO(dto, doClass));
     }
 
     @Override

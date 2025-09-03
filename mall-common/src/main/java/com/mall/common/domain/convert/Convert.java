@@ -11,7 +11,7 @@ import cn.hutool.core.bean.BeanUtil;
 public final class Convert {
     private Convert() {};
 
-    public static <DO, DTO> DO convert(DTO dto, Class<DO> doClass) {
+    public static <DO, DTO> DO convertDO(DTO dto, Class<DO> doClass) {
         return BeanUtil.copyProperties(dto, doClass);
     }
 }
