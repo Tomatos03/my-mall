@@ -34,4 +34,5 @@ build/
 .vscode/
 
 ### 测试环境配置文件
-application-dev.yml
+application-*.yml
+pri.key
