@@ -5,6 +5,7 @@ import com.mall.common.context.SpringContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -58,6 +59,26 @@ public final class RedisUtil {
     public static boolean set(String key, String value, long expireTime, TimeUnit unit) {
         try {
             stringRedisTemplate().opsForValue().set(key, value, expireTime, unit);
+            return true;
+        } catch (Exception e) {
+            log.error("Redis保存数据失败：", e);
+            return false;
+        }
+    }
+
+    public static boolean hset(String cacheKey, Map<?, ?> map) {
+        try {
+            stringRedisTemplate().opsForHash().putAll(cacheKey, map);
+            return true;
+        } catch (Exception e) {
+            log.error("Redis保存数据失败：", e);
+            return false;
+        }
+    }
+
+    public static boolean hset(String key, String field, String value) {
+        try {
+            stringRedisTemplate().opsForHash().put(key, field, value);
             return true;
         } catch (Exception e) {
             log.error("Redis保存数据失败：", e);
@@ -145,5 +166,9 @@ public final class RedisUtil {
                                                       unit
                                               );
         return Boolean.TRUE.equals(result);
+    }
+
+    public static Object hget(String cacheKey, String hashkey) {
+        return stringRedisTemplate().opsForHash().get(cacheKey, hashkey);
     }
 }

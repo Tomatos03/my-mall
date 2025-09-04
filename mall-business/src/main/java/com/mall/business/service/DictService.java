@@ -1,14 +1,24 @@
 package com.mall.business.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.json.JSONUtil;
 import com.mall.api.service.IDictService;
 import com.mall.business.mapper.CommonMapper;
+import com.mall.business.mapper.DictDetailMapper;
 import com.mall.business.mapper.DictMapper;
+import com.mall.common.domain.cache.DictCacher;
 import com.mall.dto.DictDTO;
 import com.mall.dto.condition.DictConditionDTO;
+import com.mall.dto.condition.DictDetailConditionDTO;
+import com.mall.dto.condition.PageConditionDTO;
 import com.mall.entity.DictDO;
+import com.mall.entity.DictDetailDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 服务层
@@ -22,10 +32,8 @@ public class DictService
         implements IDictService {
     @Autowired
     private DictMapper dictMapper;
-    //    @Autowired
-    //    private DictDetailMapper dictDetailMapper;
-    //    @Autowired
-    //    private RedisUtil redisUtil;
+    @Autowired
+    private DictDetailMapper dictDetailMapper;
 
     public DictService() {
         super(DictDO.class);
@@ -47,66 +55,41 @@ public class DictService
         return BeanUtil.toBean(entity, DictDTO.class);
     }
 
-//    /**
-//     * 从缓存中获取数据字典
-//     *
-//     * @param dictName 数据字典名称
-//     * @return 数据字典
-//     */
-//    @Cacheable(value = "dict_data", keyGenerator = "dictCacheKeyGenerator")
-//    public List<DictDetailEntity> queryDictDetailEntity(String dictName) {
-//        List<DictDetailEntity> dataList = getDictDataFromRedis(dictName);
-//        if (CollectionUtils.isEmpty(dataList)) {
-//            return Collections.emptyList();
-//        }
-//        return dataList.stream()
-//                       .sorted((a, b) -> a.getSort()
-//                                          .compareTo(b.getSort()))
-//                       .collect(Collectors.toList());
-//    }
+    @Override
+    public void refreshDictCache() {
+        List<DictDO> dictDOS = queryAllDict();
+        if (CollectionUtils.isEmpty(dictDOS))
+            return;
 
-//    /**
-//     * 更新redis中的数据字典
-//     */
-//    public void refreshDict() {
-//        DictConditionEntity dictConditionEntity = new DictConditionEntity();
-//        dictConditionEntity.setPageSize(0);
-//        List<DictDO> dictEntities = dictMapper.searchByCondition(dictConditionEntity);
-//        if (CollectionUtils.isEmpty(dictEntities)) {
-//            return;
-//        }
-//
-//        List<Long> dictIdList = dictEntities.stream()
-//                                            .map(DictDO::getId)
-//                                            .collect(Collectors.toList());
-//        DictDetailConditionEntity dictDetailConditionEntity = new DictDetailConditionEntity();
-//        dictDetailConditionEntity.setDictIdList(dictIdList);
-//        dictDetailConditionEntity.setPageSize(0);
-//        List<DictDetailEntity> dictDetailEntities =
-//                dictDetailMapper.searchByCondition(dictDetailConditionEntity);
-//        Map<Long, List<DictDetailEntity>> dictDetailMap = dictDetailEntities.stream()
-//                                                                            .collect(Collectors.groupingBy(DictDetailEntity::getDictId));
-//
-//        Map<Object, Object> dictMap = new HashMap<>(dictEntities.size());
-//        for (DictDO dictDO : dictEntities) {
-//            List<DictDetailEntity> detailEntityList = dictDetailMap.get(dictDO.getId());
-//            dictMap.put(dictDO.getDictName(), JSONUtil.toJsonStr(detailEntityList));
-//        }
-//
-//        redisUtil.putHashMap(DICT_DATA_KEY, dictMap);
-//    }
+        List<DictDetailDO> dictDetailDOS = queryDictDetails();
 
-//    /**
-//     * 从redis中获取数据字典数据
-//     *
-//     * @return 数据字典数据
-//     */
-//    public List<DictDetailEntity> getDictDataFromRedis(String hashKey) {
-//        String json = (String) redisUtil.getHashValue(DICT_DATA_KEY, hashKey);
-//        if (!StringUtils.hasLength(json)) {
-//            return Collections.emptyList();
-//        }
-//
-//        return JSONUtil.toList(json, DictDetailEntity.class);
-//    }
+        Map<Long, List<DictDetailDO>> dictMap = dictDetailDOS.stream()
+                                                             .collect(Collectors.groupingBy(DictDetailDO::getDictId));
+        int size = dictMap.size();
+        Map<String, String> cacheMap = new HashMap<>(size);
+        for (DictDO dictDO : dictDOS) {
+            Long id = dictDO.getId();
+            List<DictDetailDO> dictDetailList = dictMap.get(id);
+            if (CollectionUtils.isEmpty(dictDetailList)) {
+                dictDetailList = Collections.emptyList();
+            }
+
+            String dictDetailListJson = JSONUtil.toJsonStr(dictDetailList);
+            cacheMap.put(dictDO.getDictName(), dictDetailListJson);
+        }
+        DictCacher.saveMap(cacheMap);
+    }
+
+    private List<DictDO> queryAllDict() {
+        DictConditionDTO condition = new DictConditionDTO();
+        condition.setPageSize(PageConditionDTO.ALL_PAGE);
+
+        return dictMapper.searchByCondition(condition);
+    }
+
+    private List<DictDetailDO> queryDictDetails() {
+        DictDetailConditionDTO condition = new DictDetailConditionDTO();
+        condition.setPageSize(PageConditionDTO.ALL_PAGE);
+        return dictDetailMapper.searchByCondition(condition);
+    }
 }

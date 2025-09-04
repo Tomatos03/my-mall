@@ -50,19 +50,6 @@ public class DictDetailController {
         return dictDetailService.searchByPage(condition);
     }
 
-
-    /**
-     * 根据条件查询数据字典详情列表
-     *
-     * @param condition 条件
-     * @return 数据字典详情列表
-     */
-    @Operation(summary = "根据条件查询数据字典详情列表", description = "根据条件查询数据字典详情列表")
-    @PostMapping("/searchDictDetail")
-    public List<DictDetailDO> searchDictDetail(@RequestBody @NotNull DictDetailConditionDTO condition) {
-        return dictDetailService.searchByCondition(condition);
-    }
-
     /**
      * 添加数据字典详情
      *
@@ -97,5 +84,17 @@ public class DictDetailController {
     @PostMapping("/deleteByIds")
     public int deleteByIds(@RequestBody @NotNull List<Long> ids) {
         return dictDetailService.deleteByIds(ids);
+    }
+
+    /**
+     * 根据条件查询数据字典详情列表
+     *
+     * @param condition 条件
+     * @return 数据字典详情列表
+     */
+    @Operation(summary = "根据条件查询数据字典详情列表", description = "根据条件查询数据字典详情列表")
+    @PostMapping("/searchDictDetail")
+    public List<DictDetailDO> searchDictDetail(@RequestBody @NotNull DictDetailConditionDTO condition) {
+        return dictDetailService.searchDictDetailFromCache(condition.getDictName());
     }
 }

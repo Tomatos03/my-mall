@@ -13,5 +13,7 @@ import com.mall.entity.DictDO;
  */
 public interface IDictService extends ICommonService <DictDO, DictDTO, DictConditionDTO> {
     DictDTO findById(Long id);
+
+    void refreshDictCache();
 }
 

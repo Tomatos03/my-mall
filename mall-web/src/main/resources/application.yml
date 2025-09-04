@@ -26,6 +26,12 @@ spring:
       password: ${REDIS_PASSWORD:}
       database: ${REDIS_DATABASE:0}
 
+  cache:
+    cache-names: dict_data
+    type: caffeine
+    caffeine:
+      spec: initialCapacity=50,maximumSize=500,expireAfterWrite=60s
+
   mail:
     protocol: ${MAIL_PROTOCOL:smtp}
     host: ${MAIL_HOST:smtp.qq.com}
@@ -44,6 +50,7 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 knife4j:
   enable: true

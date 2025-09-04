@@ -1,9 +1,11 @@
 package com.mall.business.service;
 
+import cn.hutool.json.JSONUtil;
 import com.mall.api.service.IDictDetailService;
 import com.mall.business.mapper.CommonMapper;
 import com.mall.business.mapper.DictDetailMapper;
 import com.mall.business.mapper.DictMapper;
+import com.mall.common.domain.cache.DictCacher;
 import com.mall.dto.DictDetailDTO;
 import com.mall.dto.PageDTO;
 import com.mall.dto.condition.DictConditionDTO;
@@ -11,6 +13,7 @@ import com.mall.dto.condition.DictDetailConditionDTO;
 import com.mall.entity.DictDO;
 import com.mall.entity.DictDetailDO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,6 +51,13 @@ public class DictDetailService
     @Override
     public DictDetailDO findById(Long id) {
         return dictDetailMapper.findById(id);
+    }
+
+    @Override
+    @Cacheable(value = "dict_data", keyGenerator = "dictCacheKeyGenerator")
+    public List<DictDetailDO> searchDictDetailFromCache(String dictName) {
+        String dictDetailListJson = DictCacher.getDictDetailListJson(dictName);
+        return JSONUtil.toList(dictDetailListJson, DictDetailDO.class);
     }
 
     @Override
