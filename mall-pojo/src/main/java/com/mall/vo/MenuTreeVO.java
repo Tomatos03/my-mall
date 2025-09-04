@@ -25,7 +25,7 @@ public class MenuTreeVO implements Serializable {
      * 菜单名称
      */
     @Schema(description = "菜单名称")
-    private String name;
+    private String label;
 
     /**
      * 上级菜单ID
@@ -100,11 +100,22 @@ public class MenuTreeVO implements Serializable {
 
     private Boolean alwaysShow;
 
-
     private MetaDTO meta;
 
     /**
      * 下一级菜单集合
      */
     private List<MenuTreeVO> children;
+
+    /**
+     * 是否叶子节点
+     */
+    private Boolean leaf;
+
+    /**
+     * 下级菜单数量
+     */
+    private Integer subCount;
+
+    private Boolean hasChildren;
 }

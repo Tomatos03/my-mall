@@ -11,7 +11,7 @@
             </otherwise>
         </choose>
 
-        <if test="pageSize > 0">
+        <if test="pageSize != null and pageSize > 0">
             LIMIT #{pageBegin} , #{pageSize}
         </if>
     </sql>

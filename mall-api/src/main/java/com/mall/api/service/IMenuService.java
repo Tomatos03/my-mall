@@ -19,4 +19,8 @@ public interface IMenuService extends ICommonService<MenuDO, MenuDTO, MenuCondit
     List<MenuTreeVO> getMenuTree();
 
     void export(HttpServletResponse response, MenuConditionDTO menuCondition) throws IOException;
+
+    List<MenuTreeVO> getMenu(MenuConditionDTO condition);
+
+    List<Long> getChild(Long id);
 }

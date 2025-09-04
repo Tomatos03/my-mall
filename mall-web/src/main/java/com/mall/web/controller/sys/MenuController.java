@@ -37,6 +37,28 @@ public class MenuController {
         return menuService.getMenuTree();
     }
 
+    /**
+     * 获取逐级加载的菜单
+     *
+     * @return 菜单列表
+     */
+    @Operation(summary = "获取逐级加载的菜单", description = "获取逐级加载的菜单")
+    @PostMapping("/getMenu")
+    public List<MenuTreeVO> getMenu(@RequestBody MenuConditionDTO condition) {
+        return menuService.getMenu(condition);
+    }
+
+    /**
+     * 获取下级菜单
+     *
+     * @return 菜单列表
+     */
+    @Operation(summary = "获取下级菜单", description = "获取下级菜单")
+    @GetMapping("/getChild")
+    public List<Long> getChild(@RequestParam("id") Long id) {
+        return menuService.getChild(id);
+    }
+
     @NoLogin
     @Operation(summary = "根据条件查询菜单列表", description = "根据条件查询菜单列表")
     @PostMapping("/searchByPage")

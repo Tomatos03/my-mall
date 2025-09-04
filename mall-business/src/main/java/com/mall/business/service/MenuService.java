@@ -4,20 +4,24 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.google.common.collect.Lists;
 import com.mall.api.service.IMenuService;
+import com.mall.business.mapper.CommonMapper;
+import com.mall.business.mapper.MenuMapper;
 import com.mall.dto.MenuDTO;
 import com.mall.dto.MetaDTO;
 import com.mall.dto.condition.MenuConditionDTO;
-import com.mall.entity.MenuDO;
 import com.mall.dto.condition.PageConditionDTO;
-import com.mall.business.mapper.CommonMapper;
-import com.mall.business.mapper.MenuMapper;
+import com.mall.entity.MenuDO;
 import com.mall.vo.MenuTreeVO;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author : Tomatos
@@ -43,17 +47,17 @@ public class MenuService
     }
 
     private List<MenuTreeVO> getMenuTree0(MenuTreeVO menuTreeVO, boolean isAlwaysShow) {
-        MenuConditionDTO menuCondition = new MenuConditionDTO();
-        menuCondition.setPageSize(PageConditionDTO.NO_PAGINATION);
-        menuCondition.setPid(menuTreeVO.getId());
+        MenuConditionDTO condition = new MenuConditionDTO();
+        condition.setPageSize(PageConditionDTO.NO_PAGINATION);
+        condition.setPid(menuTreeVO.getId());
 
-        List<MenuDO> menuEntities = menuMapper.searchByCondition(menuCondition);
-        if (CollectionUtil.isEmpty(menuEntities))
+        List<MenuDO> menus = menuMapper.searchByCondition(condition);
+        if (CollectionUtil.isEmpty(menus))
             return null;
 
         List<MenuTreeVO> menuTreeVOS = Lists.newArrayList();
-        for (MenuDO menuDO : menuEntities) {
-            MenuTreeVO newMenuTreeVO = buildMenuTreeDTO(menuDO, isAlwaysShow);
+        for (MenuDO menu : menus) {
+            MenuTreeVO newMenuTreeVO = buildMenuTreeDTO(menu, isAlwaysShow);
             menuTreeVOS.add(newMenuTreeVO);
 
             newMenuTreeVO.setChildren(getMenuTree0(newMenuTreeVO, false));
@@ -64,10 +68,11 @@ public class MenuService
     private MenuTreeVO buildMenuTreeDTO(MenuDO menuDO, boolean isAlwaysShow) {
         MenuTreeVO menuTreeVO = BeanUtil.copyProperties(menuDO, MenuTreeVO.class);
         menuTreeVO.setAlwaysShow(isAlwaysShow);
+        menuTreeVO.setLabel(menuDO.getName());
 
         MetaDTO metaDTO = MetaDTO.builder()
                                  .icon(menuTreeVO.getIcon())
-                                 .title(menuTreeVO.getName())
+                                 .title(menuTreeVO.getLabel())
                                  .noCache(true)
                                  .build();
 
@@ -87,6 +92,66 @@ public class MenuService
      */
     public void export(HttpServletResponse response, MenuConditionDTO menuCondition) throws IOException {
 //        super.export(menuConditionDTO, response, MenuDO.class, ExcelTitleConst.MENU_DATE);
+    }
+
+    @Override
+    public List<MenuTreeVO> getMenu(MenuConditionDTO condition) {
+        Long currentMenuId = condition.getPid();
+        if (currentMenuId == null)
+            currentMenuId = 0L;
+
+        List<MenuDO> menus = queryNextLevelMenu(currentMenuId);
+
+        List<Long> ids = menus.stream()
+                              .map(MenuDO::getId)
+                              .toList();
+
+        MenuConditionDTO newCondition = new MenuConditionDTO();
+        newCondition.setPidList(ids);
+        List<MenuDO> menuDOS = menuMapper.searchByCondition(newCondition);
+        Map<Long, List<MenuDO>> childMenusMap = menuDOS
+                                                   .stream()
+                                                   .collect(Collectors.groupingBy(MenuDO::getPid));
+
+        List<MenuTreeVO> result = new ArrayList<>();
+        for (MenuDO menu : menus) {
+            MenuTreeVO menuTreeVO = buildMenuTreeDTO(menu, false);
+
+            List<MenuDO> subMenus = childMenusMap.get(menu.getId());
+            boolean isEmptySubMenus = CollectionUtils.isEmpty(subMenus);
+            menuTreeVO.setLeaf(isEmptySubMenus);
+            menuTreeVO.setSubCount(isEmptySubMenus ? 0 : subMenus.size());
+            menuTreeVO.setHasChildren(isEmptySubMenus);
+
+            result.add(menuTreeVO);
+        }
+        return result;
+    }
+
+    private List<Long> queryNextLevelMenuId(Long id) {
+        MenuConditionDTO condition = new MenuConditionDTO();
+        condition.setPid(id);
+
+        return menuMapper.searchByCondition(condition)
+                         .stream()
+                         .map(MenuDO::getId)
+                         .toList();
+    }
+
+    private List<MenuDO> queryNextLevelMenu(Long id) {
+        MenuConditionDTO condition = new MenuConditionDTO();
+        condition.setPid(id);
+
+        return menuMapper.searchByCondition(condition);
+    }
+
+    @Override
+    public List<Long> getChild(Long id) {
+        List<Long> result = Lists.newArrayList(id);
+        List<Long> ids = queryNextLevelMenuId(id);
+        if (CollectionUtil.isNotEmpty(ids))
+            result.addAll(ids);
+        return result;
     }
 
     public int insert(MenuDTO menuDTO) {

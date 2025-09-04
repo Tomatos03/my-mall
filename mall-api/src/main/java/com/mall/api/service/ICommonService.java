@@ -1,8 +1,6 @@
 package com.mall.api.service;
 
 import com.mall.dto.PageDTO;
-import com.mall.dto.condition.DeptConditionDTO;
-import com.mall.entity.DeptDO;
 
 import java.io.IOException;
 import java.util.List;

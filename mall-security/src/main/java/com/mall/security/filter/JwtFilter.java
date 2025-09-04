@@ -39,11 +39,12 @@ public class JwtFilter extends OncePerRequestFilter {
         && (cacheToken = TokenCacher.getTokenFromCache(username)) != null
         && (token.equals(cacheToken))
         ) {
+
             String userJson = UserCacher.getUserJson(username);
             AuthenticatedUserDTO authenticatedUserDTO = JSONUtil.toBean(userJson, AuthenticatedUserDTO.class);
             AuthenticatorUtil.restoreAuthentication(authenticatedUserDTO);
         }
-
+        log.info("请求认证通过");
         filterChain.doFilter(request, response);
     }
 }
