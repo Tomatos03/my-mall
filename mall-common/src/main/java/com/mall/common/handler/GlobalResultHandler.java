@@ -23,7 +23,10 @@ public class GlobalResultHandler implements ResponseBodyAdvice {
     @Override
     public boolean supports(MethodParameter returnType, Class converterType) {
         ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert sra != null;
+        if (sra == null) {
+            log.warn("RequestAttributes is null");
+            return false;
+        }
 
         HttpServletRequest request = sra.getRequest();
         String requestURI = request.getRequestURI();

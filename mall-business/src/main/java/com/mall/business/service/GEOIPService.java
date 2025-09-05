@@ -20,6 +20,7 @@ public class GEOIPService implements IGEOIPService {
         String province = Ip2regionUtil.province(ip);
 
         return CityDTO.builder()
+                      .ip(ip)
                       .city(city)
                       .country(country)
                       .province(province)
