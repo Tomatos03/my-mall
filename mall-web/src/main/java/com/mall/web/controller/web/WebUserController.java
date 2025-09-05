@@ -1,7 +1,7 @@
 package com.mall.web.controller.web;
 
 import com.mall.api.service.IWebUserService;
-import com.mall.common.annotation.NoLogin;
+import com.mall.security.annotation.NoLogin;
 import com.mall.dto.AuthenticatedUserDTO;
 import com.mall.dto.CaptchaDTO;
 import com.mall.dto.AuthenticationUserDTO;

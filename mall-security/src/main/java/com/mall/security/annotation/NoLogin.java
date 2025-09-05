@@ -1,4 +1,4 @@
-package com.mall.common.annotation;
+package com.mall.security.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

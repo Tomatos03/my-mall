@@ -1,6 +1,6 @@
 package com.mall.security.config;
 
-import com.mall.common.annotation.NoLogin;
+import com.mall.security.annotation.NoLogin;
 import com.mall.common.context.SpringContextHolder;
 import com.mall.security.filter.JwtFilter;
 import org.springframework.beans.factory.annotation.Qualifier;

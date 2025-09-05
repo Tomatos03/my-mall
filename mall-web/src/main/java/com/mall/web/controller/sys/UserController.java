@@ -2,7 +2,7 @@ package com.mall.web.controller.sys;
 
 import com.mall.api.service.IUserService;
 import com.mall.common.annotation.ExcelExport;
-import com.mall.common.annotation.NoLogin;
+import com.mall.security.annotation.NoLogin;
 import com.mall.common.enums.ExcelBizTypeEnum;
 import com.mall.dto.PageDTO;
 import com.mall.dto.UserDTO;
