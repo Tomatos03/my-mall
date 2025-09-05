@@ -2,6 +2,7 @@ package com.mall.web.controller.web;
 
 import com.mall.api.service.IGEOIPService;
 import com.mall.common.annotation.FlowLimit;
+import com.mall.common.enums.FlowLimitTypeEnum;
 import com.mall.dto.CityDTO;
 import com.mall.security.annotation.NoLogin;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,7 +36,8 @@ public class GEOIPController {
      * @param ip ip地址
      * @return 城市
      */
-    @FlowLimit(permitsPerSecond = 1, timeOut = 500)
+    @FlowLimit(key = "getCity", permitsPerSecond = 20, timeOut = 60, limitType =
+            FlowLimitTypeEnum.IP)
     @NoLogin
     @Operation(summary = "根据ip获取所在城市", description = "根据ip获取所在城市")
     @GetMapping("/getCity")
