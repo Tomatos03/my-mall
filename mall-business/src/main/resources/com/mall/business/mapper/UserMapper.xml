@@ -192,6 +192,16 @@
         WHERE id = #{id}
     </update>
 
+    <update id="batchUpdateUserPwd" parameterType="com.mall.entity.UserDO">
+        <foreach collection="users" item="user" separator=";">
+            UPDATE sys_user
+            SET password = #{user.password},update_user_id=#{user.updateUserId},update_user_name=#{user.updateUserName}
+            <where>
+                id = #{user.id}
+            </where>
+        </foreach>
+    </update>
+
     <select id="findById" resultType="com.mall.entity.UserDO" parameterType="Long">
         SELECT
             <include refid="selectUserColumn"/>
@@ -204,6 +214,13 @@
         <include refid="selectUserColumn"/>
         FROM sys_user u
         WHERE u.user_name = #{username}
+    </select>
+
+    <select id="findByIds" resultMap="UserResult">
+        SELECT
+        <include refid="selectUserColumn"/>
+        FROM sys_user
+        <include refid="queryWhere"/>
     </select>
 
     <insert id="insert" parameterType="com.mall.entity.UserDO" useGeneratedKeys="true" keyProperty="id">

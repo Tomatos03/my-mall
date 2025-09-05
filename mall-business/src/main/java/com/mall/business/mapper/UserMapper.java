@@ -59,4 +59,8 @@ public interface UserMapper extends CommonMapper<UserDO, UserConditionDTO> {
     int deleteById(Long id);
 
     UserDO findByUserName(String username);
+
+    List<UserDO> findByIds(List<Long> idList);
+
+    int batchUpdateUserPwd(List<UserDO> users);
 }

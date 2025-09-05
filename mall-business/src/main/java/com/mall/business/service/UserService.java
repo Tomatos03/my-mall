@@ -3,10 +3,12 @@ package com.mall.business.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.mall.api.service.IUserService;
-import com.mall.common.domain.assembler.UserDOAssembler;
+import com.mall.business.mapper.CommonMapper;
+import com.mall.common.domain.assembler.UserAssembler;
 import com.mall.common.util.*;
 import com.mall.dto.*;
 import com.mall.dto.condition.UserConditionDTO;
+import com.mall.entity.JobDO;
 import com.mall.entity.UserDO;
 import com.mall.entity.UserRoleDO;
 import com.mall.common.exception.BusinessException;
@@ -19,19 +21,27 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.mall.constant.UserConst.DEFAULT_PASSWORD;
+
 /**
  * @author : Tomatos
  * @date : 2025/8/2
  */
 @Slf4j
 @Service
-public class UserService implements IUserService {
+public class UserService
+        extends CommonService<UserDO, UserDTO, UserConditionDTO>
+        implements IUserService {
     @Autowired
     private UserMapper userMapper;
     @Autowired
     private UserRoleMapper userRoleMapper;
     @Autowired
-    private UserDOAssembler userDOAssembler;
+    private UserAssembler userAssembler;
+
+    protected UserService() {
+        super(UserDO.class);
+    }
 
     /**
      * 通过id查询用户信息
@@ -45,20 +55,57 @@ public class UserService implements IUserService {
     }
 
     /**
+     * 批量重置用户的密码
+     *
+     * @param ids 用户id列表
+     * @return int 成功重置密码的用户数
+     * @since : 1.0
+     * @author : Tomatos
+     * @date : 2025/9/4 20:58
+     */
+    @Override
+    public int resetPwd(List<Long> ids) {
+        List<UserDO> users = userMapper.findByIds(ids);
+        if (CollectionUtil.isEmpty(users))
+            return 0;
+
+        users.forEach(user -> user.setPassword(DEFAULT_PASSWORD));
+
+        return userMapper.batchUpdateUserPwd (users);
+    }
+
+    /**
      * 添加用户
      *
      * @param userDTO 用户实体
      * @return 影响行数
      */
     @Transactional(rollbackFor = Throwable.class)
-    public void insert(UserDTO userDTO) {
-        UserDO userDO = BeanUtil.copyProperties(userDTO, UserDO.class);
+    public int insert(UserDTO userDTO) {
+        UserDO user = BeanUtil.copyProperties(userDTO, UserDO.class);
 
-        hasDuplicateUserName(userDO.getUserName());
-        hasDuplicateEmail(userDO.getEmail());
+        checkDuplicateUserName(user.getUserName());
+        checkDuplicateEmail(user.getEmail());
+        setDefaultPasswordIfNotSet(user);
+        PasswordHelper.encode(user.getPassword());
+        fillDeptAndJobId(user);
 
-        userMapper.insert(userDO);
-        userRoleMapper.batchInsert(UserRoleDO.buildUserRoleDO(userDO));
+        userRoleMapper.batchInsert(UserRoleDO.buildUserRoleDO(user));
+        return userMapper.insert(user);
+    }
+
+    private void fillDeptAndJobId(UserDO user) {
+        if (user.getDept() != null)
+            user.setDeptId(user.getDept().getId());
+
+        List<JobDO> jobList = user.getJobList();
+        if (CollectionUtil.isNotEmpty(jobList))
+            user.setJobId(jobList.get(0).getId());
+    }
+
+    private void setDefaultPasswordIfNotSet(UserDO user) {
+        if (user.getPassword() == null)
+            user.setPassword(DEFAULT_PASSWORD);
     }
 
     /**
@@ -70,7 +117,7 @@ public class UserService implements IUserService {
      * @author : Tomatos
      * @date : 2025/8/31 11:31
      */
-    private void hasDuplicateEmail(String email) {
+    private void checkDuplicateEmail(String email) {
         UserConditionDTO userConditionDTO = new UserConditionDTO();
         userConditionDTO.setEmail(email);
 
@@ -88,7 +135,7 @@ public class UserService implements IUserService {
      * @author : Tomatos
      * @date : 2025/8/31 11:31
      */
-    private void hasDuplicateUserName(String username) {
+    private void checkDuplicateUserName(String username) {
         UserConditionDTO userConditionDTO = new UserConditionDTO();
         userConditionDTO.setUserName(username);
 
@@ -104,18 +151,17 @@ public class UserService implements IUserService {
      * @return 影响行数
      */
     public int update(UserDTO userDTO) {
-        UserDO userDO = BeanUtil.copyProperties(userDTO, UserDO.class);
-        return userMapper.update(userDO);
+        rebuildUserRoleRelation(userDTO);
+        return super.update(userDTO);
     }
 
-    /**
-     * 删除用户
-     *
-     * @param id 用户ID
-     * @return 影响行数
-     */
-    public int deleteById(Long id) {
-        return userMapper.deleteById(id);
+    private void rebuildUserRoleRelation(UserDTO userDTO) {
+        userRoleMapper.deleteByUserId(userDTO.getId());
+
+        List<UserRoleDO> userRoleList =
+                UserRoleDO.buildUserRoleDO(BeanUtil.copyProperties(userDTO, UserDO.class));
+
+        userRoleMapper.batchInsert(userRoleList);
     }
 
     @Override
@@ -124,11 +170,20 @@ public class UserService implements IUserService {
     }
 
     @Override
+    protected CommonMapper<UserDO, UserConditionDTO> getMapper() {
+        return this.userMapper;
+    }
+
+    @Override
     public PageDTO<UserDO> searchByPage(UserConditionDTO userConditionDTO) {
         List<UserDO> users = userMapper.searchByCondition(userConditionDTO);
         if (CollectionUtil.isEmpty(users))
             return PageUtil.emptyPage();
 
-        return PageUtil.buildPageDTO(userConditionDTO, userDOAssembler.assemblerDept(users));
+        userAssembler.assemblerDept(users);
+        userAssembler.assemblerRole(users);
+        userAssembler.assemblerJob(users);
+
+        return PageUtil.buildPageDTO(userConditionDTO, users);
     }
 }

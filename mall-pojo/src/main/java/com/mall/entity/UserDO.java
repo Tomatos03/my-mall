@@ -36,7 +36,7 @@ public class UserDO extends CommonDO {
     private String email;
 
     @Schema(description = "职位ID")
-    private Integer jobId;
+    private Long jobId;
 
     @Schema(description = "上次修改密码时间，ISO8601格式")
     private String lastChangePasswordTime;
@@ -58,6 +58,12 @@ public class UserDO extends CommonDO {
 
     @Schema(description = "角色ID列表")
     private List<RoleDO> roleList;
+
+    /**
+     * 岗位
+     */
+    @Schema(description = "岗位列表")
+    private List<JobDO> jobList;
 
     @Schema(description = "上次登录城市")
     private String lastLoginCity;

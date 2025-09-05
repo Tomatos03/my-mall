@@ -27,6 +27,7 @@ public enum ExcelBizTypeEnum {
     MENU(1, "菜单", MenuConditionDTO.class, IMenuService.class, MenuDO.class),
     ROLE(2, "角色", UserConditionDTO.class, IUserService.class, UserDO.class),
     DEPT(3, "部门", DeptConditionDTO.class, IDeptService.class, DeptDO.class),
+    USER(4, "用户", UserConditionDTO.class, IUserService.class, UserDO.class),
     JOB(5, "岗位",JobConditionDTO .class, IJobService .class, JobDO .class);
 
     /**

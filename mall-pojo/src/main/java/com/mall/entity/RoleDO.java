@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * @date : 2025/8/8
  */
 @Data
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoleDO extends CommonDO {
