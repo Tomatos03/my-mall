@@ -76,3 +76,12 @@ ip-geolocation:
   province-field-name: ${IP_GEO_PROVINCE_FIELD:province}
   params:
     lang: ${IP_GEO_LANG:zh-CN}
+
+oss:
+  qiniu:
+    access-key: ${QINIU_ACCESSKEY}
+    secret-key: ${QINIU_SECRETKEY}
+    picture-bucket-name: ${QINIU_PICTURE_BUCKET_NAME}
+    picture-domain: ${QINIU_PICTURE_DOMAIN}
+    file-bucket-name: ${QINIU_FILE_BUCKET_NAME}
+    file-domain: ${QINIU_FILE_DOMAIN}
