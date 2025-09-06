@@ -1,6 +1,7 @@
 package com.mall.job.quartz;
 
 import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
+@ConfigurationProperties("my-mall.quartz")
 public class QuartzProperties {
     /**
      * 核心线程数

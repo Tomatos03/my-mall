@@ -5,61 +5,48 @@ spring:
   profiles:
     active: dev
   application:
-    name: mall-job
+    name: mall-job-application
   datasource:
-    username: Tomatos
-    password: 20030503
-    # serverTimezone=Asia/Shanghai 设置时区
-    # characterEncoding=utf8 设置字符编码
-    # useSSL=false 关闭SSL
-    # zeroDateTimeBehavior=convertToNull 遇到零日期时转换为null
-    # allowMultiQueries=true 允许多条SQL同时执行
-    # autoReconnect=true 断线自动重连
-    url: >
-      jdbc:mariadb://localhost:3306/my_mall?
-      serverTimezone=Asia/Shanghai
-      &characterEncoding=utf8
-      &useSSL=false&zeroDateTimeBehavior=convertToNull
-      &allowMultiQueries=true&autoReconnect=true
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    url: jdbc:mariadb://${DATASOURCE_HOST:localhost}:${DATASOURCE_PORT:3306}/my_mall?characterEncoding=utf8
     driver-class-name: org.mariadb.jdbc.Driver
+
   data:
     redis:
-      port: 6379
-      password: zjlljz
-      database: 0
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD}
+      database: ${REDIS_DATABASE:0}
+
   mail:
-    # 配置信息查看:
-    # https://wx.mail.qq.com/list/readtemplate?name=app_intro.html#/agreement/authorizationCode
-    protocol: ${spring.mail.protocol}
-    host: ${spring.mail.host}
-    port: ${spring.mail.port}
-    default-encoding: ${spring.mail.default-encoding}
-    username: ${spring.mail.username}
-    password: ${spring.mail.password}
+    protocol: ${MAIL_PROTOCOL:smtp}
+    host: ${MAIL_HOST:smtp.qq.com}
+    port: ${MAIL_PORT:465}
+    default-encoding: ${MAIL_DEFAULT_ENCODING:UTF-8}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
 
-mybatis:
-  configuration:
-    map-underscore-to-camel-case: true
-
-my_mall:
+my-mall:
   jwt:
-    secret: "your-very-secure-jwt-secret-key-2024!@#ABCdef1234567890"
-    expiration: 86400 # 1天(秒为单位)
+    secret: ${JWT_SECRET}
+    expiration: ${JWT_EXPIRATION:86400}   # 1 天(秒)
+
   captcha:
     expiration: 60
+
+  quartz:
+    core-pool-size: 8
+    keep-alive-seconds: 30
+    queue-size: 200
+    thread-name-prefix: QuartzThread
 
 logging:
   level:
     com.mall.mapper: debug
     org.springframework.amqp.support.converter: DEBUG
-
-ip2region:
-  db-path: "classpath:ip2region/ip2region.xdb"
-
-ip-geolocation:
-  api: "http://ip-api.com/json/"
-  city-field-name: "city"
-  country-field-name: "country"
-  province-field-name: "province"
-  params:
-    lang: zh-CN
