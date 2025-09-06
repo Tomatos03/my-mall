@@ -1,6 +1,7 @@
 package com.mall.job.task;
 
 import com.mall.api.service.ITaskService;
+import com.mall.common.enums.JobResultEnum;
 import com.mall.entity.CommonTaskDO;
 import com.mall.dto.condition.CommonTaskConditionDTO;
 import com.mall.common.enums.TaskStatusEnum;
@@ -8,7 +9,6 @@ import com.mall.job.strategy.ScheduledTaskStrategy;
 import com.mall.job.strategy.ScheduledTaskStrategyFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -22,23 +22,24 @@ import java.util.List;
  */
 @Component
 @Slf4j
-public class CommonTaskJob {
+public class CommonTaskJob extends AbstractJob{
     @Autowired
     private ITaskService taskService;
     @Autowired
     private ScheduledTaskStrategyFactory strategyFactory;
 
-    @Scheduled(fixedRate = 10000)
-    public void handle() {
+    @Override
+    public JobResultEnum doRun(String params) {
         List<CommonTaskDO> waitHandleTask = getNeedHandleTask();
 
         if (isNoTasks(waitHandleTask))
-            return;
+            return JobResultEnum.SUCCESS;
 
         for (CommonTaskDO task : waitHandleTask) {
             ScheduledTaskStrategy scheduledTask = strategyFactory.getStrategy(task.getType());
             scheduledTask.execute(task);
         }
+        return JobResultEnum.SUCCESS;
     }
 
     private boolean isNoTasks(List<CommonTaskDO> waitHandleTask) {

@@ -3,6 +3,8 @@ package com.mall.common.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import static com.mall.constant.MessageConst.UNSUPPORTED_TYPE;
+
 /**
  *
  *
@@ -24,6 +26,6 @@ public enum FlowLimitResultEnum {
                 return value;
             }
         }
-        throw new IllegalArgumentException("无法转换的类型");
+        throw new IllegalArgumentException(UNSUPPORTED_TYPE);
     }
 }
