@@ -12,7 +12,7 @@ import java.util.List;
  * @date : 2025/8/30
  */
 public interface ICommonService<DO, DTO, ConditionDTO> {
-    void export(ConditionDTO condition, Class<DO> kClass, String fileName) throws IOException;
+    String export(ConditionDTO condition, Class<DO> kClass, String fileName) throws IOException;
 
     int insert(DTO dto);
 

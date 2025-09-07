@@ -48,5 +48,14 @@ my-mall:
 
 logging:
   level:
-    com.mall.mapper: debug
-    org.springframework.amqp.support.converter: DEBUG
+    com.mall.business.mapper: debug
+#mybatis:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+oss:
+  qiniu:
+    access-key: ${QINIU_ACCESSKEY}
+    secret-key: ${QINIU_SECRETKEY}
+    file-bucket-name: ${QINIU_FILE_BUCKET_NAME}
+    file-domain: ${QINIU_FILE_DOMAIN}

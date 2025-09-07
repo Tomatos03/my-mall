@@ -3,6 +3,7 @@ package com.mall.job.quartz;
 import com.mall.api.service.ICommonJobLogService;
 import com.mall.common.context.SpringContextHolder;
 import com.mall.common.enums.QuartzJobStatusEnum;
+import com.mall.common.util.AuthenticatorUtil;
 import com.mall.constant.JobUserConst;
 import com.mall.dto.CommonJobLogDTO;
 import com.mall.entity.CommonJobDO;
@@ -30,15 +31,20 @@ public class QuartzExecutionJob extends QuartzJobBean {
     protected void executeInternal(JobExecutionContext context) {
         CommonJobDO job = (CommonJobDO) context.getMergedJobDataMap().get(JOB_KEY);
         CommonJobLogDTO commonJobLog = buildCommonJobLogDTO(job);
-        recordJobLog(commonJobLog);
-
         try {
-            executeQuartzJob(job);
-            commonJobLog.setRunStatus(QuartzJobStatusEnum.SUCCESS.getValue());
-        } catch (Exception e) {
-            fillFailJobLog(e, commonJobLog);
+            AuthenticatorUtil.setMockAuthenticatedUser();
+            recordJobLog(commonJobLog);
+
+            try {
+                executeQuartzJob(job);
+                commonJobLog.setRunStatus(QuartzJobStatusEnum.SUCCESS.getValue());
+            } catch (Exception e) {
+                fillFailJobLog(e, commonJobLog);
+            } finally {
+                updateJobLog(commonJobLog);
+            }
         } finally {
-            updateJobLog(commonJobLog);
+            AuthenticatorUtil.clearMockAuthenticatedUser();
         }
     }
 

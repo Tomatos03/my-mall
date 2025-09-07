@@ -2,6 +2,7 @@ package com.mall.common.util;
 
 import com.mall.common.context.SpringContextHolder;
 import com.mall.common.domain.security.AuthenticationUser;
+import com.mall.constant.JobUserConst;
 import com.mall.dto.AuthenticatedUserDTO;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -79,5 +80,18 @@ public final class AuthenticatorUtil {
                                    .username(user.getUsername())
                                    .roles(roles)
                                    .build();
+    }
+
+    public static void setMockAuthenticatedUser() {
+        AuthenticatedUserDTO authenticatedUserDTO = new AuthenticatedUserDTO();
+        authenticatedUserDTO.setUsername(JobUserConst.DEFAULT_USER_NAME);
+        authenticatedUserDTO.setId(JobUserConst.DEFAULT_USER_ID);
+
+        UsernamePasswordAuthenticationToken mockUser = new UsernamePasswordAuthenticationToken(authenticatedUserDTO, null, List.of());
+        SecurityContextHolder.getContext().setAuthentication(mockUser);
+    }
+
+    public static void clearMockAuthenticatedUser() {
+        SecurityContextHolder.getContext().setAuthentication(null);
     }
 }

@@ -1,5 +1,6 @@
 package com.mall.api.service;
 
+import com.mall.api.mapper.IAutoFill;
 import com.mall.dto.CommonJobLogDTO;
 import com.mall.dto.condition.CommonJobLogConditionDTO;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * @author Tomatos
  * @date 2025-09-05
  */
-public interface ICommonJobLogService {
+public interface ICommonJobLogService extends IAutoFill<CommonJobLogDTO> {
 
     /**
      * 新增

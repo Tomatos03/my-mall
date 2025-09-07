@@ -63,13 +63,9 @@ public abstract class ExcelUtil {
      * @date : 2025/8/16 16:54
      */
     public static <T> void export(String fileName,  Class<T> clazz, List<T> data) throws FileNotFoundException, UnsupportedEncodingException {
-        fileName = String.format("%s数据_%s.xlsx",
-                                 fileName,
-                                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        String path = getFilePath(fileName);
 
-        FileOutputStream fileOutputStream = new FileOutputStream(String.format("%s/%s",
-                                                                               FILE_STORE_PATH,
-                                                                               fileName));
+        FileOutputStream fileOutputStream = new FileOutputStream(path);
         EasyExcel.write(fileOutputStream, clazz)
                  .sheet(fileName)
                  .doWrite(data);
@@ -89,17 +85,16 @@ public abstract class ExcelUtil {
         String nowTime = LocalDateTime.now()
                                       .format(fmt);
         // 将中文字符进行重新编码防止下载时名称发生乱码
-        return URLEncoder.encode(String.format("%s_%s", fileName, nowTime), UTF8);
+        return URLEncoder.encode(java.lang.String.format("%s_%s", fileName, nowTime), UTF8);
     }
 
-    public static <K> void phasedExport(String fileName, Class<K> kClass, List<K> dataList) throws IOException {
-        fileName = String.format("%s数据_%s.xlsx",
-                                 fileName,
-                                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-
-        try (FileOutputStream fileOutputStream = new FileOutputStream(String.format("%s/%s", FILE_STORE_PATH, fileName))) {
-            ExcelWriter excelWriter = EasyExcel.write(fileOutputStream, kClass)
-                                               .build();
+    public static <K> String phasedExport(String fileName, Class<K> kClass, List<K> dataList) throws IOException {
+        String path = getFilePath(fileName);
+        try (
+                FileOutputStream fileOutputStream = new FileOutputStream(path);
+                ExcelWriter excelWriter = EasyExcel.write(fileOutputStream, kClass)
+                                                   .build();
+            ) {
 
             int dataSize = dataList.size();
             int sheetCount = (dataSize + SHEET_SIZE - 1) / SHEET_SIZE;
@@ -112,7 +107,15 @@ public abstract class ExcelUtil {
                                                  .build();
                 excelWriter.write(subList, writeSheet);
             }
-            excelWriter.finish();
         }
+        return path;
+    }
+
+    private static String getFilePath(String fileName) {
+        fileName = String.format("%s数据_%s.xlsx",
+                                 fileName,
+                                 LocalDateTime.now()
+                                              .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        return String.format("%s/%s", FILE_STORE_PATH, fileName);
     }
 }

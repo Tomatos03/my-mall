@@ -3,6 +3,7 @@ package com.mall.job.consumer;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.mall.api.service.INotifyService;
+import com.mall.constant.JobUserConst;
 import com.mall.dto.NotifyDTO;
 import com.mall.entity.NotifyDO;
 import com.mall.job.service.WebSocketServer;
@@ -41,10 +42,14 @@ public class NotifyConsumer {
     }
 
     private void pushSuccessNotice(NotifyDO notifyDO) throws IOException {
-        NotifyDTO notifyDTO = BeanUtil.copyProperties(notifyDO, NotifyDTO.class);
-        WebSocketServer.sendMessage(notifyDTO);
+        try {
+            NotifyDTO notifyDTO = BeanUtil.copyProperties(notifyDO, NotifyDTO.class);
+            WebSocketServer.sendMessage(notifyDTO);
 
-        notifyDO.setIsPush(PUSHED);
-        notifyService.update(notifyDO);
+            notifyDO.setIsPush(PUSHED);
+            notifyService.update(notifyDO);
+        } catch (Exception e) {
+            log.error("推送成功消息失败, 原因:{}", e.getMessage());
+        }
     }
 }

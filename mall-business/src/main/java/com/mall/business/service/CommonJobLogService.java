@@ -25,7 +25,9 @@ public class CommonJobLogService implements ICommonJobLogService {
     @Override
     public int insert(CommonJobLogDTO dto) {
         CommonJobLogDO entity = BeanUtil.copyProperties(dto, CommonJobLogDO.class);
-        return commonJobLogMapper.insert(entity);
+        int affects = commonJobLogMapper.insert(entity);
+        dto.setId(entity.getId());
+        return affects;
     }
 
     @Override

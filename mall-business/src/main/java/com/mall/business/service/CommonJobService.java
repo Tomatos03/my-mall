@@ -1,7 +1,9 @@
 package com.mall.business.service;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.mall.api.service.ICommonJobService;
 import com.mall.business.mapper.CommonJobMapper;
+import com.mall.dto.CommonJobDTO;
 import com.mall.dto.condition.CommonJobConditionDTO;
 import com.mall.entity.CommonJobDO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +23,15 @@ public class CommonJobService implements ICommonJobService {
     private CommonJobMapper commonJobMapper;
 
     @Override
-    public int insert(CommonJobDO jobDO) {
-        return commonJobMapper.insert(jobDO);
+    public int insert(CommonJobDTO dto) {
+        CommonJobDO commonJobDO = BeanUtil.copyProperties(dto, CommonJobDO.class);
+        return commonJobMapper.insert(commonJobDO);
+    }
+
+    @Override
+    public int update(CommonJobDTO entity) {
+        // TODO 临时方法
+        return 0;
     }
 
     @Override
