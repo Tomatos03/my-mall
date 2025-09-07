@@ -1,12 +1,12 @@
 package com.mall.job.quartz;
 
-import com.mall.api.service.ICommonJobLogService;
+import com.mall.api.service.sys.ICommonJobLogService;
 import com.mall.common.context.SpringBeanHolder;
 import com.mall.common.enums.QuartzJobStatusEnum;
 import com.mall.common.util.AuthenticatorUtil;
 import com.mall.constant.JobUserConst;
-import com.mall.dto.CommonJobLogDTO;
-import com.mall.entity.CommonJobDO;
+import com.mall.dto.sys.CommonJobLogDTO;
+import com.mall.entity.sys.CommonJobDO;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionContext;
 import org.springframework.scheduling.quartz.QuartzJobBean;

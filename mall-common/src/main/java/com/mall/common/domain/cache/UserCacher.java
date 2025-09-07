@@ -1,9 +1,8 @@
 package com.mall.common.domain.cache;
 
 import cn.hutool.json.JSONUtil;
-import com.mall.dto.AuthenticatedUserDTO;
+import com.mall.dto.sys.AuthenticatedUserDTO;
 import com.mall.common.util.RedisUtil;
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 

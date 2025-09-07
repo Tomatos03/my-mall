@@ -1,7 +1,7 @@
 package com.mall.web.controller.common;
 
-import com.mall.api.service.ICommonJobService;
-import com.mall.entity.CommonJobDO;
+import com.mall.api.service.sys.ICommonJobService;
+import com.mall.dto.sys.CommonJobDTO;
 import com.mall.security.annotation.NoLogin;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,13 +27,13 @@ public class CommonJobController {
     /**
      * 添加定时任务
      *
-     * @param commonJobDO 定时任务实体
+     * @param commonJobDTO 定时任务实体
      * @return 影响行数
      */
     @NoLogin
     @Operation(summary = "添加定时任务", description = "添加定时任务")
     @PostMapping("/insert")
-    public int insert(@RequestBody CommonJobDO commonJobDO) {
-        return commonJobService.insert(commonJobDO);
+    public int insert(@RequestBody CommonJobDTO commonJobDTO) {
+        return commonJobService.insert(commonJobDTO);
     }
 }

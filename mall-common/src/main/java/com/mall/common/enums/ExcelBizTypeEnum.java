@@ -1,17 +1,17 @@
 package com.mall.common.enums;
 
-import com.mall.api.service.IDeptService;
-import com.mall.api.service.IJobService;
-import com.mall.api.service.IMenuService;
-import com.mall.api.service.IUserService;
-import com.mall.dto.condition.DeptConditionDTO;
-import com.mall.dto.condition.JobConditionDTO;
-import com.mall.dto.condition.MenuConditionDTO;
-import com.mall.dto.condition.UserConditionDTO;
-import com.mall.entity.DeptDO;
-import com.mall.entity.JobDO;
-import com.mall.entity.MenuDO;
-import com.mall.entity.UserDO;
+import com.mall.api.service.sys.IDeptService;
+import com.mall.api.service.sys.IJobService;
+import com.mall.api.service.sys.IMenuService;
+import com.mall.api.service.sys.IUserService;
+import com.mall.dto.condition.sys.DeptConditionDTO;
+import com.mall.dto.condition.sys.JobConditionDTO;
+import com.mall.dto.condition.sys.MenuConditionDTO;
+import com.mall.dto.condition.sys.UserConditionDTO;
+import com.mall.entity.sys.DeptDO;
+import com.mall.entity.sys.JobDO;
+import com.mall.entity.sys.MenuDO;
+import com.mall.entity.sys.UserDO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -1,7 +1,7 @@
 package com.mall.job.quartz;
 
 import com.mall.common.exception.BusinessException;
-import com.mall.entity.CommonJobDO;
+import com.mall.entity.sys.CommonJobDO;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.quartz.impl.triggers.CronTriggerImpl;

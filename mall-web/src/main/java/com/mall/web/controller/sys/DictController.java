@@ -1,10 +1,10 @@
 package com.mall.web.controller.sys;
 
-import com.mall.api.service.IDictService;
-import com.mall.dto.DictDTO;
-import com.mall.dto.PageDTO;
-import com.mall.dto.condition.DictConditionDTO;
-import com.mall.entity.DictDO;
+import com.mall.api.service.sys.IDictService;
+import com.mall.dto.sys.DictDTO;
+import com.mall.dto.sys.PageDTO;
+import com.mall.dto.condition.sys.DictConditionDTO;
+import com.mall.entity.sys.DictDO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;

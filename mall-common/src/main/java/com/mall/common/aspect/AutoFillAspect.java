@@ -2,9 +2,8 @@ package com.mall.common.aspect;
 
 import com.mall.common.annotation.AutoFill;
 import com.mall.common.util.AuthenticatorUtil;
-import com.mall.constant.AutoFillConst;
 import com.mall.common.enums.FillTypeEnum;
-import com.mall.dto.AuthenticatedUserDTO;
+import com.mall.dto.sys.AuthenticatedUserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;

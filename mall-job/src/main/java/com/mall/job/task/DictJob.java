@@ -1,6 +1,6 @@
 package com.mall.job.task;
 
-import com.mall.api.service.IDictService;
+import com.mall.api.service.sys.IDictService;
 import com.mall.common.enums.JobResultEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

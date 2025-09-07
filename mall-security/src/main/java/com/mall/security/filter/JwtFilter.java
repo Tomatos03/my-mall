@@ -5,7 +5,7 @@ import com.mall.api.properties.JwtProps;
 import com.mall.common.domain.JwtHelper;
 import com.mall.common.domain.cache.TokenCacher;
 import com.mall.common.domain.cache.UserCacher;
-import com.mall.dto.AuthenticatedUserDTO;
+import com.mall.dto.sys.AuthenticatedUserDTO;
 import com.mall.common.util.RequestUtil;
 import com.mall.common.util.AuthenticatorUtil;
 import jakarta.servlet.FilterChain;

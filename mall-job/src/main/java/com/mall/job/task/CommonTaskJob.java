@@ -1,9 +1,9 @@
 package com.mall.job.task;
 
-import com.mall.api.service.ITaskService;
+import com.mall.api.service.sys.ITaskService;
 import com.mall.common.enums.JobResultEnum;
-import com.mall.entity.CommonTaskDO;
-import com.mall.dto.condition.CommonTaskConditionDTO;
+import com.mall.entity.sys.CommonTaskDO;
+import com.mall.dto.condition.sys.CommonTaskConditionDTO;
 import com.mall.common.enums.TaskStatusEnum;
 import com.mall.job.strategy.ScheduledTaskStrategy;
 import com.mall.job.strategy.ScheduledTaskStrategyFactory;

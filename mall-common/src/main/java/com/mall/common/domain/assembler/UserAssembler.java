@@ -2,11 +2,11 @@ package com.mall.common.domain.assembler;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.google.common.collect.Lists;
-import com.mall.api.service.IDeptService;
-import com.mall.api.service.IUserRoleService;
-import com.mall.dto.condition.DeptConditionDTO;
-import com.mall.dto.condition.UserRoleConditionDTO;
-import com.mall.entity.*;
+import com.mall.api.service.sys.IDeptService;
+import com.mall.api.service.sys.IUserRoleService;
+import com.mall.dto.condition.sys.DeptConditionDTO;
+import com.mall.dto.condition.sys.UserRoleConditionDTO;
+import com.mall.entity.sys.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

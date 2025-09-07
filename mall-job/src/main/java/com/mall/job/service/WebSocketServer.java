@@ -1,6 +1,6 @@
 package com.mall.job.service;
 
-import com.mall.dto.NotifyDTO;
+import com.mall.dto.sys.NotifyDTO;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;

@@ -1,8 +1,8 @@
 package com.mall.web.controller.common;
 
-import com.mall.business.service.UploadService;
+import com.mall.business.service.sys.UploadService;
 import com.mall.common.enums.FileTypeEnum;
-import com.mall.dto.FileDTO;
+import com.mall.dto.sys.FileDTO;
 import com.mall.security.annotation.NoLogin;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

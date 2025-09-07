@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mall.business.mapper.sys.JobMapper">
+
+    <resultMap type="com.mall.entity.sys.JobDO" id="JobResult">
+        <result property="name" column="name"/>
+        <result property="sort" column="sort"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="validStatus" column="valid_status"/>
+    </resultMap>
+
+    <sql id="selectJobColumn">
+        name,
+        sort,
+        dept_id,
+        valid_status
+    </sql>
+
+    <sql id="queryWhere">
+        <where>
+            <if test="id != null">AND id = #{id}</if>
+            <if test="name != null and name != ''">AND name LIKE CONCAT('%', #{name}, '%')</if>
+            <if test="sort != null">AND sort = #{sort}</if>
+            <if test="deptId != null">AND dept_id = #{deptId}</if>
+            <if test="validStatus != null">AND valid_status = #{validStatus}</if>
+            <if test="createUserId != null">AND create_user_id = #{createUserId}</if>
+            <if test="createUserName != null and createUserName != ''">AND create_user_name = #{createUserName}</if>
+            <if test="createTime != null">AND create_time = #{createTime}</if>
+            <if test="updateUserId != null">AND update_user_id = #{updateUserId}</if>
+            <if test="updateUserName != null and updateUserName != ''">AND update_user_name = #{updateUserName}</if>
+            <if test="updateTime != null">AND update_time = #{updateTime}</if>
+            <if test="isDel != null">AND is_del = #{isDel}</if>
+            AND is_del = 0
+        </where>
+    </sql>
+
+    <select id="findById" parameterType="Long" resultMap="JobResult">
+        SELECT <include refid="selectJobColumn"/> FROM sys_job WHERE id = #{id}
+    </select>
+
+    <select id="searchByCondition" parameterType="com.mall.dto.condition.sys.JobConditionDTO" resultMap="JobResult">
+        SELECT
+        <include refid="selectJobColumn"/>
+        FROM sys_job
+        <include refid="queryWhere"/>
+    </select>
+
+    <select id="findByIds" parameterType="Long" resultMap="JobResult">
+        SELECT <include refid="selectJobColumn"/> FROM sys_job WHERE id IN
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach>
+    </select>
+
+    <select id="searchCount" parameterType="com.mall.dto.condition.sys.JobConditionDTO" resultType="int">
+        SELECT COUNT(*)
+        FROM sys_job
+        <include refid="queryWhere"/>
+    </select>
+
+    <update id="update" parameterType="com.mall.entity.sys.JobDO">
+        UPDATE sys_job
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="validStatus != null">valid_status = #{validStatus},</if>
+            update_time = now(3)
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteByIds">
+        UPDATE sys_job
+        SET is_del = 1, update_time = now(3)
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insert" parameterType="com.mall.entity.sys.JobDO">
+        INSERT INTO sys_job
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            name,
+            sort,
+            <if test="deptId != null">dept_id,</if>
+            valid_status,
+            create_user_id,
+            create_user_name,
+            <if test="createTime != null">create_time,</if>
+            <if test="updateUserId != null">update_user_id,</if>
+            <if test="updateUserName != null and updateUserName != ''">update_user_name,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="isDel != null">is_del,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{name},
+            #{sort},
+            <if test="deptId != null">#{deptId},</if>
+            #{validStatus},
+            #{createUserId},
+            #{createUserName},
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUserId != null">#{updateUserId},</if>
+            <if test="updateUserName != null and updateUserName != ''">#{updateUserName},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="isDel != null">#{isDel},</if>
+        </trim>
+    </insert>
+</mapper>

@@ -2,10 +2,9 @@ package com.mall.job.consumer;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
-import com.mall.api.service.INotifyService;
-import com.mall.constant.JobUserConst;
-import com.mall.dto.NotifyDTO;
-import com.mall.entity.NotifyDO;
+import com.mall.api.service.sys.INotifyService;
+import com.mall.dto.sys.NotifyDTO;
+import com.mall.entity.sys.NotifyDO;
 import com.mall.job.service.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;

@@ -1,10 +1,10 @@
 package com.mall.job.quartz;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.mall.api.service.ICommonJobService;
-import com.mall.dto.condition.CommonJobConditionDTO;
-import com.mall.dto.condition.PageConditionDTO;
-import com.mall.entity.CommonJobDO;
+import com.mall.api.service.sys.ICommonJobService;
+import com.mall.dto.condition.sys.CommonJobConditionDTO;
+import com.mall.dto.condition.sys.PageConditionDTO;
+import com.mall.entity.sys.CommonJobDO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;

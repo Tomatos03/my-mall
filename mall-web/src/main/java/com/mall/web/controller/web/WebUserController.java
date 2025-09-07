@@ -1,10 +1,10 @@
 package com.mall.web.controller.web;
 
-import com.mall.api.service.IWebUserService;
+import com.mall.api.service.sys.IWebUserService;
 import com.mall.security.annotation.NoLogin;
-import com.mall.dto.AuthenticatedUserDTO;
-import com.mall.dto.CaptchaDTO;
-import com.mall.dto.AuthenticationUserDTO;
+import com.mall.dto.sys.AuthenticatedUserDTO;
+import com.mall.dto.sys.CaptchaDTO;
+import com.mall.dto.sys.AuthenticationUserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;

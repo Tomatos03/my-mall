@@ -1,7 +1,7 @@
 package com.mall.job.strategy;
 
-import com.mall.api.service.ITaskService;
-import com.mall.entity.CommonTaskDO;
+import com.mall.api.service.sys.ITaskService;
+import com.mall.entity.sys.CommonTaskDO;
 import com.mall.common.enums.TaskStatusEnum;
 import com.mall.common.enums.TaskTypeEnum;
 

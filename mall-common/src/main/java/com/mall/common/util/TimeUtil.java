@@ -1,6 +1,6 @@
 package com.mall.common.util;
 
-import com.mall.dto.condition.CommonConditionDTO;
+import com.mall.dto.condition.sys.CommonConditionDTO;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

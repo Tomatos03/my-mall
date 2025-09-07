@@ -1,13 +1,13 @@
 package com.mall.web.controller.sys;
 
-import com.mall.api.service.IRoleService;
+import com.mall.api.service.sys.IRoleService;
 import com.mall.common.annotation.ExcelExport;
 import com.mall.security.annotation.NoLogin;
 import com.mall.common.enums.ExcelBizTypeEnum;
-import com.mall.dto.PageDTO;
-import com.mall.dto.RoleDTO;
-import com.mall.dto.condition.RoleConditionDTO;
-import com.mall.entity.RoleDO;
+import com.mall.dto.sys.PageDTO;
+import com.mall.dto.sys.RoleDTO;
+import com.mall.dto.condition.sys.RoleConditionDTO;
+import com.mall.entity.sys.RoleDO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;

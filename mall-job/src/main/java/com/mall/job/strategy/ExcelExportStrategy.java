@@ -1,15 +1,15 @@
 package com.mall.job.strategy;
 
-import com.mall.api.service.ITaskService;
-import com.mall.business.service.CommonService;
+import com.mall.api.service.sys.ITaskService;
+import com.mall.business.service.sys.CommonService;
 import com.mall.common.context.SpringBeanHolder;
 import com.mall.common.domain.mq.MQHelper;
 import com.mall.common.enums.ExcelBizTypeEnum;
 import com.mall.common.enums.TaskStatusEnum;
 import com.mall.common.enums.TaskTypeEnum;
-import com.mall.entity.CommonTaskDO;
-import com.mall.entity.NotifyDO;
-import com.mall.dto.condition.CommonConditionDTO;
+import com.mall.entity.sys.CommonTaskDO;
+import com.mall.entity.sys.NotifyDO;
+import com.mall.dto.condition.sys.CommonConditionDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

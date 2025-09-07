@@ -2,9 +2,9 @@ package com.mall.common.aspect;
 
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
-import com.mall.api.service.ILogService;
+import com.mall.api.service.sys.ILogService;
 import com.mall.common.annotation.AddLog;
-import com.mall.entity.LogDO;
+import com.mall.entity.sys.LogDO;
 import com.mall.common.util.IpUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;

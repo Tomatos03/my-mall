@@ -1,8 +1,8 @@
 package com.mall.security.service;
 
-import com.mall.api.service.IRoleService;
-import com.mall.api.service.IUserService;
-import com.mall.entity.UserDO;
+import com.mall.api.service.sys.IRoleService;
+import com.mall.api.service.sys.IUserService;
+import com.mall.entity.sys.UserDO;
 import com.mall.common.domain.security.AuthenticationUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

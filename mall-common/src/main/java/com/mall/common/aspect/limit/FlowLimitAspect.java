@@ -7,7 +7,7 @@ import com.mall.common.exception.BusinessException;
 import com.mall.common.util.AuthenticatorUtil;
 import com.mall.common.util.IpUtil;
 import com.mall.constant.UserConst;
-import com.mall.dto.AuthenticatedUserDTO;
+import com.mall.dto.sys.AuthenticatedUserDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;

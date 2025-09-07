@@ -1,13 +1,13 @@
 package com.mall.web.controller.sys;
 
-import com.mall.api.service.IJobService;
+import com.mall.api.service.sys.IJobService;
 import com.mall.common.annotation.ExcelExport;
 import com.mall.security.annotation.NoLogin;
 import com.mall.common.enums.ExcelBizTypeEnum;
-import com.mall.dto.JobDTO;
-import com.mall.dto.PageDTO;
-import com.mall.dto.condition.JobConditionDTO;
-import com.mall.entity.JobDO;
+import com.mall.dto.sys.JobDTO;
+import com.mall.dto.sys.PageDTO;
+import com.mall.dto.condition.sys.JobConditionDTO;
+import com.mall.entity.sys.JobDO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;

@@ -1,12 +1,12 @@
 package com.mall.web.controller.sys;
 
-import com.mall.api.service.IDeptService;
+import com.mall.api.service.sys.IDeptService;
 import com.mall.common.annotation.ExcelExport;
 import com.mall.common.enums.ExcelBizTypeEnum;
-import com.mall.dto.DeptDTO;
-import com.mall.dto.PageDTO;
-import com.mall.entity.DeptDO;
-import com.mall.dto.condition.DeptConditionDTO;
+import com.mall.dto.sys.DeptDTO;
+import com.mall.dto.sys.PageDTO;
+import com.mall.entity.sys.DeptDO;
+import com.mall.dto.condition.sys.DeptConditionDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;

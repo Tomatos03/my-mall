@@ -3,7 +3,7 @@ package com.mall.common.util;
 import com.mall.common.context.SpringBeanHolder;
 import com.mall.common.domain.security.AuthenticationUser;
 import com.mall.constant.JobUserConst;
-import com.mall.dto.AuthenticatedUserDTO;
+import com.mall.dto.sys.AuthenticatedUserDTO;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

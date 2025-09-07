@@ -1,8 +1,8 @@
 package com.mall.web.controller.common;
 
-import com.mall.api.service.ICommonJobLogService;
-import com.mall.dto.CommonJobLogDTO;
-import com.mall.dto.condition.CommonJobLogConditionDTO;
+import com.mall.api.service.sys.ICommonJobLogService;
+import com.mall.dto.sys.CommonJobLogDTO;
+import com.mall.dto.condition.sys.CommonJobLogConditionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,7 +1,7 @@
 package com.mall.common.util;
 
-import com.mall.dto.PageDTO;
-import com.mall.dto.condition.CommonConditionDTO;
+import com.mall.dto.sys.PageDTO;
+import com.mall.dto.condition.sys.CommonConditionDTO;
 
 import java.util.List;
 

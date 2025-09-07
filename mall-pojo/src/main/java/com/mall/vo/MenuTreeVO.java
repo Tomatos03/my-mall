@@ -1,6 +1,6 @@
 package com.mall.vo;
 
-import com.mall.dto.MetaDTO;
+import com.mall.dto.sys.MetaDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
