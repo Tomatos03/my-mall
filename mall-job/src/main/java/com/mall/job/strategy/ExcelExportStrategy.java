@@ -2,7 +2,7 @@ package com.mall.job.strategy;
 
 import com.mall.api.service.ITaskService;
 import com.mall.business.service.CommonService;
-import com.mall.common.context.SpringContextHolder;
+import com.mall.common.context.SpringBeanHolder;
 import com.mall.common.domain.mq.MQHelper;
 import com.mall.common.enums.ExcelBizTypeEnum;
 import com.mall.common.enums.TaskStatusEnum;
@@ -73,7 +73,7 @@ public class ExcelExportStrategy extends ScheduledTaskStrategy {
                                                                         .getDeclaredConstructor()
                                                                         .newInstance();
         String excelFileName = excelBizType.getDesc();
-        CommonService commonService = (CommonService) SpringContextHolder.getBean(excelBizType.getServiceClass());
+        CommonService commonService = (CommonService) SpringBeanHolder.getBean(excelBizType.getServiceClass());
         commonService.export(condition, excelBizType.getDoClass(), excelFileName);
     }
 

@@ -1,7 +1,7 @@
 package com.mall.job.quartz;
 
 import com.mall.api.service.ICommonJobLogService;
-import com.mall.common.context.SpringContextHolder;
+import com.mall.common.context.SpringBeanHolder;
 import com.mall.common.enums.QuartzJobStatusEnum;
 import com.mall.common.util.AuthenticatorUtil;
 import com.mall.constant.JobUserConst;
@@ -51,16 +51,16 @@ public class QuartzExecutionJob extends QuartzJobBean {
     private void executeQuartzJob(CommonJobDO job) throws NoSuchMethodException, InterruptedException, ExecutionException {
         QuartzTaskCallable quartzTaskCallable = new QuartzTaskCallable(job.getBeanName(),
                                                                        job.getParams());
-        ThreadPoolExecutor quartzThreadPool = SpringContextHolder.getBean("quartzThreadPoolExecutor",
-                                                                          ThreadPoolExecutor.class);
+        ThreadPoolExecutor quartzThreadPool = SpringBeanHolder.getBean("quartzThreadPoolExecutor",
+                                                                       ThreadPoolExecutor.class);
         Future future = quartzThreadPool.submit(quartzTaskCallable);
         future.get();
     }
 
     private void updateJobLog(CommonJobLogDTO commonJobLog) {
         commonJobLog.setEndTime(System.currentTimeMillis());
-        SpringContextHolder.getBean(ICommonJobLogService.class)
-                           .update(commonJobLog);
+        SpringBeanHolder.getBean(ICommonJobLogService.class)
+                        .update(commonJobLog);
 
         outputTaskDurationIfSuccess(commonJobLog);
     }
@@ -96,7 +96,7 @@ public class QuartzExecutionJob extends QuartzJobBean {
     
     private void recordJobLog(CommonJobLogDTO commonJobLog) {
         log.info("任务准备执行，任务名称：{}", commonJobLog.getJobName());
-        SpringContextHolder.getBean(ICommonJobLogService.class)
-                           .insert(commonJobLog);
+        SpringBeanHolder.getBean(ICommonJobLogService.class)
+                        .insert(commonJobLog);
     }
 }

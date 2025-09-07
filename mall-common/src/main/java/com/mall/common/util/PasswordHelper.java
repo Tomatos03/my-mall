@@ -2,7 +2,7 @@ package com.mall.common.util;
 
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
-import com.mall.common.context.SpringContextHolder;
+import com.mall.common.context.SpringBeanHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
@@ -13,7 +13,7 @@ public final class PasswordHelper {
     private PasswordHelper(){};
 
     public static PasswordEncoder passwordEncoder() {
-        return SpringContextHolder.getBean(PasswordEncoder.class);
+        return SpringBeanHolder.getBean(PasswordEncoder.class);
     }
 
     public static String encode(String password) {

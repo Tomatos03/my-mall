@@ -1,6 +1,6 @@
 package com.mall.common.util;
 
-import com.mall.common.context.SpringContextHolder;
+import com.mall.common.context.SpringBeanHolder;
 import com.mall.common.domain.security.AuthenticationUser;
 import com.mall.constant.JobUserConst;
 import com.mall.dto.AuthenticatedUserDTO;
@@ -24,7 +24,7 @@ public final class AuthenticatorUtil {
     private AuthenticatorUtil() {}
 
     private static AuthenticationManager authenticationManager() {
-        return SpringContextHolder.getBean(AuthenticationManager.class);
+        return SpringBeanHolder.getBean(AuthenticationManager.class);
     }
 
     public static Authentication authenticate(String username, String password) {

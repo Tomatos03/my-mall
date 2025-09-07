@@ -1,7 +1,7 @@
 package com.mall.security.config;
 
 import com.mall.security.annotation.NoLogin;
-import com.mall.common.context.SpringContextHolder;
+import com.mall.common.context.SpringBeanHolder;
 import com.mall.security.filter.JwtFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -111,8 +111,8 @@ public class SecurityConfig {
     }
 
     private String[] getWhiteList() {
-        Map<RequestMappingInfo, HandlerMethod> handlerMethods = SpringContextHolder.getBean(RequestMappingHandlerMapping.class)
-                                                                                   .getHandlerMethods();
+        Map<RequestMappingInfo, HandlerMethod> handlerMethods = SpringBeanHolder.getBean(RequestMappingHandlerMapping.class)
+                                                                                .getHandlerMethods();
         List<String> whiteList = new ArrayList<>();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
             HandlerMethod handlerMethod = entry.getValue();

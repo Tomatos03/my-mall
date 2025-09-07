@@ -2,7 +2,7 @@ package com.mall.common.util;
 
 import cn.hutool.json.JSONUtil;
 import com.mall.common.config.QiNiuConfig;
-import com.mall.common.context.SpringContextHolder;
+import com.mall.common.context.SpringBeanHolder;
 import com.mall.common.enums.FileTypeEnum;
 import com.qiniu.http.Response;
 import com.qiniu.storage.Configuration;
@@ -21,7 +21,7 @@ import java.io.InputStream;
  */
 public final class QiNiuUtil {
     private static QiNiuConfig qiNiuConfig() {
-        return SpringContextHolder.getBean(QiNiuConfig.class);
+        return SpringBeanHolder.getBean(QiNiuConfig.class);
     }
 
     /**

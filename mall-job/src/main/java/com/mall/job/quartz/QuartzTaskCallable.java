@@ -1,6 +1,6 @@
 package com.mall.job.quartz;
 
-import com.mall.common.context.SpringContextHolder;
+import com.mall.common.context.SpringBeanHolder;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Method;
@@ -20,7 +20,7 @@ public class QuartzTaskCallable implements Callable {
 
     public QuartzTaskCallable(String beanName, String params)
             throws NoSuchMethodException, SecurityException {
-        this.target = SpringContextHolder.getBean(beanName);
+        this.target = SpringBeanHolder.getBean(beanName);
         this.params = params;
         this.method = target.getClass().getDeclaredMethod(JOB_METHOD_NAME, String.class);
     }

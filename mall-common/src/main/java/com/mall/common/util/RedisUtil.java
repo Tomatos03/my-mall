@@ -1,7 +1,7 @@
 package com.mall.common.util;
 
 import cn.hutool.core.util.StrUtil;
-import com.mall.common.context.SpringContextHolder;
+import com.mall.common.context.SpringBeanHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
@@ -17,7 +17,7 @@ public final class RedisUtil {
     private RedisUtil(){};
 
     public static StringRedisTemplate stringRedisTemplate() {
-        return SpringContextHolder.getBean("stringRedisTemplate", StringRedisTemplate.class);
+        return SpringBeanHolder.getBean("stringRedisTemplate", StringRedisTemplate.class);
     }
 
     /**
