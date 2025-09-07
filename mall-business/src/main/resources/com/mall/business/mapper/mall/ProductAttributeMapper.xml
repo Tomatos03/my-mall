@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mall.business.mapper.mall.ProductAttributeMapper">
+    <insert id="insert" parameterType="com.mall.entity.mall.ProductAttributeDO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO mall_product_attribute
+        <trim prefix="(" suffix=")" suffixOverrides=","> 
+            <if test="id != null">id,</if>
+            <if test="productId != null">product_id,</if>
+            <if test="attributeId != null">attribute_id,</if>
+            <if test="attributeValueId != null">attribute_value_id,</if>
+            <if test="createUserId != null">create_user_id,</if>
+            <if test="createUserName != null and createUserName != ''">create_user_name,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateUserId != null">update_user_id,</if>
+            <if test="updateUserName != null and updateUserName != ''">update_user_name,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="isDel != null">is_del,</if>
+         </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=","> 
+            <if test="id != null">#{id},</if>
+            <if test="productId != null">#{productId},</if>
+            <if test="attributeId != null">#{attributeId},</if>
+            <if test="attributeValueId != null">#{attributeValueId},</if>
+            <if test="createUserId != null">#{createUserId},</if>
+            <if test="createUserName != null and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUserId != null">#{updateUserId},</if>
+            <if test="updateUserName != null and updateUserName != ''">#{updateUserName},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="isDel != null">#{isDel},</if>
+         </trim>
+    </insert>
+
+    <update id="update" parameterType="com.mall.entity.mall.ProductAttributeDO">
+        UPDATE mall_product_attribute
+        <set> 
+            <if test="id != null"> id = #{id}, </if>
+            <if test="productId != null"> product_id = #{productId}, </if>
+            <if test="attributeId != null"> attribute_id = #{attributeId}, </if>
+            <if test="attributeValueId != null"> attribute_value_id = #{attributeValueId}, </if>
+            <if test="createUserId != null"> create_user_id = #{createUserId}, </if>
+            <if test="createUserName != null and createUserName != ''"> create_user_name = #{createUserName}, </if>
+            <if test="createTime != null"> create_time = #{createTime}, </if>
+            <if test="updateUserId != null"> update_user_id = #{updateUserId}, </if>
+            <if test="updateUserName != null and updateUserName != ''"> update_user_name = #{updateUserName}, </if>
+            <if test="updateTime != null"> update_time = #{updateTime}, </if>
+            <if test="isDel != null"> is_del = #{isDel}, </if>
+         </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM mall_product_attribute
+        WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        DELETE FROM mall_product_attribute
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="searchByCondition" parameterType="com.mall.dto.condition.mall.ProductAttributeConditionDTO"
+    resultMap="ProductAttributeResultMap">
+        SELECT
+        <include refid="queryColumn"/>
+        FROM mall_product_attribute
+        <include refid="queryWhere"/>
+    </select>
+
+    <resultMap type="com.mall.entity.mall.ProductAttributeDO" id="ProductAttributeResultMap"> 
+        <result property="id" column="id"/>
+        <result property="productId" column="product_id"/>
+        <result property="attributeId" column="attribute_id"/>
+        <result property="attributeValueId" column="attribute_value_id"/>
+        <result property="createUserId" column="create_user_id"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUserId" column="update_user_id"/>
+        <result property="updateUserName" column="update_user_name"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isDel" column="is_del"/>
+     </resultMap>
+
+    <sql id="queryColumn"> 
+        id,
+        product_id,
+        attribute_id,
+        attribute_value_id,
+        create_user_id,
+        create_user_name,
+        create_time,
+        update_user_id,
+        update_user_name,
+        update_time,
+        is_del
+     </sql>
+
+    <sql id="queryWhere">
+        <where> 
+            <if test="id != null"> and id = #{id} </if>
+            <if test="productId != null"> and product_id = #{productId} </if>
+            <if test="attributeId != null"> and attribute_id = #{attributeId} </if>
+            <if test="attributeValueId != null"> and attribute_value_id = #{attributeValueId} </if>
+            <if test="createUserId != null"> and create_user_id = #{createUserId} </if>
+            <if test="createUserName != null and createUserName != ''"> and create_user_name = #{createUserName} </if>
+            <if test="createTime != null"> and create_time = #{createTime} </if>
+            <if test="updateUserId != null"> and update_user_id = #{updateUserId} </if>
+            <if test="updateUserName != null and updateUserName != ''"> and update_user_name = #{updateUserName} </if>
+            <if test="updateTime != null"> and update_time = #{updateTime} </if>
+            <if test="isDel != null"> and is_del = #{isDel} </if>
+         </where>
+    </sql>
+</mapper>
