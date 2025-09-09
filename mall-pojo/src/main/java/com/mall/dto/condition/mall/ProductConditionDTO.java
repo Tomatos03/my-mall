@@ -150,4 +150,8 @@ public class ProductConditionDTO extends CommonConditionDTO {
      * 逻辑删除ID，默认是0，表示未删除
      */
     private Long delId;
+
+    private Boolean isHot;
+    private Boolean saleStatus;
+    private Boolean isRecommend;
 }

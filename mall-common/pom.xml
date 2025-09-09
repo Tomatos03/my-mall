@@ -111,5 +111,11 @@
             <artifactId>qiniu-java-sdk</artifactId>
             <version>7.19.0</version>
         </dependency>
+
+        <!-- ES -->
+        <dependency>
+            <groupId>co.elastic.clients</groupId>
+            <artifactId>elasticsearch-java</artifactId>
+        </dependency>
     </dependencies>
 </project>

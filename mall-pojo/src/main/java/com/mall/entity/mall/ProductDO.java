@@ -162,4 +162,11 @@ public class ProductDO extends BaseProductDO {
      * 逻辑删除ID，默认是0，表示未删除
      */
     private Long delId;
+
+    private Boolean isHot;
+    private Boolean isRecommend;
+    private Boolean saleStatus;
+//        <result property="saleStatus" column="sale_status"/>
+//        <result property="isHot" column="is_hot"/>
+//        <result property="isRecommend" column="is_recommend"/>
 }

@@ -29,8 +29,5 @@ public class QuartzTaskCallable implements Callable {
     public Object call() throws Exception {
         ReflectionUtils.makeAccessible(method);
         return method.invoke(target, params);
-//        return StrUtil.isNotBlank(params) ?
-//                method.invoke(target, params) :
-//                method.invoke(target);
     }
 }
