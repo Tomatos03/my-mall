@@ -54,12 +54,12 @@ my-mall:
     index:
       product: 'product-es-index-v1'
 
-logging:
-  level:
-    com.mall.business.mapper: debug
-#mybatis:
-#  configuration:
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#logging:
+#  level:
+#    com.mall.business.mapper: debug
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 oss:
   qiniu:

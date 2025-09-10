@@ -8,5 +8,5 @@ package com.mall.constant;
  */
 public final class JobUserConst {
     public static final Long DEFAULT_USER_ID = 1L;
-    public static final String DEFAULT_USER_NAME = "系统管理员";
+    public static final String DEFAULT_USER_NAME = "系统任务管理员";
 }
