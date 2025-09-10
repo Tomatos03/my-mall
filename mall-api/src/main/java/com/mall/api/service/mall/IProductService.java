@@ -1,7 +1,10 @@
 package com.mall.api.service.mall;
 
-import com.mall.dto.mall.ProductDTO;
 import com.mall.dto.condition.mall.ProductConditionDTO;
+import com.mall.dto.mall.ProductDTO;
+import com.mall.dto.sys.PageDTO;
+import com.mall.entity.mall.ProductDO;
+
 import java.util.List;
 
 /**
@@ -38,4 +41,6 @@ public interface IProductService {
     int deleteByIds(List<Long> ids);
 
     List<ProductDTO> generate(List<ProductDTO> productDTOList);
+
+    PageDTO<ProductDO> searchFromEs(ProductConditionDTO condition);
 }

@@ -6,6 +6,7 @@ import co.elastic.clients.elasticsearch._types.Refresh;
 import co.elastic.clients.elasticsearch._types.Result;
 import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.elasticsearch.core.bulk.BulkOperation;
+import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.mall.common.context.SpringBeanHolder;
 import com.mall.entity.EsCommonDO;
 import lombok.extern.slf4j.Slf4j;
@@ -90,24 +91,21 @@ public class EsTemplate {
         }
     }
 
-    //    /**
-    //     * 查询数据
-    //     *
-    //     * @param idxName index
-    //     * @param builder 查询参数
-    //     * @param aClass  结果类对象
-    //     * @return java.util.List<T>
-    //     */
-    public <T> List<T> query(String idxName, Class<T> aClass) {
-        SearchRequest searchRequest = SearchRequest.of(builder -> builder.index(idxName));
-//        client().get()
-        //        SearchRequest request = new SearchRequest(idxName);
-        //        request.source(builder);
-        //        SearchResponse response = restHighLevelClient.search(request, RequestOptions
-        //        .DEFAULT);
-        //        SearchHit[] hits = response.getHits().getHits();
-        //        return Arrays.stream(hits).map(hit -> JSON.parseObject(hit.getSourceAsString(),
-        //        aClass)).collect(Collectors.toList());
-        return null;
+    /**
+     * 根据传入的搜索请求对象, 查询Es
+     *
+     * @param request 搜索请求对象
+     * @param zclass 返回结果类型
+     * @since : 1.0
+     * @author : Tomatos
+     * @date : 2025/9/10 16:02
+     */
+    public static <T> List<T> query(SearchRequest request, Class<T> zclass) throws IOException {
+        SearchResponse<T> search = client().search(request, zclass);
+        return search.hits()
+                     .hits()
+                     .stream()
+                     .map(Hit::source)
+                     .toList();
     }
 }

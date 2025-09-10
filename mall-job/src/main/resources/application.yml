@@ -51,7 +51,8 @@ my-mall:
     port: ${ES_PORT}
     username: ${ES_USERNAME}
     password: ${ES_PASSWORD}
-    product-index-name: product-es-index-v1
+    index:
+      product: 'product-es-index-v1'
 
 logging:
   level:

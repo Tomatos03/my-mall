@@ -1,13 +1,25 @@
 package com.mall.business.service.mall;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
+import co.elastic.clients.elasticsearch._types.SortOrder;
+import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.Query;
+import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
+import co.elastic.clients.elasticsearch.core.SearchRequest;
 import com.mall.api.service.mall.IProductService;
 import com.mall.business.mapper.mall.*;
+import com.mall.common.domain.template.EsTemplate;
+import com.mall.common.properties.EsProperties;
 import com.mall.common.util.AsserUtil;
+import com.mall.common.util.PageUtil;
 import com.mall.dto.condition.mall.*;
 import com.mall.dto.condition.sys.PageConditionDTO;
 import com.mall.dto.mall.ProductDTO;
+import com.mall.dto.sys.PageDTO;
 import com.mall.entity.mall.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +31,7 @@ import java.util.List;
  * @author Tomatos
  * @date 2025-09-07
  */
+@Slf4j
 @Service
 public class ProductService implements IProductService {
     @Autowired
@@ -33,6 +46,10 @@ public class ProductService implements IProductService {
     private AttributeMapper attributeMapper;
     @Autowired
     private AttributeValueMapper attributeValueMapper;
+    @Autowired
+    private EsProperties esProperties;
+
+    private static final String ES_PRODUCT_INDEX = "product";
 
     @Override
     public int insert(ProductDTO dto) {
@@ -72,6 +89,53 @@ public class ProductService implements IProductService {
         return productDTOList;
     }
 
+    @Override
+    public PageDTO<ProductDO> searchFromEs(ProductConditionDTO condition) {
+        String esIndex = esProperties.getIndex().get(ES_PRODUCT_INDEX);
+
+        try {
+            Query query = getQuery(condition);
+
+            SearchRequest request = SearchRequest.of(b -> b
+                    .index(esIndex)
+                    .from(condition.getPageBegin()) // 设置分页起始位置
+                    .size(condition.getPageSize()) // 分页页面大小
+                    .query(query)
+                    .sort(s -> s.field(f -> f.field("id") // 设置按照ID降序排序
+                                             .order(SortOrder.Desc)))
+            );
+
+            log.info("searchFromES请求参数: {}", request);
+
+            List<ProductDO> data = EsTemplate.query(request, ProductDO.class);
+
+            return CollectionUtil.isEmpty(data) ? PageUtil.emptyPage() : PageUtil.buildPageDTO(condition, data);
+        } catch (Exception e) {
+            log.error("从ES中查询商品失败，原因：", e);
+            return PageUtil.emptyPage();
+        }
+    }
+
+    private Query getQuery(ProductConditionDTO condition) {
+        String name = condition.getName();
+        String model = condition.getModel();
+
+        // 构建BoolQuery对象
+        BoolQuery.Builder builder = QueryBuilders.bool();
+        if (StrUtil.isNotBlank(name)) {
+            builder.must(QueryBuilders.matchPhrase(m -> m.field("name")
+                                                         .query(name)));
+        }
+
+        if (StrUtil.isNotBlank(condition.getModel())) {
+            builder.must(QueryBuilders.matchPhrase(m -> m.field("model")
+                                                         .query(model)));
+        }
+
+        return builder.build()
+                      ._toQuery();
+    }
+
     private void doGenerate(List<ProductDTO> productDTOList) {
 
     }
@@ -96,7 +160,8 @@ public class ProductService implements IProductService {
         List<AttributeValueDO> skuAttributeValueDOList = productDTOList.stream()
                                                                        .flatMap(
                                                                                productDTO -> productDTO.getSkuAttributeEntityList()
-                                                                                                       .stream()).toList();
+                                                                                                       .stream())
+                                                                       .toList();
         // 检查sku
         AsserUtil.notNull(skuAttributeValueDOList, "商品属性值不为空");
         checkAttributeValue(skuAttributeValueDOList);
@@ -193,6 +258,7 @@ public class ProductService implements IProductService {
                                                                                                    .equals(id))
                                              )
                                              .toList();
-        AsserUtil.notNull(notFoundList, String.format("存在系统中不存在的分类ID: %s", notFoundList));
+        AsserUtil.notNull(notFoundList,
+                          String.format("存在系统中不存在的分类ID: %s", notFoundList));
     }
 }
