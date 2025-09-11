@@ -1,7 +1,7 @@
 package com.mall.common.util;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.mall.common.exception.BusinessException;
-import io.jsonwebtoken.lang.Collections;
 
 import java.util.Collection;
 
@@ -23,7 +23,7 @@ public abstract class AsserUtil {
     }
 
     public static void isNull(Collection<?> collection, String message) {
-        if (Collections.isEmpty(collection)) {
+        if (CollectionUtil.isNotEmpty(collection)) {
             throw new BusinessException(ASSERT_ERROR_CODE, message);
         }
     }
