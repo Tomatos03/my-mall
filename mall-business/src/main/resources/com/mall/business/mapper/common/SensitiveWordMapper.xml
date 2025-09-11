@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mall.business.mapper.common.CommonSensitiveWordMapper">
-    <insert id="insert" parameterType="com.mall.entity.CommonSensitiveWordDO" useGeneratedKeys="true" keyProperty="id">
+<mapper namespace="com.mall.business.mapper.common.SensitiveWordMapper">
+    <insert id="insert" parameterType="com.mall.entity.SensitiveWordDO" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO common_sensitive_word
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
@@ -61,7 +61,7 @@
         </foreach>
     </insert>
 
-    <update id="update" parameterType="com.mall.entity.CommonSensitiveWordDO">
+    <update id="update" parameterType="com.mall.entity.SensitiveWordDO">
         UPDATE common_sensitive_word
         <set>
             <if test="id != null">id = #{id},</if>
@@ -92,7 +92,7 @@
         </foreach>
     </delete>
 
-        <select id="searchByCondition" parameterType="com.mall.dto.condition.mall.CommonSensitiveWordConditionDTO"
+        <select id="searchByCondition" parameterType="com.mall.dto.condition.mall.SensitiveWordConditionDTO"
         resultMap="CommonSensitiveWordResultMap">
             SELECT
             <include refid="queryColumn"/>
@@ -100,7 +100,7 @@
             <include refid="queryWhere"/>
         </select>
 
-    <resultMap type="com.mall.entity.CommonSensitiveWordDO" id="CommonSensitiveWordResultMap">
+    <resultMap type="com.mall.entity.SensitiveWordDO" id="CommonSensitiveWordResultMap">
         <result property="id" column="id"/>
         <result property="type" column="type"/>
         <result property="word" column="word"/>

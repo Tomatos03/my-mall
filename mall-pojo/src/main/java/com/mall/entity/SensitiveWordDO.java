@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CommonSensitiveWordDO extends CommonDO {
+public class SensitiveWordDO extends CommonDO {
  
      /**
       * 类型 1:广告 2:政治 3：违法 4：色情 5：网址

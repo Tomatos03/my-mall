@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CommonSensitiveWordConditionDTO extends CommonConditionDTO {
+public class SensitiveWordConditionDTO extends CommonConditionDTO {
 
     /**
      * 类型 1:广告 2:政治 3：违法 4：色情 5：网址

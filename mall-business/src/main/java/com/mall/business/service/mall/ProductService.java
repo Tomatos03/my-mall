@@ -10,6 +10,7 @@ import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import com.mall.api.service.mall.IProductService;
 import com.mall.business.mapper.mall.*;
+import com.mall.common.annotation.sensitive.SensitiveWordCheck;
 import com.mall.common.domain.template.EsTemplate;
 import com.mall.common.properties.EsProperties;
 import com.mall.common.util.AsserUtil;
@@ -58,6 +59,7 @@ public class ProductService implements IProductService {
         return affects;
     }
 
+    @SensitiveWordCheck
     @Override
     public int update(ProductDTO dto) {
         ProductDO entity = BeanUtil.copyProperties(dto, ProductDO.class);

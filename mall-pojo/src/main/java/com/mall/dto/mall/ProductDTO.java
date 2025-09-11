@@ -1,5 +1,6 @@
 package com.mall.dto.mall;
 
+import com.mall.annotation.SensitiveWord;
 import com.mall.dto.sys.CommonDTO;
 import com.mall.entity.mall.AttributeValueDO;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -38,11 +39,13 @@ public class ProductDTO extends CommonDTO {
      /**
       * 商品名称
       */
+     @SensitiveWord
      private String name;
 
      /**
       * 规格
       */
+     @SensitiveWord
      private String model;
 
      /**

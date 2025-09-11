@@ -166,7 +166,4 @@ public class ProductDO extends BaseProductDO {
     private Boolean isHot;
     private Boolean isRecommend;
     private Boolean saleStatus;
-//        <result property="saleStatus" column="sale_status"/>
-//        <result property="isHot" column="is_hot"/>
-//        <result property="isRecommend" column="is_recommend"/>
 }

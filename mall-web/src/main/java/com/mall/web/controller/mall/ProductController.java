@@ -1,9 +1,12 @@
 package com.mall.web.controller.mall;
 
 import com.mall.api.service.mall.IProductService;
+import com.mall.common.annotation.sensitive.SensitiveWordCheck;
 import com.mall.dto.condition.mall.ProductConditionDTO;
 import com.mall.dto.mall.ProductDTO;
+import com.mall.security.annotation.NoLogin;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +18,7 @@ import java.util.List;
  * @author Tomatos
  * @date 2025-09-07
  */
+@Tag(name = "商品接口", description = "商品相关操作")
 @RestController
 @RequestMapping("/v1/product")
 public class ProductController {
@@ -33,6 +37,8 @@ public class ProductController {
     /**
      * 修改
      */
+    @NoLogin
+    @SensitiveWordCheck
     @PutMapping("/update")
     public int update(@RequestBody ProductDTO dto) {
         return productService.update(dto);
