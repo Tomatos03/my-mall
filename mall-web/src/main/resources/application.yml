@@ -74,6 +74,8 @@ my-mall:
     password: ${ES_PASSWORD}
     index:
       product: 'product-es-index-v1'
+  sensitive-word:
+    file-path: 'sensitive/custom-sensitive-words.txt'
 
 ip2region:
   db-path: ${IP2REGION_DB_PATH:classpath:ip2region/ip2region.xdb}

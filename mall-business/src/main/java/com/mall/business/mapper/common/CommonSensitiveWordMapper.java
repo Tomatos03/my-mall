@@ -1,5 +1,6 @@
-package com.mall.business.mapper;
+package com.mall.business.mapper.common;
 
+import com.mall.dto.condition.mall.CommonSensitiveWordConditionDTO;
 import com.mall.entity.CommonSensitiveWordDO;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface CommonSensitiveWordMapper {
     int deleteByIds(List<Long> ids);
 
     void batchInsert(List<CommonSensitiveWordDO> list);
+
+    List<CommonSensitiveWordDO> searchByCondition(CommonSensitiveWordConditionDTO condition);
 }

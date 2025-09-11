@@ -72,6 +72,11 @@
             <artifactId>caffeine</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.hankcs</groupId>
+            <artifactId>hanlp</artifactId>
+            <version>portable-1.8.6</version>
+        </dependency>
         <!-- 该依赖存在一个问题: 根据class对象获取RequestMappingHandlerMapping的Bean对象不唯一, 暂时先注释这个依赖 -->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.boot</groupId>-->
