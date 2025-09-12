@@ -26,6 +26,7 @@ import static com.mall.constant.AutoFillConst.*;
 @Slf4j
 @Aspect
 @Component
+@Deprecated(since = "使用 MyBatis 拦截器替代", forRemoval = true)
 public class AutoFillAspect {
     // @annotation(com.takeout.annotation.AutoFill) 限定只拦截有该注解的方法
     @Before("execution(* com.mall.api.mapper.IAutoFill.*(..)) " +
