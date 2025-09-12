@@ -1,6 +1,7 @@
 package com.mall.common.config;
 
 import com.mall.common.interceptor.AutoFillInterceptor;
+import com.mall.common.interceptor.SensitiveInfoInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,5 +16,10 @@ public class MyBatisConfig {
     @Bean
     public AutoFillInterceptor autoFillInterceptor() {
         return new AutoFillInterceptor();
+    }
+
+    @Bean
+    public SensitiveInfoInterceptor sensitiveInfoInterceptor() {
+        return new SensitiveInfoInterceptor();
     }
 }

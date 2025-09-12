@@ -92,13 +92,13 @@
         </foreach>
     </delete>
 
-        <select id="searchByCondition" parameterType="com.mall.dto.condition.mall.SensitiveWordConditionDTO"
-        resultMap="CommonSensitiveWordResultMap">
-            SELECT
-            <include refid="queryColumn"/>
-            FROM common_sensitive_word
-            <include refid="queryWhere"/>
-        </select>
+    <select id="searchByCondition" parameterType="com.mall.dto.condition.mall.SensitiveWordConditionDTO"
+            resultMap="CommonSensitiveWordResultMap">
+        SELECT
+        <include refid="queryColumn"/>
+        FROM common_sensitive_word
+        <include refid="queryWhere"/>
+    </select>
 
     <resultMap type="com.mall.entity.SensitiveWordDO" id="CommonSensitiveWordResultMap">
         <result property="id" column="id"/>

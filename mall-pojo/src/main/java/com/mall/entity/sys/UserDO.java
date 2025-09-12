@@ -1,5 +1,7 @@
 package com.mall.entity.sys;
 
+import com.mall.annotation.Desensitization;
+import com.mall.enums.DesensitizationTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,6 +34,7 @@ public class UserDO extends CommonDO {
     @Schema(description = "部门实体")
     private DeptDO dept;
 
+    @Desensitization(DesensitizationTypeEnum.EMAIL)
     @Schema(description = "邮箱")
     private String email;
 
@@ -47,6 +50,7 @@ public class UserDO extends CommonDO {
     @Schema(description = "用户密码")
     private String password;
 
+    @Desensitization(DesensitizationTypeEnum.MOBILE)
     @Schema(description = "手机号")
     private String phone;
 
