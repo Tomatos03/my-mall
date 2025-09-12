@@ -83,6 +83,10 @@ my-mall:
       worker-id: 1
       datacenter-id: 1
 
+  security:
+    mock-user:
+      enabled: true
+
 ip2region:
   db-path: ${IP2REGION_DB_PATH:classpath:ip2region/ip2region.xdb}
 

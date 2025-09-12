@@ -54,6 +54,15 @@ my-mall:
     index:
       product: 'product-es-index-v1'
 
+  id-generator:
+    snowflake:
+      worker-id: 2
+      datacenter-id: 1
+
+  security:
+    mock-user:
+      enabled: true
+
 #logging:
 #  level:
 #    com.mall.business.mapper: debug
